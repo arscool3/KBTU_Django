@@ -1,8 +1,11 @@
-from django.http import HttpResponse
-
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 
 def index(request):
-    return HttpResponse('LOL KEk ')
+    return HttpResponse("This is main view")
 
-def other(request):
-    return HttpResponse('Today Django Day')
+def index_1(request):
+    return HttpResponse("This is basic view")
+
+def index_2(request):
+    return HttpResponse("Test view")
