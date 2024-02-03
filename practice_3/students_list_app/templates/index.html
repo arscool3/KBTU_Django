@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head></head>
+<body>
+    <h1>Students list</h1>
+    <UL>
+        {% for student in student_list %}
+            <li> {{student.name}} {{student.surname}} </li>
+        {% endfor %}
+    </UL>
+
+</body>
+</html>
