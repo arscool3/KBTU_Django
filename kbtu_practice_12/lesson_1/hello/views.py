@@ -2,7 +2,10 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse('LOL KEk ')
+    return HttpResponse('This is the main view')
 
-def other(request):
-    return HttpResponse('Today Django Day')
+def basic(request):
+    return HttpResponse('This is the basic view')
+
+def test(request):
+    return HttpResponse('This is the test view')
