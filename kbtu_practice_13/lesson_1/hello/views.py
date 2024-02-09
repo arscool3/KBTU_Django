@@ -17,3 +17,10 @@ def index(request):
 
 def test(request, id):
     return HttpResponse(f"5 times id is {id * 5}!")
+
+def students_list(request):
+    students = [
+        {'name': 'Darkhan', 'age': 20, 'grade': 'A'},
+        {'name': 'Aidar', 'age': 23, 'grade': 'C'},
+    ]
+    return render(request, 'students.html', {'students' : students})
