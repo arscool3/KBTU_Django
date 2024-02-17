@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Students List</title>
+    <title>Student List</title>
 </head>
 <body>
 
-    <h1>Students List</h1>
+    <h1>Student List</h1>
+
+    <form method="GET" action="">
+        <label for="initial">Filter by Initial:</label>
+        <input type="text" id="initial" name="initial">
+        <button type="submit">Filter</button>
+    </form>
+
+    {% if initial %}
+    <p>Filtered by Initial: {{ initial }}</p>
+    {% endif %}
 
     <ul>
         {% for student in students %}
