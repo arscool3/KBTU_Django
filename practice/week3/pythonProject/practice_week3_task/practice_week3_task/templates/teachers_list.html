@@ -1,0 +1,17 @@
+{%load utils%}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teachers</title>
+</head>
+<body>
+    <h1>Teachers List :</h1>
+    <ul>
+        {% for teacher in teachers %}
+
+            <li><button></button>{{ teacher | filterA}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
