@@ -1,12 +1,15 @@
+{% load utils %}
+
 <!doctype html>
 <html lang="en">
 <head>
     <title>Students</title>
 </head>
 <body>
+    <h1>Users</h1>
     <ul>
-        {% for student in students %}
-            <li>{{student}}</li>
+        {% for user in users %}
+            <li>{{user.name| capitalize}} {{ user.age| age_classifier}} {{ user.gender }}</li>
         {% endfor %}
     </ul>
 </body>
