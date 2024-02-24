@@ -16,8 +16,8 @@
     <ul>
       {% for student in students %}
       <li>
-        My name is {{student.name + add_suffix}}, age = {{student.age}}, sex =
-        {{student.sex}}
+        My name is {{student.name| capitalize | add_suffix}}, age =
+        {{student.age}}, sex = {{student.sex}}
       </li>
       {% endfor %}
     </ul>
