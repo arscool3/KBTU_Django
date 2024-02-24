@@ -8,34 +8,34 @@
 >https://docs.github.com/ru/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo
 > 
 
-[//]: # (> Practice 2:)
+> Practice 2:
 
-[//]: # (> Create 3 basic views)
+> Create 3 basic views
 
-[//]: # (> Practice 2&#40;Basic Views&#41;:)
+> Practice 2(Basic Views):
 
-[//]: # (> Practice Task: Building Basic Views With Django Application)
+> Practice Task: Building Basic Views With Django Application
 
-[//]: # (Objective:)
+Objective:
 
-[//]: # (To develop Basic Django Application Using Django)
+To develop Basic Django Application Using Django
 
-[//]: # (Templates)
+Templates
 
-[//]: # (Use headers and unordered list to view students)
+Use headers and unordered list to view students
 
-[//]: # (Students must be python list)
+Students must be python list
 
-[//]: # (You must use Django Templates)
+You must use Django Templates
 
-[//]: # (> Practice 3:)
+> Practice 3:
 
-[//]: # (> Create Views with Forms)
+> Create Views with Forms
 
-[//]: # (1&#41; Create a simple django view function)
+1) Create a simple django view function
 
-[//]: # (2&#41; Create django form)
+2) Create django form
 
-[//]: # (3&#41; Create django template)
+3) Create django template
 
-[//]: # (4&#41; Save instances)
+4) Save instances
