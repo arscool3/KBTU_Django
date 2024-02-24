@@ -6,9 +6,12 @@
     <title>My Website</title>
 </head>
 <body>
-    <h1>ASSIGNMENT2</h1>
-    <ul>
-        <li>{{ value }}</li>
-    </ul>
+    <h1>ASSIGNMENT3</h1>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+    </form>
+
 </body>
 </html>
