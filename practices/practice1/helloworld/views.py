@@ -12,3 +12,6 @@ def index(request):
 
 def exp(request, id):
     return HttpResponse(f"5^{id}={5**id}")
+
+def welcome(request):
+    return render(request, "index.html", {'bb':["welcome","willkommen","benvenuti"]})
