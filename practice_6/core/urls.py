@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from core.views import add_product
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('core/', include("core.urls"))
+    path('', add_product)
 ]
