@@ -39,3 +39,11 @@ You must use Django Templates
 3) Create django template
 
 4) Save instances
+
+> Practice 4:
+# WRITE DJANGO APPLICATION
+# AT LEAST YOU NEED TO DEVELOP
+# 2 Django Managers with 2 method each
+# 4 Django Models with 2-3 relationship
+# VIEWS for GET this objects
+# AND Django form for creating this instances
