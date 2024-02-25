@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Genres</h1>
+<ul>
+    {% for genre in genres %}
+        <li><a href="{% url 'genre-detail' genre.pk %}">{{ genre.name }}</a></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
