@@ -1,0 +1,16 @@
+<!-- templates/publishers.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Publishers</title>
+</head>
+<body>
+    <h1>Publishers</h1>
+    <ul>
+        {% for publisher in publishers %}
+            <li>{{ publisher.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

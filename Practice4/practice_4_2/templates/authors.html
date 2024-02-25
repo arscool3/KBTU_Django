@@ -1,0 +1,16 @@
+<!-- templates/authors.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authors</title>
+</head>
+<body>
+    <h1>Authors</h1>
+    <ul>
+        {% for author in authors %}
+            <li>{{ author.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
