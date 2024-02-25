@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     "hello",
     "practice2",
+    "practice3",
 ]
 
 MIDDLEWARE = [

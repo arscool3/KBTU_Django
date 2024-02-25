@@ -25,4 +25,7 @@ urlpatterns = [
 
     # Practice - 2
     path("practice2/", include("practice2.urls")),
+
+    # Practice - 3
+    path("practice3/", include("practice3.urls")),
 ]
