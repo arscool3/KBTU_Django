@@ -17,4 +17,5 @@ def my_view(request):
             return render(request, 'heloo.html', {'name': name, 'time':time})
     
     form = MyForm()
-    return render(request, 'my_template.html', {'form': form})       
+    return render(request, 'my_template.html', {'form': form})
+
