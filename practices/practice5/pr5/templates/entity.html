@@ -2,10 +2,12 @@
 <html>
     <head>
         <title>
-
+            {{type}}
         </title>
     </head>
     <body>
-        
+        {% for e in liste %}
+            <p>{{e}}</p>
+        {% endfor %}
     </body>
 </html>

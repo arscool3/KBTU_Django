@@ -5,6 +5,9 @@ class Person(models.Model):
     lname = models.CharField(max_length=50)
     age = models.IntegerField()
 
+    def __str__(self):
+        return self.fname + self.lname
+
     class Meta:
         abstract = True
 
@@ -12,8 +15,14 @@ class Lesson(models.Model):
     title = models.CharField(max_length=50)
     semester = models.CharField(max_length=50)
 
+    def __str__(self):
+        return title
+
 class Faculty(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return name
 
 class StudentQuerySet(models.QuerySet):
     def freshmen(self):
