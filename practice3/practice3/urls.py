@@ -1,8 +1,7 @@
-"""
-URL configuration for practice3 project.
+"""practice3 URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
+    https://docs.djangoproject.com/en/3.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -16,12 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import *
+
+from forms.views import my_view
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main_view),
-    path('basic/', basic_view),
-    path('test/', test_view),
-
+    path('my-view/', my_view, name='my-view'),
 ]
