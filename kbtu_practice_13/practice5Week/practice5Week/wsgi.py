@@ -1,5 +1,5 @@
 """
-WSGI config for practice6Week project.
+WSGI config for practice2# project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'practice6Week.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'practice2#.settings')
 
 application = get_wsgi_application()
