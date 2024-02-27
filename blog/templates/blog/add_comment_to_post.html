@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Comment</title>
+</head>
+<body>
+    <h1>Add Comment</h1>
+    <form method="post" action="{% url 'add_comment_to_post' pk=post.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+    <a href="{% url 'post_detail' pk=post.pk %}">Cancel</a>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>Author: {{ post.author.username }}</p>
+    <p>Categories: {% for category in post.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>Published: {{ post.published }}</p>
+    <p>Comments Count: {{ post.get_comments_count }}</p>
+    <hr>
+    
+    <h2>Comments</h2>
+    {% for comment in comments %}
+        <p>{{ comment.author.username }} - {{ comment.text }}</p>
+        <p>Posted on: {{ comment.created_at }}</p>
+        <hr>
+    {% endfor %}
+
+    <h2>Add Comment</h2>
+    <form method="post" action="{% url 'add_comment_to_post' pk=post.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+</body>
+</html>
