@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{city.name}}
+        </title>
+    </head>
+    <body>
+        <h1>City of {{city.name | capfirst}}</h1>
+        <p><b>Location:</b> <a href="/views/country/{{city.country}}">{{city.country}}</a></p>
+        <p><b>Population:</b> {{pop}}</p>
+        <p><b>Citizens:</b></p>
+        {% for c in citizens %}
+        <p><a href="/views/citizen/{{c.fname}}">{{c}}</a></p>
+        {% endfor %}
+    </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            List of citizens
+        </title>
+    </head>
+    <body>
+        <h1>
+            List of Citizens:
+        </h1>
+        <ul> {% for c in citizens %}
+            <a href='/views/citizen/{{c.fname}}'><li>{{c}}</li></a>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
