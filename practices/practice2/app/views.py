@@ -9,7 +9,7 @@ class Student:
 students = [
     Student(name='togzhan', age=19, sex='f'),
     Student(name='aizhan', age=15, sex='f'),
-    Student(name='ernar', age=23, sex='m')
+    Student(name='ernar', age=23, sex='m'),  
 ]
 
 def view(request):
