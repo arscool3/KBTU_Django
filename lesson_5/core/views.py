@@ -9,10 +9,10 @@ from core.models import Country, City, Citizen
 # Django ORM is lazy
 
 def get_country_by_name(request):
-    countries = Country.objects
-    if name := request.GET.get('name'):
-        countries = countries.filter(name=name.capitalize())
-    countries = countries.all()
+    countries = Country.objects.get_kaz().get_name(3)
+    # if name := request.GET.get('name'):
+    #     countries = countries.filter(name=name.capitalize())
+    # countries = countries.all()
     return render(request, "index.html", {"iterable": countries, "object": "Countries"})
 
 
