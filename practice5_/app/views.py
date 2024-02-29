@@ -42,14 +42,20 @@ def corporations_and_departments(request):
         'pro_form': pro_form,
         
     })
-from django.shortcuts import render
-from app.models import Corporation, Department, Employee, Project
 
-def get_employees(request):
-    employees = Employee.objects.get_employee_by_age(request.GET.get('age'))
+def get_employees_age(request):
+    age = request.GET.get('age')
+    employees = Employee.objects.get_employee_by_age(age) if age else Employee.objects.none()
     return render(request, 'employee.html', {'employees': employees})
+
+def get_employees_salary(request):
+    salary = request.GET.get('salary')
+    employees = Employee.objects.get_employee_by_salary(salary) if salary else Employee.objects.none()
+    return render(request, 'employee.html', {'employees': employees})
+
 
 def get_projects(request):
     projects = Project.objects.get_successful_projects()
     return render(request, 'projects.html', {'projects': projects})
-23
+
+
