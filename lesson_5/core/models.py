@@ -10,16 +10,20 @@ class Base(models.Model):
         abstract = True
 
 
-class CountryManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().order_by('-area')
+class CountryManager(models.QuerySet):
+    # def get_queryset(self):
+    #     return super().get_queryset().order_by('-area')
 
+    def get_kaz(self):
+        return self.filter(language='kazakh')
+    def get_name(self):
+        return self.filter(language='kazakh')
 
 class Country(Base):
     language = models.CharField(max_length=20)
     population = models.IntegerField()
     area = models.DecimalField(max_digits=20, decimal_places=2)
-    objects = CountryManager()
+    objects = CountryManager().as_manager()
 
 
 class City(Base):
@@ -50,3 +54,13 @@ class Citizen(Base):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     has_criminal_issues = models.BooleanField(default=False)
     objects = CitizenManager()
+
+
+
+# Create entire Django Application
+# At least 4 models
+# At least 2 relationships
+# At least 8 methods (4 post, 4 get)
+# At least 1 abstract class for models
+# At least 2 custom querysets
+# At least 6 custom querysets methods
