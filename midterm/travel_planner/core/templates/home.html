@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="message">
+  {% if message %}
+  <p>{{ message }}</p>
+  {% endif %}
+</div>
+  <h2>Welcome to Travel Planner!</h2>
+  <div class="link-block">
+    <a href="{% url 'ticket_search' %}">Airline tickets</a>
+    <a href="{% url 'accommodation_search' %}">Hotels</a>
+    <a href="{% url 'cart' %}">Cart</a>
+  </div>
+</div>
+
+<div class="ad-banner">
+  <img src="https://penji.co/wp-content/uploads/2019/03/Mcdonalds-Food-Ad-Designs.jpg" alt="Advertisement">
+</div>
+
+{% endblock %}
