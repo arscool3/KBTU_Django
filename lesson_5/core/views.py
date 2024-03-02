@@ -5,9 +5,6 @@ from django.shortcuts import render
 
 from core.models import Country, City, Citizen
 
-
-# Django ORM is lazy
-
 def get_country_by_name(request):
     countries = Country.objects
     if name := request.GET.get('name'):
