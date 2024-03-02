@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
 import datetime
 
 
@@ -35,6 +35,7 @@ class City(models.Model):
 
 class Airport(models.Model):
     airport_id = models.AutoField(primary_key=True)
+    airport_code = models.CharField(max_length=3,  validators=[MinLengthValidator(3)])
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     airport_name = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
