@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store List</title>
+</head>
+<body>
+    <h1>Stores with Products</h1>
+    <ul>
+        {% for store in stores_with_products %}
+            <li>{{ store.name }}</li>
+        {% endfor %}
+    </ul>
+    <h1>Ordered Stores</h1>
+    <ul>
+        {% for store in ordered_stores %}
+            <li>{{ store.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Create New Store</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location">
+        <button type="submit">Create Store</button>
+    </form>
+</body>
+</html>
