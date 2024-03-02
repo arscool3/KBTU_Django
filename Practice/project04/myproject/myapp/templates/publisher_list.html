@@ -1,4 +1,3 @@
-<!-- templates/publisher_list.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +6,25 @@
     <title>Publisher List</title>
 </head>
 <body>
-    <h1>Publishers</h1>
+    <h1>Publisher List</h1>
+    <form method="get">
+        <label for="name">Filter by Name:</label>
+        <input type="text" id="name" name="name">
+        <button type="submit">Filter</button>
+    </form>
+
     <ul>
         {% for publisher in publishers %}
-            <li>{{ publisher.name }} - {{ publisher.location }}</li>
+            <li>
+                <strong>{{ publisher.name }}</strong> - {{ publisher.location }}
+                <ul>
+                    {% for book in publisher.books.all %}
+                        <li>{{ book.title }} - {{ book.author.name }} - {{ book.publication_date }}</li>
+                    {% empty %}
+                        <li>No associated books</li>
+                    {% endfor %}
+                </ul>
+            </li>
         {% endfor %}
     </ul>
 </body>

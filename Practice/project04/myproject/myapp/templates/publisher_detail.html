@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book List</title>
+    <title>Publisher Detail</title>
 </head>
 <body>
-    <h1>Book List</h1>
-    <form method="get">
-        <label for="name">Filter by Name:</label>
-        <input type="text" id="name" name="name">
-        <button type="submit">Filter</button>
-    </form>
+    <h1>Publisher Detail</h1>
+    <p>Name: {{ publisher.name }}</p>
+    <p>Location: {{ publisher.location }}</p>
 
+    <h2>Associated Books</h2>
     <ul>
-        {% for book in books %}
+        {% for book in publisher.books.all %}
             <li>{{ book.title }} - {{ book.author.name }} - {{ book.publication_date }}</li>
+        {% empty %}
+            <li>No associated books</li>
         {% endfor %}
     </ul>
 </body>

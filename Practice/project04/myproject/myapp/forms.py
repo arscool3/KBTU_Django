@@ -9,7 +9,7 @@ class AuthorForm(forms.ModelForm):
 class PublisherForm(forms.ModelForm):
     class Meta:
         model = Publisher
-        fields = ['name', 'location']
+        fields = ['name', 'location', 'books']
 
 class BookForm(forms.ModelForm):
     class Meta:
