@@ -84,7 +84,7 @@ def author_delete(request, pk):
     if request.method == 'POST':
         author.delete()
         return redirect('author_list')
-    return render(request, 'author_delete_confirm.html', {'author': author})
+    return render(request, 'author_delete_confirm.html', {'author': author}) #delete method 
 
 def book_detail(request, pk):
     book = get_object_or_404(Book, pk=pk)
