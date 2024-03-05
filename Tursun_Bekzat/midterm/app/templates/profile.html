@@ -1,0 +1,43 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    </head>
+    <div class="profile-details">
+        <h2>Welcome to the Profile Page</h2>
+        {% if object %}
+            <p>{{ type }} Details:</p>
+            <table class="profile-table">
+                <tr>
+                    <th>ID</th>
+                    <td>{{ object.id }}</td>
+                </tr>
+                <tr>
+                    <th>GPA</th>
+                    <td>{{ object.gpa }}</td>
+                </tr>
+                <tr>
+                    <th>Speciality</th>
+                    <td>{{ object.speciality }}</td>
+                </tr>
+                <tr>
+                    <th>Disciplines</th>
+                    <td>
+                        <ul>
+                            {% for discipline in object.disciplines.all %}
+                                <li>{{ discipline }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Login</th>
+                    <td class="login-details">{{ object.login }}</td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

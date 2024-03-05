@@ -1,0 +1,30 @@
+{% extends 'home.html' %}
+{% load static %}
+
+
+{% block title %}Home - My Website{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Journal</title>
+        <link rel="stylesheet" href="{% static 'css/journal.css' %}">
+
+    </head>
+    <body>
+
+    <div class="container">
+        <h1>Journal</h1>
+        <div class="journal-entries">
+            <!-- Journal entries will be dynamically populated here -->
+            <!-- Example entry -->
+            <div class="entry">
+                <h2 class="entry-title">Entry Title</h2>
+                <p class="entry-date">Date: January 1, 2023</p>
+                <p class="entry-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

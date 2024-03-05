@@ -1,0 +1,39 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %}Disciplines - My Website{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weekly Schedule</title>
+        <link rel="stylesheet" href="{% static 'css/schedule.css' %}">
+    </head>
+    <body>
+
+    <h2>Weekly Schedule</h2>
+
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+        </tr>
+        {% for time_slot, disciplines in schedule.items %}
+        <tr>
+            <td>{{ time_slot }}</td>
+            {% for discipline in disciplines %}
+            <td>{{ discipline }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    </body>
+{% endblock %}

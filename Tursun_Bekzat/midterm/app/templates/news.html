@@ -1,0 +1,29 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block title %}News - My Website{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>News - My Website</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/news.css' %}">
+    </head>
+
+    <div class="news-container">
+        <h2>Latest News</h2>
+        {% if news %}
+            <ul class="news-list">
+                {% for item in news %}
+                    <li>
+                        <h3>{{ item.title }}</h3>
+                        <p>{{ item.content }}</p>
+                        <p><strong>Published on:</strong> {{ item.published_date }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No news available.</p>
+        {% endif %}
+    </div>
+{% endblock %}
