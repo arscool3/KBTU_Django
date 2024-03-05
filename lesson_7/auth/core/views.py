@@ -24,6 +24,11 @@ def register_view(request):
 def add_movies(request):
     return basic_form(request, MovieForm)
 
+@decorators.permission_required('core.can_delete_movies', login_url='login')
+def delete_movie(request,id):
+    if request.method == "DELETE":
+        Movie.objects.filter(id=id).delete()
+
 
 def logout_view(request):
     logout(request)
