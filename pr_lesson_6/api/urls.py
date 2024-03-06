@@ -1,7 +1,9 @@
 from django.urls import path
 
-# from pr_lesson_6.api.views import
+from .views import *
 
 urlpatterns = [
-
+    path('users/', get_users),
+    # path('users/<int:pk>/', get_user),
+    path('user/', get_user)
 ]

@@ -10,8 +10,13 @@ class Author(Person):
 
 
 class CustomUser(Person):
-    objects = None
+    pass
 
+
+class CustomUserQuerySet(models.QuerySet):
+
+    def get_name(self, username: str):
+        return self.filter(name=username)
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
