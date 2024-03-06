@@ -16,6 +16,7 @@ class CountryManager(models.QuerySet):
 
     def get_kaz(self):
         return self.filter(language='kazakh')
+
     def get_name(self):
         return self.filter(language='kazakh')
 
