@@ -2,6 +2,11 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
 import datetime
 
+class Days_of_Week(models.Model):
+    id = models.AutoField(primary_key=True)
+    day = models.CharField(max_length=15)
+    def __str__(self):
+        return self.day
 
 class Airline(models.Model):
     airline_id = models.AutoField(primary_key=True)
@@ -56,9 +61,13 @@ class Flight_fact(models.Model):
     arr_time = models.TimeField()
 
     diff_days = models.IntegerField(validators=[MinValueValidator(-1), MaxValueValidator(1)])
-
+    flight_days = models.ManyToManyField(Days_of_Week)
     def __str__(self):
         return self.flight_code
+
+class FlightQuerySet(models.QuerySet):
+    def get_flight_by_filter(self, airport_from: str, airport_to: str, flight_date: datetime):
+        return self.filter(flight_code__airport_from__city=airport_from,flight_code__airport_to__city=airport_to, flight_date=flight_date)
 
 class Flight_dim(models.Model):
     flight_id = models.AutoField(primary_key=True)
@@ -66,6 +75,10 @@ class Flight_dim(models.Model):
     aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE)
     flight_date = models.DateField()
     is_sale_open = models.BooleanField()
+    objects = FlightQuerySet.as_manager()
 
     def __str__(self):
         return self.flight_code.flight_code + ' (' + f'{self.flight_date}' + ')'
+
+    def dept_date(self):
+        return self.flight_date
