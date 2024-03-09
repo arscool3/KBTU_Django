@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-o^6y4n0@8d-=l#57o$!hn8cd%q#r43^*u!6e(^r$h-@6+z$2+&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'api',
     'channels'
 ]
-
 ASGI_APPLICATION = 'midterm.asgi.application'
 
 MIDDLEWARE = [
@@ -126,3 +125,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
+LOGIN_REDIRECT_URL = 'chat-page'
+
+LOGOUT_REDIRECT_URL = 'login-user'

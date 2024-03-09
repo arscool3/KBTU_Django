@@ -21,6 +21,8 @@ Let's start
 Note : Starting from version 4.0.0 of channels, ASGI runserver in development mode does not work anymore. You will have to install daphne as well.
 
     python -m pip install -U daphne
+#### 3. Pillow for progile images
+     python -m pip install Pillow
 
 # Adding dependencies
 ```
@@ -39,3 +41,17 @@ INSTALLED_APPS = [
 ASGI_APPLICATION = 'midterm.asgi.application'
 ```
 
+# Project files
+## New files added
+    api/template/Login.html
+    api/template/Page.html
+    api/urls.py
+    api/routing.py - for WebSocket connection
+    api/clients.py
+
+### routing.py
+    For WebSocket connections between server and client.
+
+### clients.py
+    Contains class that help with interaction with WebSocket
+    for a client
