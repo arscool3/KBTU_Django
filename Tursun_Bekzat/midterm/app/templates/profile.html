@@ -1,4 +1,4 @@
-{% extends 'home.html' %}
+{% extends 'basic.html' %}
 {% load static %}
 
 {% block content %}
@@ -38,6 +38,8 @@
                     <td class="login-details">{{ object.login }}</td>
                 </tr>
             </table>
+        {% else %}
+            <p>Not authorised</p>
         {% endif %}
     </div>
 {% endblock %}

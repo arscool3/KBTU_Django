@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 
 
 class Base(models.Model):
@@ -22,7 +23,7 @@ class Speciality(Base):
 
 class Discipline(Base):
     credits = models.IntegerField()
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, default=1)
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, default=1)
 
 
 class Student(Base):

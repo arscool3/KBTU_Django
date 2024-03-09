@@ -1,0 +1,22 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+    <div class="container">
+        <div class="about-section">
+            <h2>About Our University</h2>
+            <p>Welcome to our esteemed university. We pride ourselves on providing top-notch education and fostering a supportive learning environment for all our students.</p>
+            <p>Our university offers a wide range of disciplines and programs, including:</p>
+            <ul>
+                <li>Bachelor's, Master's, and PhD programs in various fields</li>
+                <li>Research opportunities with world-renowned faculty</li>
+                <li>Internship and co-op programs with leading industry partners</li>
+                <li>Study abroad programs to broaden horizons</li>
+            </ul>
+            <p>We are committed to academic excellence, innovation, and diversity. Our state-of-the-art facilities, modern campus, and vibrant student life contribute to an enriching educational experience.</p>
+            <p>Explore our website to learn more about our faculty, facilities, and academic offerings. If you have any questions or would like to schedule a campus tour, feel free to contact us.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        </div>
+    </div>
+{% endblock %}
