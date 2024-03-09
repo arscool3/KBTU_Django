@@ -79,7 +79,7 @@
 <br>
 {% if request.user.is_authenticated  %}
 <div style="text-align: center;"> Logout the chat Page
-    <a href = "{% url 'logout-user' %}">Logout</a>
+    <a href = "http://localhost:8000/api/auth/sign_out/{{ request.user.username }}/">Logout</a>
 </div>
 {% endif %}
 <div class="container" id="chat_item_container" style="font-size: 20px">

@@ -1,8 +1,10 @@
 import json
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.views import View
 from django.views.decorators import csrf
 from django.views.decorators.csrf import csrf_exempt
 
@@ -91,21 +93,17 @@ def get_the_group(request, room_name):
 def save_message_by_room(request, room_name):
     if request.method == 'POST':
         try:
-
             data = json.loads(request.body)['data']
             username = data['username']
             message_content = data['message']
             time = data['time']
             user = User.objects.get(username=username)
-            # Get the ChatRoom object
             chat_room = ChatRoom.objects.get(name=room_name)
 
-            # Create and save the Message
             message = Message(sender=user, content=message_content, time=time)
             message.save()
             chat_room.messages.add(message)
             chat_room.save()
-            # Optionally, you can send a response
             response_data = {
                 'status': 'success',
                 'message': 'Message saved successfully.'
@@ -119,16 +117,44 @@ def save_message_by_room(request, room_name):
             }
             return JsonResponse(response_data, status=404)
 
-        except Exception as e:
-            response_data = {
-                'status': 'error',
-                'message': 'An error occurred while saving the message.'
-            }
-            return JsonResponse(response_data, status=500)
-
-    else:
-        response_data = {
-            'status': 'error',
-            'message': 'Invalid request method. Only POST requests are allowed.'
+@csrf_exempt
+def get_online_users(request):
+    if request.method == 'GET':
+        online_users = OnlineUser.objects.filter(is_online=True)
+        data = {
+            'online users': list(online_users.values('user__username', 'last_activity', 'is_online'))
         }
-        return JsonResponse(response_data, status=405)
+        return JsonResponse(data)
+
+@csrf_exempt
+def set_users_activity(request, username):
+    if request.method == 'POST':
+        user = User.objects.get(username=username)
+        print(user)
+        if user:
+            try:
+                is_online_user = OnlineUser.objects.get(user=user)
+                if is_online_user:
+                    is_online_user.is_online = True
+                    is_online_user.last_activity = timezone.now()
+                    is_online_user.save()
+            except:
+                OnlineUser(user=user, is_online=True).save()
+            return JsonResponse({"success":"operation done"})
+    return JsonResponse({"error":"Something wrong"})
+
+
+class LogoutViewCustom(View):
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        print(user)
+        if user:
+            try:
+                is_online_user = OnlineUser.objects.get(user=user)
+                if is_online_user:
+                    is_online_user.is_online = False
+                    is_online_user.save()
+            except:
+                return JsonResponse({"error": "something went wrong"})
+        logout(request)
+        return JsonResponse({'message': f'User {username} logged out successfully'})
