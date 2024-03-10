@@ -1,9 +1,9 @@
-# MIDTERM
+MIDTERM
 
-# DEADLINE - BEFORE 9th lecture (12th March)
-# You choose topic (feel free to choose)
-# You have to use all topics that we have learned (check syllabus)
-# 25 points (25 баллов)
+ DEADLINE - BEFORE 9th lecture (12th March)
+ You choose topic (feel free to choose)
+ You have to use all topics that we have learned (check syllabus)
+ 25 points 
 
  # Min requirements
  # 6 Models
