@@ -9,7 +9,9 @@
     <h1>Expensive Products</h1>
     <ul>
         {% for product in expensive_products %}
-            <li>{{ product.name }} - {{ product.price }}tg</li>
+            {% if product.price > 1000 %}
+                <li>{{ product.name }} - {{ product.price }}tg</li>
+            {% endif %}
         {% empty %}
             <li>No expensive products found.</li>
         {% endfor %}
