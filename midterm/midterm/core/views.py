@@ -101,7 +101,6 @@ def process_payment(request, order_id):
             payment = form.save(commit=False)
             payment.order = order
             payment.save()
-
             order.status = 'Paid'
             order.save()
     else:
