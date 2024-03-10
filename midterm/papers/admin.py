@@ -1,3 +1,6 @@
 from django.contrib import admin
+from papers.models import Paper, Tag, Category
 
-# Register your models here.
+admin.site.register(Paper)
+admin.site.register(Tag)
+admin.site.register(Category)
