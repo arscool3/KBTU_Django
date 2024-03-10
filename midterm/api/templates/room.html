@@ -1,3 +1,5 @@
+{% load filters %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,8 +76,8 @@
         <div id="message-container">
             {% for message in messages %}
                 <div class="message">
-                    <span class="username">{{ message.sender }}</span>
-                    <span class="timestamp">{{ message.time}}</span>
+                    <span class="username">{{ message.sender | bold}}</span>
+                    <span class="timestamp">{{ "2024-03-10T08:35:21.202Z" | adorable_date}}</span>
                     <p>{{ message.content }}</p>
                 </div>
             {% endfor %}
@@ -88,13 +90,13 @@
 
     <script>
         const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/chat/{{ room_name }}/");
-
+        const notificationSocket = new WebSocket("ws://" + window.location.host + "/notifications/");
         function sendMessage() {
             const messageInput = document.getElementById('message-text').value.trim();
             if (!messageInput) {
                 return;
             }
-            const currentTime = new Date().toLocaleString();
+            const currentTime = new Date();
             const data = {
                 username: "{{ request.user }}",
                 message: messageInput,
@@ -114,8 +116,18 @@
                 .then(response => response.text())
                 .then(result => console.log(result))
                 .catch(error => console.error(error));
+            chatSocket.send(JSON.stringify({
+                username: "{{ request.user }}",
+                message: messageInput,
+                time: currentTime.toLocaleString()
+            }));
 
-            chatSocket.send(JSON.stringify(data));
+            notificationSocket.send(JSON.stringify({
+                message: messageInput,
+                notification_from: "{{ request.user.username }}",
+                group: "{{ room_name }}"
+            }))
+
             document.getElementById('message-text').value = '';
         }
 
@@ -132,6 +144,7 @@
             messageContainer.appendChild(newMessage);
             messageContainer.scrollTop = messageContainer.scrollHeight; // Scroll to bottom
         };
+
     </script>
 </body>
 </html>

@@ -6,4 +6,5 @@ from .clients import *
 websocket_urlpatterns = [
     path("", ChatConsumer.as_asgi()),
     re_path(r'ws/chat/(?P<room_name>\w+)/$', ChatRoomConsumer.as_asgi()),
+    path("notifications/", ChatNotification.as_asgi())
 ]

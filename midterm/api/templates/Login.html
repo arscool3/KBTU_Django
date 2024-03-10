@@ -7,28 +7,5 @@
         <br>
         <button type = "submit">Login</button>
     </form>
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            fetch("http://127.0.0.1:8000/api/set-user-activity/{{request.user.username}}/", {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-CSRFToken": "{{ csrf_token }}"
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data);
-                window.location.href = ('http://127.0.0.1:8000/api/chatApp/')
-            })
-        });
-    </script>
 </body>
 </html>

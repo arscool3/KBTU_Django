@@ -82,7 +82,6 @@ def get_the_group(request, room_name):
         try:
             chat_room = ChatRoom.objects.get(name=room_name)
             messages = chat_room.get_all_messages()
-            print(list(messages))
         except ChatRoom.DoesNotExist:
             messages = []
 
@@ -158,3 +157,22 @@ class LogoutViewCustom(View):
                 return JsonResponse({"error": "something went wrong"})
         logout(request)
         return JsonResponse({'message': f'User {username} logged out successfully'})
+
+@csrf_exempt
+def set_notification(request, username):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print(data)
+            user = User.objects.get(username=username)
+            if user:
+                notification = Notification(user=user, message=data['message'])
+                notification.save()
+                return JsonResponse({'success':'operation done',
+                                     'notification_from':'azama',
+                                     'message':data['message'],
+                                     'time':timezone.now()})
+            else:
+                return JsonResponse({'error':'user do not exists'})
+        except:
+            return JsonResponse({'error':'something went wrong'})
