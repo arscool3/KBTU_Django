@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add Chapter</title>
+    <style>
+              :root {
+        /* Light theme colors */
+        --background-color: #ffffff;
+        --text-color: #333;
+        --secondary-background-color: #f8f8f8;
+        --border-color: #ddd;
+        --box-shadow-color: rgba(0, 0, 0, 0.1);
+        --link-color: #007bff;
+        --hover-bg-color: #555;
+        --hover-text-color: #ffffff;
+    }
+
+    [data-theme="dark"] {
+        /* Dark theme colors */
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --secondary-background-color: #242424;
+        --border-color: #444;
+        --box-shadow-color: rgba(255, 255, 255, 0.1);
+        --link-color: #1e90ff;
+        --hover-bg-color: #333;
+        --hover-text-color: #dddddd;
+    }
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #1e90ff;
+            padding-top: 20px;
+        }
+     /* Navbar styles */
+    .navbar {
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        box-shadow: 0 2px 5px var(--box-shadow-color);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* Ensures navbar stays above other content */
+    }
+
+    .nav-item {
+        margin-right: 20px;
+        color: var(--link-color);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .nav-item:hover {
+        color: var(--hover-text-color);
+    }
+
+    .theme-toggle {
+
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+        background-color: var(--hover-bg-color);
+        color: var(--hover-text-color);
+    }
+    form {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--secondary-background-color);
+            border-radius: 5px;
+            box-shadow: var(--box-shadow-color) 0px 2px 4px;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--link-color);
+            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.5); /* A light blue outline */
+        }
+
+        input[type="submit"] {
+            padding: 10px 15px;
+            background-color: var(--link-color);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--hover-bg-color);
+            color: var(--hover-text-color);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <nav class="navbar">
+    <a href="{% url 'home' %}" class="nav-item">Home</a>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'user_profile' user_id=request.user.id %}" class="nav-item">Profile</a>
+        <a href="{% url 'logout' %}" class="nav-item">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="nav-item">Login</a>
+    {% endif %}
+    <button class="theme-toggle">Toggle Theme</button>
+</nav>
+    <h1>Add a New Chapter to {{ novel.title }}</h1>
+    <form action="{% url 'add_chapter' novel.id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">Chapter Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="chapter_number">Chapter Number:</label>
+            <input type="number" id="chapter_number" name="chapter_number" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" rows="10" required></textarea>
+        </div>
+        <input type="submit" value="Add Chapter">
+    </form>
+<script>
+    const themeToggleButton = document.querySelector('.theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    themeToggleButton.textContent = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+    themeToggleButton.addEventListener('click', () => {
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeToggleButton.textContent = newTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    });
+</script>
+</body>
+</html>
