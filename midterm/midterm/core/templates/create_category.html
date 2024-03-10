@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Category</title>
+</head>
+<body>
+    <h2>Create a new category</h2>
+    <form method="post" action="{% url 'create_category' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Category</button>
+    </form>
+</body>
+</html>
