@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, forms
 from .serializers import CustomUserCreationForm
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 
 def homepage(request):
