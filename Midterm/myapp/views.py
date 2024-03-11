@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
@@ -41,6 +41,11 @@ def logIn(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+
+def logOut(request):
+    logout(request)
+    return redirect('users_default')
 
 
 class UserView(View):
