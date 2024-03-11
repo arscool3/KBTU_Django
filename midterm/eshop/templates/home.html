@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+
+{% block content %}
+    <h1>Welcome to our e-shop!</h1>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <a href="{% url 'product_detail' product.id %}">{{ product.name|shorten_name }} - {{ product.price|format_price }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
