@@ -6,8 +6,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from my_app.serializers import AuthorSerializer, BookSerializer, UserProfileSerializer, FavoriteSerializer, GenreSerializer
 from django.contrib.auth.decorators import login_required
-from my_app.models import Author, Book, UserProfile, Favorite, Genre
-from my_app.forms import BookForm
+from my_app.models import Author, Book, UserProfile, Favorite, Genre, User
+from my_app.forms import BookForm, AuthorForm, FavoriteForm, GenreForm
+
+
+# 6 Post requests
 
 def homepage(request):
     return render(request, 'homepage.html')
@@ -62,7 +65,57 @@ def check_view(request):
     raise Exception(f"{request.user} is not authenticated")
 
 
+def add_book(request):
+    if request.method == 'POST':
+        serializer = BookSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    else:
+        if request.user.is_authenticated:
+            return basic_form(request, BookForm)
+        else:
+            next_url = request.GET.get('next')
+            print("Next URL:", next_url) 
+            request.session['next_url'] = next_url
+            return redirect('login')
 
+def add_author(request):
+    if request.method == 'POST':
+        serializer = AuthorSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    else:
+        if request.user.is_authenticated:
+            return basic_form(request, AuthorForm)
+        else:
+            next_url = request.GET.get('next')
+            print("Next URL:", next_url) 
+            request.session['next_url'] = next_url
+            return redirect('login')
+        
+def add_genre(request):
+    if request.method == 'POST':
+        serializer = GenreSerializer(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    else:
+        if request.user.is_authenticated:
+            return basic_form(request, GenreForm)
+        else:
+            next_url = request.GET.get('next')
+            print("Next URL:", next_url) 
+            request.session['next_url'] = next_url
+            return redirect('login')
+
+
+# 6 Get requests
+        
 @api_view(['GET'])
 def get_all_books(request):
     if request.user.is_authenticated:
@@ -97,75 +150,19 @@ def get_author_details(request, author_id):
         return JsonResponse(serializer.data)
     except Author.DoesNotExist:
         return JsonResponse({'error': 'Author not found'}, status=404)
-
+    
 @api_view(['GET'])
-@decorators.login_required(login_url='login')
-def get_user_profile(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    serializer = UserProfileSerializer(user_profile)
-    return JsonResponse(serializer.data)
-
-@api_view(['GET'])
-@decorators.login_required(login_url='login')
-def get_user_favorite(request):
-    favorites = Favorite.objects.filter(user=request.user)
-    serializer = FavoriteSerializer(favorites, many=True)
+def get_all_genres(request):
+    genres = Genre.objects.all()
+    serializer = GenreSerializer(genres, many=True)
     return JsonResponse(serializer.data, safe=False)
 
+@api_view(['GET'])
+def get_genre_details(request, genre_id):
+    try:
+        genre = Genre.objects.get(pk=genre_id)
+        serializer = GenreSerializer(genre)
+        return JsonResponse(serializer.data)
+    except genre.DoesNotExist:
+        return JsonResponse({'error': 'genre not found'}, status=404)
 
-@decorators.login_required(login_url='login')
-def add_book(request):
-    if request.user.is_authenticated:
-        return basic_form(request, BookForm)
-    else:
-        next_url = request.GET.get('next')
-        print("Next URL:", next_url) 
-        request.session['next_url'] = next_url
-        return redirect('login')
-
-@api_view(['POST'])
-@decorators.login_required(login_url='login')
-def add_author(request):
-    if request.method == 'POST':
-        serializer = AuthorSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-@api_view(['POST'])
-@decorators.login_required(login_url='login')
-def add_favorite(request):
-    if request.method == 'POST':
-        serializer = FavoriteSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-@api_view(['POST'])
-@decorators.login_required(login_url='login')
-def add_genre(request):
-    if request.method == 'POST':
-        serializer = GenreSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-@api_view(['POST'])
-@decorators.login_required(login_url='login')
-def add_user_profile(request):
-    if request.method == 'POST':
-        serializer = UserProfileSerializer(data=request.POST)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-@api_view(['POST'])
-@decorators.login_required(login_url='login')
-def add_user_photo(request):
-    if request.method == 'POST':
-        return JsonResponse({'message': 'Photo uploaded successfully'}, status=201)
-    return JsonResponse({'error': 'Method not allowed'}, status=405)
