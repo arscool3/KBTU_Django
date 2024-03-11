@@ -8,7 +8,7 @@ from django.views import View
 from django.views.decorators import csrf
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import ChatRoomForm
+from .forms import ChatRoomForm, UserForm
 from .models import *
 
 
@@ -142,6 +142,15 @@ def set_users_activity(request, username):
             return JsonResponse({"success":"operation done"})
     return JsonResponse({"error":"Something wrong"})
 
+def register(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login-user')
+    else:
+        form = UserForm()
+    return render(request, 'register.html', {'form': form})
 
 class LogoutViewCustom(View):
     def get(self, request, username):

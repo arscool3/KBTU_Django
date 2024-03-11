@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <style>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
@@ -34,6 +36,7 @@
         }
 
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 100%;
             padding: 10px;
@@ -61,11 +64,11 @@
     </style>
 </head>
 <body>
-    <form id="loginForm" method ="post">
+    <h1>User Registration</h1>
+    <form method="post">
         {% csrf_token %}
-        {{form.as_p}}
-        <br>
-        <button type = "submit">Login</button>
+        {{ form.as_p }}
+        <button type="submit">Register</button>
     </form>
 </body>
 </html>
