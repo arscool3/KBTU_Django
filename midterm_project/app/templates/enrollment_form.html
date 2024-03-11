@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollment Form</title>
+</head>
+<body>
+    <h1>Enrollment Form</h1>
+    <form action="{% url 'enrollment_form' course_id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Enroll</button>
+    </form>
+</body>
+</html>
