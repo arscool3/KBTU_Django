@@ -55,14 +55,9 @@ def category_detail(request, category_name):
 
 #6 POST Endpoints
 def create_product(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('all_products') 
-    else:
-        form = ProductForm()
-    
+    form = ProductForm(request.POST)
+    if form.is_valid():
+        form.save()
     return render(request, 'create_product.html', {'form': form})
 
 
