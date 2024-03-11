@@ -27,8 +27,11 @@ router.register(r'tasks', Project.views.TaskViewSet, basename='user')
 router.register(r'comments', Project.views.CommentViewSet, basename='user')
 router.register(r'attachments', Project.views.AttachmentViewSet, basename='user')
 router.register(r'teams', Project.views.TeamViewSet, basename='user')
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', Project.views.login_view, name='login'),
+    path('register/', Project.views.register_view, name='register'),
     path('project/dates', Project.views.get_projects_by_date, name='dates'),
     path('project/status', Project.views.get_only_build_company, name='status'),
     path('project/dates/january', Project.views.get_projects_from_january, name='status'),
