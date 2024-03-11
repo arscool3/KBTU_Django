@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event list</title>
+  </head>
+  <body>
+    <header>
+      {% if request.user.is_authenticated %}
+      <form action="{% url 'signout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+      {% endif %} {% if user.is_superuser %}
+      <a href="/admin">Go to the Admin Panel</a>
+      <a href="/attendee/create">Create attendee</a>
+      {% else %}
+      <a href="/events/create">Create Event</a>
+      {% endif %}
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+  </body>
+</html>

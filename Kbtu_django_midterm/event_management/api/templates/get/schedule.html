@@ -1,0 +1,15 @@
+{% load utils %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ schedule.event.title }} schedule</title>
+</head>
+<body>
+    <h2>Schedule of {{ schedule.event.title }}</h2>
+    <p>Start Time: {{ schedule.start_time|format_time }}</p>
+    <p>End Time: {{ schedule.end_time|format_time }}</p>
+</body>
+</html>

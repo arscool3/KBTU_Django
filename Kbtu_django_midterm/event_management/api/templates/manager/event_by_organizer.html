@@ -1,0 +1,19 @@
+{% load utils %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{organizer.name}} events</title>
+  </head>
+  <body>
+    <h2>{{ organizer.name }} event list</h2>
+    <ul>
+      {% for event in events %}
+      <li>
+        <a href="/events/{{event.id}}">{{ event.title| truncate_title}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

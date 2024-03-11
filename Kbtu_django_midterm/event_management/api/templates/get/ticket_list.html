@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket list</title>
+  </head>
+  <body>
+    <h2>Ticket lists</h2>
+    <ul>
+      {% for ticket in tickets %}
+      <li>
+        <a href="/tickets/{{ticket.id}}">{{ticket.attendee}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
