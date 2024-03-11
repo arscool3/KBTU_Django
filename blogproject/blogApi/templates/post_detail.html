@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/cyborg/bootstrap.min.css">
+
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <h2>{{ post.category }}</h2>
+    <p>{{ post.description }}</p>
+    <form action="{% url 'add_comments' post.id %}", method="post">
+        {% csrf_token %}
+        <label>Ваш комментарий</label>  
+		<textarea name="text_comments"></textarea>
+        <button type="submit">submit</button>
+    </form>
+
+    {% for comment in post.comments_set.all %}
+    <h4>{{ comment.author.username }}</h4>
+    <p> {{ comment.text_comments }}</p>
+    {% endfor %}
+</body>
+</html>

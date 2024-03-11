@@ -1,0 +1,30 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/cyborg/bootstrap.min.css">
+</head>
+<body>
+    <form action={{request.get_full_path}} method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+    <input type="submit" value="Submit">
+    </form>
+
+    {% for post in posts %}
+    
+    <table>
+        
+        <tr>
+            <td>{{ post.id }}</td>
+            <td><a href="{{ post.id}}">{{ post.title }}</a></td>
+            <td>{{ post.description }}</td>
+        </tr>
+    </table>
+    {% endfor %}
+</body>
+</html>
