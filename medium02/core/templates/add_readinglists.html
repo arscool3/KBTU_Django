@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liking an article</title>
+</head>
+<body>
+    <form method="post" action="{% url 'add_readinglists' %}">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{article.pk}}">
+        <button type="submit">add to reading lists</button>
+    </form>
+    
+    
+</body>
+</html>

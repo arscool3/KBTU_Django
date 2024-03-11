@@ -1,0 +1,24 @@
+<!-- reading_list.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading List</title>
+</head>
+<body>
+
+   <h1>{{ readinglists.profile.user.username }}'s Reading List</h1>
+
+
+    {% for article in readinglists.articles.all %}
+        <li>{{ article.title }} by {{article.author}}</li>            
+    {% endfor %}
+
+
+    <!-- Add a link to go back to the home page or other relevant page -->
+    <a href="{% url 'articles' %}">Back to all articles</a>
+</body>
+</html>
+
