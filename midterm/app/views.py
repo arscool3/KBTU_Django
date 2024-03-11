@@ -149,10 +149,10 @@ def apply_for_vacancy(request, vacancy_id):
             response.vacancy = vacancy
             response.resume = request.user.resume
             response.save()
-            messages.success(request, 'The response has been sent successfully.')
-            return redirect('home')
+            messages.success(request, 'Your application has been submitted successfully.')
+            return redirect('vacancy_list')
         else:
-            messages.error(request, 'An error occurred when sending the response. Please check the entered data.')
+            messages.error(request, 'An error occurred while submitting your application. Please check the entered data.')
     else:
         form = ResponseForm()
 
@@ -170,7 +170,7 @@ def apply_for_vacancy(request, vacancy_id):
 #         messages.info(request, 'Вы уже сохраняли эту вакансию.')
 #
 #     return redirect('home')
-#
+
 
 def edit_resume(request, resume_id):
     resume = get_object_or_404(Resume, id=resume_id)
