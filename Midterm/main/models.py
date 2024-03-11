@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator, MinLengthValidator, MaxLengthValidator
-import datetime
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 class Days_of_Week(models.Model):
     id = models.AutoField(primary_key=True)
@@ -65,6 +66,28 @@ class Flight_fact(models.Model):
     def __str__(self):
         return self.flight_code
 
+    def generate_flights(self, period_type):
+        data = Flight_dim.objects
+        if period_type == 'month':
+            last_date = data.filter(flight_code__flight_code = self.flight_code).order_by('-flight_date').first()
+
+            if last_date:
+                last_date = last_date.flight_date
+            else:
+                last_date = timezone.now().date()
+
+            first_day_next_month = (last_date.replace(day=1) + timedelta(days=32)).replace(day=1)
+            last_day_next_month = (first_day_next_month + timedelta(days=32)).replace(day=1) + timedelta(days=-1)
+
+            next_month_dates = [first_day_next_month + timedelta(days=i) for i in range((last_day_next_month - first_day_next_month).days + 1)]
+
+            flight_days_list = self.flight_days.values_list('id', flat=True)
+            for date in next_month_dates:
+                if date.weekday() + 1 in flight_days_list.all():
+                    Flight_dim.objects.create(flight_code=self, flight_date=date, is_sale_open=False)
+
+
+
 class FlightQuerySet(models.QuerySet):
     def get_flight_by_filter(self, airport_from: str, airport_to: str, flight_date: datetime):
         return self.filter(flight_code__airport_from__city=airport_from,flight_code__airport_to__city=airport_to, flight_date=flight_date)
@@ -72,7 +95,7 @@ class FlightQuerySet(models.QuerySet):
 class Flight_dim(models.Model):
     flight_id = models.AutoField(primary_key=True)
     flight_code = models.ForeignKey(Flight_fact, on_delete=models.CASCADE)
-    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE)
+    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE, null=True)
     flight_date = models.DateField()
     is_sale_open = models.BooleanField()
     objects = FlightQuerySet.as_manager()

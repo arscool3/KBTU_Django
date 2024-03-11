@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Options</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    .trip-details {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .flight-option {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .flight-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .flight-info span {
+      font-weight: bold;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .flight-option {
+        margin-bottom: 20px;
+    }
+
+    /* Adjust the width of the fares block to create wider blocks */
+    .fares {
+        width: 100%; /* Adjust the width as needed */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap; /* Prevent line breaks */
+        margin: 10px; /* Add spacing between options */
+    }
+
+    .fares_option {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: inline-block; /* Display horizontally */
+        margin-right: 10px; /* Add spacing between options */
+        white-space: nowrap; /* Prevent line breaks */
+    }
+
+    .fares_option span {
+        display: block; /* Display spans as block-level elements */
+    }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: right;
+    }
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+        margin-top: 0;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        {% if request.user.is_authenticated %}
+            <a class="btn" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </header>
+    <div class="container">
+        <div class="trip-details">
+            <h2>Flight Options</h2>
+            <p>Trip: From <span id="from">{{ flight_detail.From }}</span> to <span id="to">{{ flight_detail.To }}</span></p>
+            <p>Date: <span id="date">{{ flight_detail.Flight_date }}</span></p>
+        </div>
+        <div id="flight-options">
+          {% for flight in flights %}
+            <div class="flight-option">
+              <div class="flight-info">
+                <span>{{ flight.airline_name }} - {{ flight.flight_code }}</span>
+                <span>Departure Time: {{ flight.dept_time }} &rarr; {{ flight.arr_time }}</span>
+              </div>
+              <button onclick="toggleFares(this)">Expand</button>
+              <div class="fares hidden">
+                <div class="fares_option">
+                    <span>Fare Option 1</span>
+                    <span>10,000KZT</span>
+                    <button>Купить</button>
+                </div>
+                <div class="fares_option">
+                    <span>Fare Option 2</span>
+                    <span>15,000KZT</span>
+                    <button>Купить</button>
+                </div>
+                <div class="fares_option">
+                    <span>Fare Option 3</span>
+                    <span>20,000KZT</span>
+                    <button>Купить</button>
+                </div>
+                <div class="fares_option">
+                    <span>Fare Option 4</span>
+                    <span>25,000KZT</span>
+                    <button>Купить</button>
+                </div>
+                <div class="fares_option">
+                    <span>Fare Option 5</span>
+                    <span>30,000KZT</span>
+                    <button>Купить</button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function toggleFares(button) {
+            var fares = button.nextElementSibling;
+            fares.classList.toggle('hidden');
+            if (fares.classList.contains('hidden')) {
+                button.textContent = 'Expand';
+            } else {
+                button.textContent = 'Collapse';
+            }
+        }
+    </script>
+</body>
+</html>
