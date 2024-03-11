@@ -1,0 +1,17 @@
+{%extends 'base.html' %}
+{%block content%}
+<h1>Login</h1>
+<hr>
+{%if form.error%}
+<p>{{form.errors.error}}</p>
+{%endif%}
+
+<form action="{%url 'login' %}" method="POST">
+	{{form}}
+	{%csrf_token%}
+	
+	<button class="btn btn-success" type="submit">Отправить</button>
+</form>
+<a class="nav-link" href="{%url 'register' %}">Register</a>
+
+{%endblock%}

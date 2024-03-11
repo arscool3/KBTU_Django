@@ -1,0 +1,16 @@
+{%extends 'base.html' %}
+{%block content%}
+
+<div class="cart-card-wrapper">
+	{%for product in order_objects%}
+	<div class="cart-card">
+		<img src="{{product.prodcut.image.url}}" alt="" class="cart-img">
+		<div class="card-body">
+			<h3 class="cart-title">{{product.prodcut.title}}</h3>
+			<p class="cart-text">{{product.prodcut.price}}</p>
+			<p class="cart-text">{{product.quantity}}</p>
+		</div>
+	</div>
+	{%endfor%}
+</div>
+{%endblock%}

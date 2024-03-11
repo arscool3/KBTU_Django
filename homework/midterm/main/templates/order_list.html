@@ -1,0 +1,17 @@
+{%extends 'base.html '%}
+
+{%block content%}
+<div class="cart-card-wrapper">
+	{%for product in orders%}
+	<div class="cart-card">
+		
+		<div class="card-body">
+			<h3 class="cart-title">{{product.id}}</h3>
+			<p class="cart-text">{{product.data}}</p>
+			<a class="link" href="{%url 'order_detail' product.id %}">подробнее</a>
+			
+		</div>
+	</div>
+	{%endfor%}
+</div>
+{%endblock%}
