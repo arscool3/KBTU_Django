@@ -50,7 +50,6 @@ class CreateStudentView(generics.CreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-
 class CreateCourseView(generics.CreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
