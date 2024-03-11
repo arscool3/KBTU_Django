@@ -1,10 +1,20 @@
 import dataclasses
 
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse, redirect
 from .models import Airline, Aircraft, City, Airport, Flight_fact, Flight_dim
 from collections import defaultdict
 from .forms import TicketSearchForm
+from django.contrib.auth import authenticate, login, decorators, logout, forms
+
+
+def format_time(time):
+    # Format time using strftime
+    formatted_time = time.strftime('%H:%M')
+    return formatted_time
+
+def entry_page(request):
+    return render(request, 'entry_page.html')
+
 
 def search_ticket(request):
     if request.method == "POST":
@@ -19,14 +29,29 @@ def search_ticket(request):
             flights = Flight_dim.objects
             flights = flights.get_flight_by_filter(airport_from, airport_to, flight_date)
 
-            flights = flights.all().order_by('flight_date', 'flight_code__dept_time')
+            flights = flights.all().order_by('flight_code__dept_time')
 
-            grouped_flights = defaultdict(list)
+            flight_detail = {
+                'From': airport_from.name,
+                'To': airport_to.name,
+                'Flight_date': flight_date,
+                'Seat_Class': seat_class,
+            }
+            serialized_flights = []
             for flight in flights:
-                grouped_flights[flight.dept_date()].append(flight)
+                serialized_flight = {
+                    'flight_id': flight.flight_id,
+                    'flight_code': flight.flight_code.flight_code,
+                    'airline_name': flight.flight_code.airline_name.airline_name,
+                    'dept_time': format_time(flight.flight_code.dept_time),
+                    'arr_time': format_time(flight.flight_code.arr_time)
+                }
+                serialized_flights.append(serialized_flight)
 
-            return render(request, 'index.html', {'grouped_flights': dict(grouped_flights), 'header':'Flights by filter'})
-    else:
+            print(serialized_flights)
+            return render(request, 'flight_option.html', {'flights': serialized_flights, 'flight_detail': flight_detail, 'header':'Flights by filter'})
+            #return JsonResponse({'flights': serialized_flights, 'flight_detail': flight_detail, 'header':'Flights by filter'})
+    elif request.method == "GET":
         form = TicketSearchForm()
         return render(request, 'index2.html', {'form': form})
 
@@ -47,5 +72,51 @@ def get_flights(request):
     for flight in flights:
         grouped_flights[flight.dept_date()].append(flight)
     return render(request, 'index.html', {'grouped_flights': dict(grouped_flights), 'header':'Flights by filter'})
+
+def basic_form(request, given_form):
+    if request.method == 'POST':
+        form = given_form(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('entry_page')
+        else:
+            raise Exception(f"some erros {form.errors}")
+    elif request.method == "GET":
+        return render(request, 'log_reg.html', {'form': given_form()})
+
+
+def register_view(request):
+    return basic_form(request, forms.UserCreationForm)
+
+def logout_view(request):
+    logout(request)
+    return redirect('entry_page')
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = forms.AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            try:
+                user = authenticate(**form.cleaned_data)
+                login(request, user)
+                if user.is_superuser:
+                    return redirect('admin:index')
+                return redirect('search_ticket')
+            except Exception:
+                pass
+        else:
+            return render(request, 'log_reg.html', {'form': forms.AuthenticationForm(), 'comment': 'Wrong credentials, or you still do not have access to enter the Web page'})
+    elif request.method == "GET":
+        return render(request, 'log_reg.html', {'form': forms.AuthenticationForm()})
+
+
+@decorators.login_required(login_url='login')
+def check_view(request):
+    if request.user.is_authenticated:
+        return HttpResponse(f"{request.user} is authenticated")
+    raise Exception(f"{request.user} is not authenticated")
+
+
 
 

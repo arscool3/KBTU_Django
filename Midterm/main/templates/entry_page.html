@@ -1,12 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-        <style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entry Page</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -46,17 +44,14 @@
 </head>
 <body>
     <header>
-        {% if request.user.is_authenticated %}
-            <a class="btn" href="{% url 'logout' %}">Logout</a>
-        {% endif %}
+        <a class="btn" href="{% url 'login' %}">Login</a>
+        <a class="btn" href="{% url 'register' %}">Register</a>
     </header>
-    <h3>Search Tickets</h3>
-    <form method="POST">
-        {% csrf_token %}
-    <table>
-        {{ form }}
-    </table>
-    <input type="submit" value="Search" >
-    </form>
+    <div class="container">
+        <h1>Welcome to the Entry Page</h1>
+        <p>Please select an option:</p>
+        <a class="btn" href="{% url 'login' %}">Login</a>
+        <a class="btn" href="{% url 'register' %}">Register</a>
+    </div>
 </body>
 </html>
