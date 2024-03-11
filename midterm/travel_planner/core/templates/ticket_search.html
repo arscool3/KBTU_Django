@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Ticket Search
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2>Ticket Search</h2>
+  {% if message %}
+  <p>{{ message }}</p>
+  {% endif %}
+  <h2>Select Your Destination</h2>
+  <form id="ticketSearchForm" class="form" action="{% url 'ticket_search' %}" method="POST">
+    {% csrf_token %}
+    <label for="departure">Departure City:</label>
+    <select id="departure" name="departure">
+      {% for city in cities %}
+      <option value="{{ city.name }}" {% if city.name == departure %}selected{% endif %}>{{ city.name }}</option>
+      {% endfor %}
+    </select>
+    <label for="destination">Destination City:</label>
+    <select id="destination" name="destination">
+      {% for city in cities %}
+      <option value="{{ city.name }}" {% if city.name == destination %}selected{% endif %}>{{ city.name }}</option>
+      {% endfor %}
+    </select>
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required value="{{ date }}">
+    <label for="travelers">Number of Travelers:</label>
+    <input type="number" id="travelers" name="travelers" min="1" value="{% if travelers %}{{ travelers }}{% else %}1{% endif %}">
+    <button type="button" onclick="checkCitiesAndSubmit()">Search Tickets</button>
+  </form>
+  <div class="home_link">
+    <a href="{% url 'home' %}">Home</a>
+  </div>
+  <img id="ad" src="https://penji.co/wp-content/uploads/2019/03/CurtisTea-Food-Ad-Designs-708x1024.jpg" alt="Advertisement">
+  <img id="ad2" src="https://penji.co/wp-content/uploads/2019/03/demorfi-Food-Ad-Designs-768x1024.jpg" alt="">
+  <ul class="list">
+    {% for ticket in tickets %}
+    <li id="ticket_{{ ticket.id }}" {% if ticket.selected %} class="selected" {% endif %} {% if ticket.cheapest %} class="cheapest" {% endif %} onclick="selectTicket({{ ticket.id }})">
+      <p>Flight Number: {{ ticket.flight_number }}</p>
+      <p>Price: ${{ ticket.price }}</p>
+    </li>
+    {% endfor %}
+    {% if tickets %}
+      <button class="addToCart" onclick="continueSelection()">Add to cart</button>
+    {% endif %}
+  </ul>
+  
+  <form id="selectTicketForm" method="post" action="">
+    {% csrf_token %}
+  </form>
+</div>
+
+<script>
+  function checkCitiesAndSubmit() {
+    var departure = document.getElementById('departure').value;
+    var destination = document.getElementById('destination').value;
+
+    if (departure === destination) {
+      alert("Departure city and destination city cannot be the same.");
+      return;
+    }
+
+    document.getElementById('ticketSearchForm').submit();
+  }
+
+  let selectedTicketId = null;
+
+  function selectTicket(ticketId) {
+    const selectedTicket = document.querySelector('.selected');
+    if (selectedTicket) {
+      selectedTicket.classList.remove('selected');
+    }
+    const currentTicket = document.getElementById(`ticket_${ticketId}`);
+    if (currentTicket) {
+      currentTicket.classList.add('selected');
+      selectedTicketId = ticketId;
+    }
+  }
+
+  function continueSelection() {
+    if (selectedTicketId) {
+      document.getElementById('selectTicketForm').action = `{% url 'add_ticket_to_cart' 0 %}`.replace('0', selectedTicketId);
+      document.getElementById('selectTicketForm').submit();
+    } else {
+      console.error('No ticket selected.');
+    }
+  }
+</script>
+{% endblock %}

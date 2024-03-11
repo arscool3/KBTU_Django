@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Payment
+{% endblock %}
+
+{% block content %}
+    <div class="pay">
+    <form class="payment-form" action="{% url 'process_payment' %}" method="POST">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" class="payment-input" placeholder="John More Doe" required ><br>
+        <label for="card_number">Card Number:</label>
+        <input type="text" id="card_number" name="card_number" class="payment-input" placeholder="1111-2222-3333-4444" required><br>
+        <label for="expiry_date">Expiry Date:</label>
+        <input type="text" id="expiry_date" name="expiry_date" class="payment-input" placeholder="12/24" required><br>
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" class="payment-input" placeholder="352" required><br>
+        <button type="submit" class="payment-button">Pay Now</button>
+    </form> 
+</div>   
+
+{% endblock %}
