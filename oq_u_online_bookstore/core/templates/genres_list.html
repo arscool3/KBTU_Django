@@ -16,6 +16,9 @@
             <li><a href="{% url 'books_by_genre' genre.id %}">{{ genre.name }}</a></li>
             {% endfor %}
         </ul>
+        <br>
+        <br>
+        <a href="{% url 'create_genre' %}">Create a genre</a>
     </ul>
 </body>
 

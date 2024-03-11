@@ -1,7 +1,7 @@
-
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, decorators, logout, forms
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
 from .forms import BookForm, AuthorForm, GenreForm, OrderForm, ReviewForm
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
@@ -159,6 +159,7 @@ def create_user(request):
     return render(request, 'create_user.html', {'form': form})
 
 # for our forms
+@decorators.login_required(login_url='login')
 def create_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
@@ -169,6 +170,7 @@ def create_book(request):
         form = BookForm()
     return render(request, 'create_book.html', {'form': form})
 
+@decorators.login_required(login_url='login')
 def create_author(request):
     if request.method == 'POST':
         form = AuthorForm(request.POST)
@@ -179,6 +181,7 @@ def create_author(request):
         form = AuthorForm()
     return render(request, 'create_author.html', {'form': form})
 
+@decorators.login_required(login_url='login')
 def create_genre(request):
     if request.method == 'POST':
         form = GenreForm(request.POST)
@@ -189,6 +192,7 @@ def create_genre(request):
         form = GenreForm()
     return render(request, 'create_genre.html', {'form': form})
 
+@decorators.login_required(login_url='login')
 def create_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -199,6 +203,7 @@ def create_order(request):
         form = OrderForm()
     return render(request, 'create_order.html', {'form': form})
 
+@decorators.login_required(login_url='login')
 def create_review(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -208,6 +213,46 @@ def create_review(request):
     else:
         form = ReviewForm()
     return render(request, 'create_review.html', {'form': form})
+
+
+def basic_form(request, given_form):
+    if request.method == 'POST':
+        form = given_form(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("OK")
+        else:
+            # Form is invalid, render login page with form and errors
+            return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', {'form': given_form()})
+
+
+def register_view(request):
+    return basic_form(request, forms.UserCreationForm)
+
+def logout_view(request):
+    logout(request)
+    return HttpResponse("You have logged out succesfully.")
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = forms.AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            try:
+                user = authenticate(**form.cleaned_data)
+                login(request, user)
+                if next := request.GET.get("next"):
+                    return redirect(next)
+                return HttpResponse("everything is ok")
+            except Exception:
+                return HttpResponse("something is not ok")
+        else:
+            # Form is invalid, render login page with form and errors
+            return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'form': forms.AuthenticationForm()})
+
+
 
 
 

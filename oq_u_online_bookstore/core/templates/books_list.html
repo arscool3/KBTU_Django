@@ -12,9 +12,13 @@
     <ul>
         {% for book in books %}
         <li>{{ book.title }}</li>
-        <!-- Add other fields you want to display for each book -->
+
         {% endfor %}
+
     </ul>
+    <br>
+    <br>
+    <a href="{% url 'create_book' %}">Create a book</a>
 </body>
 
 </html>

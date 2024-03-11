@@ -13,6 +13,9 @@
         {% for author in authors %}
         <li><a href="{% url 'books_by_author' author.id %}">{{ author.name }}</a></li>
         {% endfor %}
+        <br>
+        <br>
+        <a href="{% url 'create_author' %}">Create an author</a>
     </ul>
 </body>
 
