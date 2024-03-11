@@ -1,9 +1,10 @@
-from django.shortcuts import render,  get_object_or_404, redirect, HttpResponse
+from django.shortcuts import render,  get_object_or_404, HttpResponse
 from core.models import Product, Order, Category, Cart
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .serializers import ProductForm, OrderForm, CartForm, PaymentForm, UserProfileForm, CategoryForm
+from .serializers import ProductForm, OrderForm, CartForm, PaymentForm, CategoryForm
 from auth_.serializers import CustomUserCreationForm
+from .models import UserProfile
 
 #6 GET Endpoints:
 def get_product_list(request):
@@ -25,9 +26,9 @@ def get_user_orders(request):
         serialized_orders = []
         for order in orders:
             serialized_order = {
-                'id': order.id,
-                'order_number': order.order_number,
-                'total_amount': order.total_amount,
+                'user': order.id,
+                'total_amount': order.total_price,
+                'status': order.status,
             }
             serialized_orders.append(serialized_order)
 
@@ -99,6 +100,7 @@ def process_payment(request, order_id):
             payment.save()
             order.status = 'Paid'
             order.save()
+            return HttpResponse("Order created successfully")
     else:
         form = PaymentForm()
     
@@ -107,18 +109,17 @@ def process_payment(request, order_id):
 
 def update_user_profile(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, instance=request.user.UserProfile)
 
         if form.is_valid():
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user
-            user_profile.save() 
-            return HttpResponse("everything is ok")
+            form.save()
+            return HttpResponse("Profile updated successfully")
     else:
-        form = UserProfileForm()
+        form = CustomUserCreationForm()
 
     form = CustomUserCreationForm(request.POST)
     return render(request, 'update_user_profile.html', {'form': form})
+
 
 
 def create_category(request):
