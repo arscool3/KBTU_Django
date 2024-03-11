@@ -25,7 +25,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Redirect to home page after login
+                return redirect('home')
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})
@@ -40,7 +40,7 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            return redirect('user_profile')  # Assuming you have a login page with the name 'login'
+            return redirect('user_profile')
     else:
         user_form = UserRegistrationForm()
         profile_form = UserProfileForm()

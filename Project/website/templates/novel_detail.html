@@ -3,12 +3,9 @@
 <head>
 
     <title>{{ novel.title }}</title>
-
-
     <style>
-
   :root {
-        /* Light theme colors */
+
         --background-color: #ffffff;
         --text-color: #333;
         --secondary-background-color: #f8f8f8;
@@ -20,7 +17,7 @@
     }
 
     [data-theme="dark"] {
-        /* Dark theme colors */
+
         --background-color: #121212;
         --text-color: #ffffff;
         --secondary-background-color: #242424;
@@ -52,7 +49,7 @@
 
         .novel-info {
             max-width: 800px;
-            margin: auto; /* Centers the novel info box */
+            margin: auto;
             padding: 20px;
 
             border-radius: 5px;
@@ -66,18 +63,18 @@
         }
 
         .image-wrapper {
-            text-align: center; /* Center the image wrapper */
-            margin: 20px 0; /* Vertical spacing */
+            text-align: center;
+            margin: 20px 0;
         }
 
         .img-responsive {
-            max-width: 250px; /* Responsive image width */
-            height: auto; /* Maintain aspect ratio */
-            border: 1px solid #ddd; /* Light border around the image */
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
-            border-radius: 4px; /* Rounded corners for the image */
-            display: inline-block; /* Center align */
-            margin-bottom: 20px; /* Spacing between image and novel info */
+            max-width: 250px;
+            height: auto;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
         .chapter-listing, .review, .back-to-home {
@@ -89,11 +86,11 @@
         }
 
         h1 {
-            color: #333; /* Dark color for contrast */
-            background-color: #f8f8f8; /* Slight gray background */
+            color: #333;
+            background-color: #f8f8f8;
             padding: 10px 0;
             margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             background-color: var(--secondary-background-color);
             color: var(--text-color);
             border-color: var(--border-color);
@@ -102,10 +99,10 @@
         }
 
         h2 {
-            {#color: #1e90ff; /* Keeping the color for headers consistent with links */#}
-            margin-top: 40px; /* More spacing around headers */
+
+            margin-top: 40px;
             text-align: left;
-            padding-left: 20px; /* Align text to the left with padding */
+            padding-left: 20px;
             background-color: var(--secondary-background-color);
         color: var(--text-color);
         border-color: var(--border-color);
@@ -118,7 +115,7 @@
             line-height: 1.6;
             max-width: 800px;
             margin: 10px auto;
-            padding: 0 20px; /* Padding for better readability */
+            padding: 0 20px;
         }
 
         .chapter-listing {
@@ -128,12 +125,12 @@
         }
 
         .chapter-listing li {
-            background: #f8f8f8; /* Consistent with the h1 background */
-            margin: 10px 0; /* More vertical margin for separation */
-            padding: 15px 20px; /* Larger padding for clickable area */
-            border-left: 4px solid #1e90ff; /* Blue accent on the side */
+            background: #f8f8f8;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-left: 4px solid #1e90ff;
             transition: background-color 0.3s, transform 0.3s;
-            text-align: left; /* Align text to the left */
+            text-align: left;
             background-color: var(--secondary-background-color);
             color: var(--text-color);
             border-color: var(--border-color);
@@ -146,25 +143,25 @@
             transform: translateX(10px);
 }
     .chapter-listing a {
-        color: #007bff; /* Blue color for links */
+        color: #007bff;
         text-decoration: none;
         font-weight: bold;
-        display: block; /* Make the link block-level for larger click area */
+        display: block;
     }
 
     .review {
-        background: #f8f8f8; /* Light grey background for reviews */
-        margin: 20px 0; /* More margin for separation */
-        padding: 20px; /* Larger padding for content */
-        border-radius: 4px; /* Rounded corners */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Softer shadow */
+        background: #f8f8f8;
+        margin: 20px 0;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
          background-color: var(--secondary-background-color);
         color: var(--text-color);
     }
 
     .review p {
-        color: #666; /* Grey color for text */
-        margin: 5px 0; /* Less margin for compact look */
+        color: #666;
+        margin: 5px 0;
     }
 
     .back-to-home {
@@ -172,7 +169,7 @@
         width: 200px;
         margin: 20px auto;
         padding: 10px 15px;
-        background-color: #333; /* Darker button for contrast */
+        background-color: #333;
         color: white;
         text-decoration: none;
         text-align: center;
@@ -181,10 +178,10 @@
     }
 
     .back-to-home:hover {
-        background-color: #555; /* Slightly lighter on hover */
-        transform: translateY(-3px); /* Lift the button on hover */
+        background-color: #555;
+        transform: translateY(-3px);
     }
-        /* Navbar styles */
+
     .navbar {
         background-color: var(--secondary-background-color);
         color: var(--text-color);
@@ -196,7 +193,7 @@
         position: fixed;
         top: 0;
         width: 100%;
-        z-index: 1000; /* Ensures navbar stays above other content */
+        z-index: 1000;
     }
 
     .nav-item {
@@ -255,7 +252,7 @@
         input[type="text"]:focus,
         textarea:focus {
             border-color: var(--link-color);
-            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.5); /* A light blue outline */
+            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.5);
         }
 
         input[type="submit"] {

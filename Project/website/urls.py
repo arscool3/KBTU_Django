@@ -7,7 +7,7 @@ from .views import upload_novel, bookmark_chapter, add_chapter, register, user_l
     search_results
 
 urlpatterns = [
-                  # GET Requests
+
                   path('', views.home, name='home'),
                   path('novels/<int:novel_id>/', views.novel_detail, name='novel_detail'),
                   path('novels/<int:novel_id>/chapters/<int:chapter_id>/', views.chapter_reading,
@@ -22,7 +22,6 @@ urlpatterns = [
                   path('logout/', user_logout, name='logout'),
                   path('add_review/<int:novel_id>/', add_review, name='add_review'),
                   path('search/', search_results, name='search_results'),
-                  # # POST Requests
-                  # path('novels/<int:novel_id>/reviews/new/', views.submit_review, name='submit_review'),
+
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

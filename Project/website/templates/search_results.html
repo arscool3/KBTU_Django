@@ -6,7 +6,7 @@
 </head>
 <style>
 :root {
-        /* Light theme colors */
+
         --background-color: #ffffff;
         --text-color: #333;
         --secondary-background-color: #f8f8f8;
@@ -18,7 +18,7 @@
     }
 
     [data-theme="dark"] {
-        /* Dark theme colors */
+
         --background-color: #121212;
         --text-color: #ffffff;
         --secondary-background-color: #242424;
@@ -54,23 +54,23 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
-            gap: 20px; /* Adds space between items */
+            gap: 20px;
             padding: 0;
-            margin: 80px 20px 20px; /* Top margin adjusted for navbar */
+            margin: 80px 20px 20px;
         }
 
         .novel-listing li {
-            flex: 0 0 calc(33.333% - 20px); /* Deducting gap from width */
-            max-width: calc(33.333% - 20px); /* Deducting gap from width */
+            flex: 0 0 calc(33.333% - 20px);
+            max-width: calc(33.333% - 20px);
             box-shadow: var(--box-shadow-color);
-            margin-bottom: 20px; /* Space between rows */
-            /* Rest of your styles ... */
+            margin-bottom: 20px;
+
         }
 
-        /* For smaller screens, adjust the number of items per row */
+
         @media (max-width: 768px) {
             .novel-listing li {
-                flex: 0 0 calc(50% - 20px); /* 2 items per row */
+                flex: 0 0 calc(50% - 20px);
                 max-width: calc(50% - 20px);
             }
         }
@@ -101,7 +101,7 @@
             color: var(--text-color);
         }
 
-     /* Navbar styles */
+
     .navbar {
         background-color: var(--secondary-background-color);
         color: var(--text-color);
@@ -113,7 +113,7 @@
         position: fixed;
         top: 0;
         width: 100%;
-        z-index: 1000; /* Ensures navbar stays above other content */
+        z-index: 1000;
     }
 
     .nav-item {

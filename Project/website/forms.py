@@ -30,7 +30,7 @@ class NovelUploadForm(forms.ModelForm):
         model = Novel
         fields = ['title', 'author', 'summary', 'cover_image']
         widgets = {
-            'summary': forms.Textarea(attrs={'rows': 5}),  # Adjust the textarea widget if needed
+            'summary': forms.Textarea(attrs={'rows': 5}),
         }
 
     def __init__(self, *args, **kwargs):
