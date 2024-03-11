@@ -5,9 +5,7 @@ from django.contrib.auth.models import User
 
 # This model represents the user authentication and profile management.
 # It uses Django's built-in User model.
-# Additional profile information can be stored by extending the User model if needed.
 
-# No explicit model definition is required for the User model.
 
 
 from django.db import models
@@ -33,7 +31,21 @@ class BookDetail(models.Model):
     def __str__(self):
         return f"Details of '{self.book.title}'"
 
+class BookQuerySet(models.QuerySet):
+    def by_genre(self, genre_id):
+        return self.filter(genre__id=genre_id)
+    def by_author(self, author_id):
+        return self.filter(author__id=author_id)
 
+class BookManager(models.Manager):
+    def get_queryset(self):
+        return BookQuerySet(self.model, using=self._db)
+
+    def by_genre(self, genre_id):
+        return self.get_queryset().by_genre(genre_id)
+    def by_author(self, author_id):
+        return self.get_queryset().by_author(author_id)
+    
 # 2.1 Book model
 class Book(models.Model):
     title = models.CharField(max_length=255)
@@ -42,6 +54,7 @@ class Book(models.Model):
     description = models.TextField()
     publication_date = models.DateField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    objects = BookManager()
 
     def __str__(self):
         return self.title

@@ -1,7 +1,7 @@
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import BookForm, AuthorForm, GenreForm, OrderForm, ReviewForm
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm
@@ -38,10 +38,33 @@ def get_books_by_author(author_id):
     author = Author.objects.get(pk=author_id)
     return author.books.all()
 
-def get_books_by_genre(genre_id):
+def get_list_of_books_by_genre(genre_id):
     # Retrieve all books belonging to a specific genre
     genre = Genre.objects.get(pk=genre_id)
     return genre.books.all()
+
+def books_by_genre(request, genre_id):
+    genre = get_object_or_404(Genre, pk=genre_id)
+    books = Book.objects.by_genre(genre_id)
+    return render(request, 'books_by_genre.html', {'genre': genre, 'books': books})
+
+def books_by_author(request, author_id):
+    author = get_object_or_404(Author, pk=author_id)
+    books = Book.objects.by_author(author_id)
+    return render(request, 'books_by_author.html', {'author': author, 'books': books})
+
+# def books_by_genre(request, genre_id):
+#     # Retrieve the Genre object based on the genre_id, or return a 404 error if not found
+#     genre = get_object_or_404(Genre, id=genre_id)
+    
+#     # Log or print the value of genre to ensure it's a single instance
+#     print("Genre:", genre)
+
+#     # Filter books by the retrieved Genre object
+#     books = Book.objects.filter(genre=genre)
+    
+#     # Pass the filtered books queryset and the genre object to the template
+#     return render(request, 'core/books_by_genre.html', {'books': books, 'genre': genre})
 
 def get_user_orders(user_id):
     # Retrieve all orders placed by a specific user
