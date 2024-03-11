@@ -1,0 +1,61 @@
+{% load filters %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List of Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>List of Products</h1>
+    <ul>
+
+            <li>
+                <h2>{{ product.name | italic}}</h2>
+                <p><strong>Category Type:</strong> {{ product.category.type.type }}</p>
+                <p><strong>Category Sort:</strong> {{ product.category.sort.sort }}</p>
+                <p><strong>Price:</strong> ${{ product.price }}</p>
+                <p><strong>Description:</strong> {{ product.description | italic}}</p>
+            </li>
+
+    </ul>
+</body>
+</html>
