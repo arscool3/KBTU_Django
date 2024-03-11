@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Courses
+        </title>
+    </head>
+    <body>
+        <h1>Catalogue of courses:</h1>
+        {% for c in cs %}
+            <a href="/courses/{{c.id}}"><div>
+                <h4>{{c}}</h4>
+                <p>{{c.descr}}</p>
+            </div></a>
+        {% endfor %}
+    </body>
+</html>
