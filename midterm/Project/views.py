@@ -5,7 +5,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -80,7 +79,7 @@ def register_view(request):
 
 
 class ProjectViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+
     def list(self, request):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
