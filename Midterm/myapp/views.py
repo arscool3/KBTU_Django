@@ -211,3 +211,25 @@ def latest_comments(request):
 def chats_by_member(request, id):
     chats = Chat.objects.get_chats_by_member(id)
     return render(request, 'chats.html', {'chats': chats})
+
+
+@login_required
+def update_post(request, id):
+    post = Post.objects.get(pk=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')  # Redirect to category list view
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'update_post.html', {'form': form})
+
+
+@login_required
+def delete_post(request, id):
+    post = Post.objects.get(pk=id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('category_list')  # Redirect to category list view
+    return render(request, 'delete_post.html', {'post': post})

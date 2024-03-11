@@ -23,6 +23,9 @@ urlpatterns = [
     path('categories_with_posts/', CategoriesWithPostsView.as_view(), name="categories_with_posts"),
     path('latest_comments/', latest_comments, name="latest_comments"),
     path('chats_by_member/<int:id>/', chats_by_member, name="chats_by_member"),
+    #update, delete. Тоже стало лень все делать, поэтому только пост, что самое сложное типа
+    path('update_post/<int:id>/', update_post, name="update_post"),
+    path('delete_post/<int:id>/', delete_post, name="delete_post"),
     # auth
     path('register/', register, name='register'),
     path('login/', logIn, name='login'),
