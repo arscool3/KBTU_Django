@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+  <ol>
+    {% for product in products %}
+      <li>
+        <h4>
+          Name: {{ product.name }} <br />
+          Price: {{ product.price }} <br/>
+          Description: {{product.description}} <br/>
+          Category: {{product.category}}
+        </h4>
+      </li>
+    {% endfor %}
+  </ol>
+<!-- Additional content specific to the home page -->
+{% endblock %}
