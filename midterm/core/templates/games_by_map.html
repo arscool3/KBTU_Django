@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games by Map</title>
+</head>
+<body>
+    <h1>Counter-Strike Games on Map: {{ map_name }}</h1>
+    <ul>
+        {% for game in games %}
+            <li>
+                <strong>Game Name:</strong> {{ game.name }}<br>
+                <strong>Map:</strong> {{ game.map.name }}<br>
+            </li>
+        {% empty %}
+            <li>No games found for this map.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

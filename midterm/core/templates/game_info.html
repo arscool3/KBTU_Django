@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Information</title>
+</head>
+<body>
+    <h1>Game Information: {{ game.name }}</h1>
+
+    <h2>Players:</h2>
+    <ul>
+        {% for player in players %}
+            <li>{{ player.name }} ({{ player.team }}) - Unit: {{ player.unit.name }}</li>
+        {% empty %}
+            <li>No players found for this game.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
