@@ -7,9 +7,13 @@ from Library.models import Book, Client
 
 # Create your views here.
 def get_books(request):
-    books = Book.objects.all()
+    # books = Book.objects.all()
+    books = Book.objects.available_books()
     return render(request, 'books.html', context={'books': books})
 
+def get_books_by_genre(request, genre__id):
+    books = Book.objects.books_by_genre(genre__id)
+    return render(request, 'books.html', context={'books': books})
 def get_book_by_id(request, book_id):
     book = Book.objects.get(id=book_id)
     return render(request, 'book_detail.html', context={'book': book})
@@ -29,6 +33,10 @@ def get_authors(request):
 def get_loans(request):
     loans = Loan.objects.all()
     return render(request, 'loans.html', context={'loans':loans})
+
+def get_publishing_office(request):
+    publishing_office = PublishingOffice.objects.all()
+    return render(request, '')
 
 def delete_loan(request, client_id, book_id):
     client = Client.objects.get(id=client_id)
@@ -65,3 +73,6 @@ def add_client(request):
 
 def add_loan(request):
     return add_model(request, LoanForm, 'add_loan', 'loan')
+
+def add_publishing_office(request):
+    return add_model(request, PublishingOfficeForm, 'add_publishing_office', 'publishing_office')

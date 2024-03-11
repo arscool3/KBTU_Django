@@ -23,16 +23,30 @@ class Genre(AbstractTimestampedModel):
         db_table = 'genre_model'
 
 
+
+
+class PublishingOffice(models.Model):
+    name = models.CharField(max_length=255, default="Publishing Office sample")
+    email = models.EmailField(default='default@example.com')
+    address = models.CharField(max_length=255, default='default@example.com')
+
+    def _str__(self):
+        return f"{self.name} - {self.address}"
+
+    class Meta(object):
+        db_table = 'publishing_office'
+
 class BookQuerySet(models.QuerySet):
     def available_books(self):
-        return self.filter(client=None)
-    def books_by_genre(self, genre):
-        return self.filter(genre=genre)
+        return self.all()
+    def books_by_genre(self, genre__id):
+        return self.filter(genre__id=genre__id)
 
 class Book(AbstractTimestampedModel):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(to=Author, on_delete=models.CASCADE)
     genre = models.ForeignKey(to=Genre, on_delete=models.CASCADE)
+    publishing_office = models.ForeignKey(to=PublishingOffice, on_delete=models.CASCADE, default="AlmatyKitap")
     objects = BookQuerySet.as_manager()
 
     def __str__(self):
@@ -77,6 +91,7 @@ class Loan(models.Model):
         return f"{self.book} - {self.loan_date}"
     class Meta(object):
         db_table = 'loan'
+
 
 
 

@@ -27,4 +27,8 @@ class LoanForm(forms.ModelForm):
         model = Loan
         fields = '__all__'
 
+class PublishingOfficeForm(forms.ModelForm):
+    class Meta:
+        model = PublishingOffice
+        fields = '__all__'
 
