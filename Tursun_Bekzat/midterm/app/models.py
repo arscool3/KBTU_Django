@@ -23,24 +23,26 @@ class Speciality(Base):
 
 class Discipline(Base):
     credits = models.IntegerField()
+    code = models.CharField(max_length=10, default='', blank=True)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, default=1)
+    grade = models.DecimalField(max_digits=4, decimal_places=2, default=None)
 
 
 class Student(Base):
+    surname = models.CharField(max_length=30, default=None)
     id = models.CharField(max_length=9, primary_key=True)
     gpa = models.DecimalField(max_digits=3, decimal_places=2)
     speciality = models.ForeignKey(Speciality, on_delete=models.PROTECT)
-    disciplines = models.ManyToManyField(Discipline, blank=True)
+    course = models.IntegerField(null=True)
+    disciplines = models.ManyToManyField(Discipline, blank=True, null=True)
     login = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._disciplines = self.disciplines.none()
 
 
 class Professor(Base):
     surname = models.CharField(max_length=30)
+    year_of_experience = models.IntegerField(default=0)
+    degree = models.CharField(max_length=100, default='')
     disciplines = models.ManyToManyField(Discipline)
     login = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
@@ -65,9 +67,11 @@ class Schedule(models.Model):
         (SUNDAY, 'Sunday'),
     ]
 
+    professor = models.ForeignKey(Professor, on_delete=models.PROTECT, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     time_slot = models.CharField(max_length=50)
     day = models.CharField(max_length=20, choices=DAY_CHOICES)
-    discipline = models.CharField(max_length=100)
+    discipline = models.ManyToManyField(Discipline)
 
 
 class News(models.Model):

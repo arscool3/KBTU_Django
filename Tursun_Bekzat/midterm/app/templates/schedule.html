@@ -25,14 +25,28 @@
             <th>Saturday</th>
             <th>Sunday</th>
         </tr>
-        {% for time_slot, disciplines in schedule.items %}
-        <tr>
-            <td>{{ time_slot }}</td>
-            {% for discipline in disciplines %}
-            <td>{{ discipline }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
+        {% if schedule %}
+            {% if schedule.student %}
+                {% for time_slot, disciplines in schedule.items %}
+
+                    <tr>
+                        <td>{{ time_slot }}</td>
+                        {% for discipline in disciplines %}
+                            <td>{{ discipline }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for time_slot, disciplines in schedule.items %}
+                    <tr>
+                        <td>{{ time_slot }}</td>
+                        {% for discipline in disciplines %}
+                            <td>{{ discipline }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
     </table>
 
     </body>

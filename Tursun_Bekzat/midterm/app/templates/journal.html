@@ -16,14 +16,18 @@
 
     <div class="container">
         <h1>Journal</h1>
-        <div class="journal-entries">
-            <!-- Journal entries will be dynamically populated here -->
-            <!-- Example entry -->
-            <div class="entry">
-                <h2 class="entry-title">Entry Title</h2>
-                <p class="entry-date">Date: January 1, 2023</p>
-                <p class="entry-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla...</p>
-            </div>
+        <div>
+            <label for="discipline_name">Discipline</label>
+            <select id="discipline_name">
+                {% for discipline in disciplines %}
+                    <option value="{{ discipline }}">{{ discipline }}</option>
+                {% endfor %}
+            </select>
+            <label for="student_id">Student ID</label>
+            <input id="student_id">
+        </div>
+        <div>
+            <p>Student name surname</p>
         </div>
     </div>
 

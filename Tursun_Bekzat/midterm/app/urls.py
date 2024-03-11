@@ -2,17 +2,31 @@ from django.urls import path
 from app.views import *
 
 urlpatterns = [
-    path('register', register_view, name='register'),
+
+    # get endpoints
+    path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('', about_view, name='about'),
+    path('basic/', basic_view, name='basic'),
     path('logout/', logout_view, name='logout'),
     path('schedule/', schedule_view, name='schedule'),
     path('disciplines/', disciplines_view, name='disciplines'),
     path('journal/', journal_view, name='journal'),
     path('news/', news_view, name='news'),
     path('profile/', profile_view, name='profile'),
-    # path('add_schedule/', add_schedule, name='add_schedule'),
-    # path('edit_schedule/', edit_schedule, name='edit_schedule'),
-    # path('delete_schedule/', delete_schedule, name='delete_schedule'),
-    # path('schedule_list/', schedule_list, name='schedule_list'),
+    path('settings/', settings_view, name='settings'),
+
+
+    # post endpoints
+    path('crud_news/', crud_news, name='crud_news'),
+    path('crud_student/', crud_student, name='crud_student'),
+    path('crud_faculty/', crud_faculty, name='crud_faculty'),
+    path('crud_schedule/', crud_schedule, name='crud_schedule'),
+    path('crud_professor/', crud_professor, name='crud_professor'),
+    path('crud_discipline/', crud_discipline, name='crud_discipline'),
+    path('crud_speciality/', crud_speciality, name='crud_speciality'),
+
 ]
+
+
+

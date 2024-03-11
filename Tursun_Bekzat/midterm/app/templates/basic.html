@@ -16,6 +16,12 @@
             <li><a href="{% url 'news' %}">News</a></li>
         </ul>
         <ul id="header-settings">
+             {% block settings_link %}
+                {% comment %} Display settings link if user is admin {% endcomment %}
+                {% if admin %}
+                    <li><a href="{% url 'settings' %}">Settings</a></li>
+                {% endif %}
+            {% endblock %}
             <li><a href="{% url 'profile' %}">Profile</a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
