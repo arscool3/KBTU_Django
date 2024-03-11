@@ -16,3 +16,9 @@ class StudentRegistrationForm(UserCreationForm):
             user.save()
             student = Student.objects.create(user=user)
         return user
+
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = '__all__'
