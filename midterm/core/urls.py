@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from django.contrib.auth.decorators import login_required
-
 urlpatterns = [
 
     path('register/', views.register_view, name='register'),
@@ -56,4 +55,3 @@ urlpatterns = [
     path('orders/', views.OrderListView.as_view(), name='order_list'),
 
 ]
-
