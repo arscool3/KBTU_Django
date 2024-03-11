@@ -1,8 +1,9 @@
-from django.shortcuts import render,  get_object_or_404, redirect
+from django.shortcuts import render,  get_object_or_404, redirect, HttpResponse
 from core.models import Product, Order, Category, Cart
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .serializers import ProductForm, OrderForm, CartForm, PaymentForm, UserProfileForm, CategoryForm
+from auth_.serializers import CustomUserCreationForm
 
 #6 GET Endpoints:
 def get_product_list(request):
@@ -106,15 +107,17 @@ def process_payment(request, order_id):
 
 def update_user_profile(request):
     if request.method == 'POST':
-        form = UserProfileForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save() 
+            return HttpResponse("everything is ok")
     else:
         form = UserProfileForm()
-    
+
+    form = CustomUserCreationForm(request.POST)
     return render(request, 'update_user_profile.html', {'form': form})
 
 
