@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Category Detail{% endblock %}
+
+{% block content %}
+
+    <div id='category_list_wrapper' style="margin:20px">
+        <ol>
+            {% for category in categories %}
+                <h3><li> Category name: {{category.name}} <br/> Description: {{category.description}} </li></h3>
+            {% endfor %}
+        </ol>
+    </div>
+
+{% endblock %}

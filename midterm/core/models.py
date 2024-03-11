@@ -2,18 +2,27 @@ from django.db import models
 from datetime import date
 # Create your models here.
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+
 # Product model
 class Product(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
     price = models.IntegerField(default = 0)
-    category = models.CharField(max_length=15)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)  # Many-to-One relationship
     image = models.ImageField()
     quantity = models.IntegerField(default = 0)
 
-class Category(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=100)
+    class Meta:
+        permissions = [
+            ('can_create_product', 'Can create product'),
+            ('can_change_product', 'Can change product'),
+            ('can_delete_product', 'Can delete product'),
+            ('can_view_product', 'Can view product')
+        ]
 
 class Customer(models.Model):
     username = models.CharField(max_length=50)
@@ -24,8 +33,8 @@ class Customer(models.Model):
 
 class Order(models.Model):
     order_date = models.DateField()
-    customer_id = models.ForeignKey("Customer", on_delete=models.CASCADE)
-    product_id = models.ForeignKey("Product", on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  # One-to-One relationship
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     amount = models.IntegerField(default=0)
 
@@ -33,7 +42,7 @@ class Order(models.Model):
         return f"Customer #{self.customer_id} ordered item #{self.product_id}"
 
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default=1)  # One-to-One relationship
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
