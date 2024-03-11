@@ -6,7 +6,7 @@
     <title>Books</title>
 </head>
 <body>
-    <a href="{% url 'add_books' %}?next={{ request.get_full_path }}">Add Book</a>
+    <a href="{% url 'add_book' %}?next={{ request.get_full_path }}">Add Book</a>
     <a href="{% url 'logout' %}">Logout</a> 
     <h1>Books</h1>
     <ul>
