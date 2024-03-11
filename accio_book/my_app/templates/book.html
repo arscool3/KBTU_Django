@@ -11,7 +11,7 @@
     <h1>Books</h1>
     <ul>
         {% for book in books %}
-            <li>{{ book.title }} - {{ book.author }}</li>
+            <li>{{ book.title|title }} - {{ book.author|capfirst }}</li>
         {% endfor %}
     </ul>
 </body>
