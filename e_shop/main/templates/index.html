@@ -1,0 +1,31 @@
+{% load utils %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <a>{{user.username}} |</a>
+    <a href="{% url 'logout' %}" class="logout">Logout</a>
+    <a>Cart</a>
+    <a>Orders</a>
+    {% else %}
+    <a href="{% url 'login' %}" class="login">Login</a> | 
+    <a href="{% url 'signup' %}" class="signup">Signup</a>
+    {% endif %}
+    <select>
+        <option value=""  disabled selected hidden>Category</option>
+        {% for product in products %}
+        <option>{{product.category}}</option>
+        {% endfor %}
+    </select>
+    <ul>
+        {% for product in products %}
+        <li>{{product.name|capitalize}} | {{product.price}} KZT | {{product.price|converter}} USD</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
