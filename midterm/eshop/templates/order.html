@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Orders - E-Shop{% endblock %}
+
+{% block content %}
+    <h2>Your Orders</h2>
+
+    {% if user_orders %}
+        <ul>
+            {% for order in user_orders %}
+                <li>
+                    Order ID: {{ order.id }} - Total Price: ${{ order.total_price }}
+                    <ul>
+                        {% for order_item in order.order_items.all %}
+                            <li>
+                                {{ order_item.product.name }} - Quantity: {{ order_item.quantity }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't placed any orders yet.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Continue Shopping</a>
+{% endblock %}

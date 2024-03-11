@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - E-Shop{% endblock %}
+
+{% block content %}
+    <h2>{{ product.name }}</h2>
+    <p>Price: ${{ product.price }}</p>
+    <p>Description: {{ product.description }}</p>
+
+    <form method="post" action="{% url 'product_detail' product_id=product.id %}">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+    </form>
+
+    <a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}

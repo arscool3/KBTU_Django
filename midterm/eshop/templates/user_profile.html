@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile - Your E-Shop{% endblock %}
+
+{% block content %}
+    <h2>User Profile</h2>
+
+    <p><strong>Username:</strong> {{ user_profile.user.username }}</p>
+    <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
+    <p><strong>Address:</strong> {{ user_profile.address }}</p>
+
+    <a href="{% url 'cart' %}">Cart</a>
+    <a href="{% url 'orders' %}">View Orders</a>
+    <a href="{% url 'home' %}">Back to Home</a>
+
+{% endblock %}
