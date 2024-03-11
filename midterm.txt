@@ -11,8 +11,8 @@
  # 1 Templates
  # 2 Filters for templates
  # 12 Endpoints (6 get, 6 post)
+(validating user input, customizing form appearance, more CRUD, Managers,querysets,Class-Base views)
 
-models: user,article,publication,lik
 
 
 
@@ -34,7 +34,7 @@ Lecture #4. Django Forms and User Input
     5. Integration forms with CRUD 
     functional
     6. Connecting Templates with Forms
-
+(validating user input, customizing form appearance, more CRUD, Managers,querysets,Class-Base views)
 Lecture #5 Django Models and Databases
     1. Understanding models in Django
     2. Database setup and migrations

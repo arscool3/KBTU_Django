@@ -3,15 +3,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-class Topic(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('home')
-
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
@@ -21,6 +12,16 @@ class Profile(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+    
+class Topic(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('home')
+
 class Article(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,7 +45,6 @@ class ReadingList(models.Model):
 
     def __str__(self):
         return f"Reading list for {self.profile.user.username}"
-
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, related_name="comments", on_delete=models.CASCADE)

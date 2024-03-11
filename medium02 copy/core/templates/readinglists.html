@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ readinglists.profile.user.username }}'s Reading List</h1>
+
+
+{% for article in readinglists.articles.all %}
+    <li>{{ article.title }} by {{article.author}}</li>            
+{% endfor %}
+
+<a href="{% url 'articles' %}">Back to all articles</a>
+{% endblock %}
+
+
+
+

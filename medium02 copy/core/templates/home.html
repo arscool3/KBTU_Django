@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Most Liked Articles</h1>
+
+    {% for article in articles %}
+     <li>{{ article.title }} - Likes: {{ article.like_count }}</li>
+
+    {% endfor %}
+
+</ul>
+{% endblock %}
+

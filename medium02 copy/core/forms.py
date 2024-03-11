@@ -1,6 +1,14 @@
 from django import forms
+from core.models import Article,Comment,Topic,ReadingList,Profile
 
-from core.models import Article,Comment,Topic,ReadingList
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('bio',)
+        widgets = {
+            'bio': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
 
 class TopicForm(forms.ModelForm):
     class Meta:

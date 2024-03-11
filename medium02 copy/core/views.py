@@ -1,10 +1,26 @@
-from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
-from django.contrib.auth import authenticate, login, decorators, logout, forms
-from django.http import JsonResponse
-from core.models import Article,Comment,Follow,Like,Topic,Profile,ReadingList
-from core.forms import ArticleForm,CommentForm,EditArticleForm,TopicForm,ReadingListForm
-
+from django.contrib.auth import (
+    authenticate, decorators, forms, login, logout
+)
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import (
+    HttpResponse, get_object_or_404, redirect, render
+)
+from core.forms import (
+    ArticleForm, CommentForm, EditArticleForm, ReadingListForm, TopicForm,ProfileForm
+)
+from core.models import (
+    Article, Comment, Follow, Like, Profile, ReadingList, Topic
+)
+from django.views.generic import ListView
+from django.db import models
+
+class HomeView(ListView):
+    model = Article
+    template_name = 'home.html'
+    def get_queryset(self):
+        # Query articles ordered by the number of likes in descending order
+        return Article.objects.annotate(like_count=models.Count('like')).order_by('-like_count')[:2]
 
 def basic_form(request, given_form):
     if request.method == 'POST':
@@ -88,33 +104,45 @@ def add_topics(request):
 def add_readinglists(request):
     return basic_form(request,ReadingListForm)
 
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+@login_required
+def edit_profile(request):
+    try:
+        profile = request.user.profile
+        creating_profile = False
+    except Profile.DoesNotExist:
+        profile = None
+        creating_profile = True
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'profile.html', {'form': form, 'creating_profile': creating_profile, 'profile': profile})
+
+def profile(request):
+    profile = request.user.profile
+    follower_count = Follow.objects.filter(followed_user=profile.user).count()
+    followers = Follow.objects.filter(followed_user=profile.user).select_related('follower__profile')
+    articles = Article.objects.filter(author=profile.user)
+    return render(request, 'profile.html', {'profile': profile, 'follower_count': follower_count, 'followers': followers, 'articles': articles})
 
 @login_required
 def add_likes(request,pk):
     article = get_object_or_404(Article, id=pk)
-
-    # Check if the user has already liked the article
     already_liked = Like.objects.filter(user=request.user, article=article).exists()
-
-    if not already_liked:
-        # If the user has not liked the article yet, create a new like
+    if not already_liked:      
         like = Like.objects.create(user=request.user, article=article)
         like.save()
-
-    # Redirect the user back to the article detail page after liking
     return redirect('likes')
 
-"""
-class Follow(models.Model):
-    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
-    followed_user = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f"{self.follower.username} follows {self.followed_user.username}"
 
-"""
 @login_required
 def add_follows(request, username):
     # Get the user to follow
@@ -123,11 +151,6 @@ def add_follows(request, username):
     follow, created = Follow.objects.get_or_create(follower=request.user, followed_user=user_to_follow)
     return redirect('follows')
 
-
-#class DeletePostView(DeleteView):
-#    model = Post
-#    template_name = 'delete_post.html'
-#    success_url = reverse_lazy('home')
 
 #6 get
 
@@ -152,17 +175,12 @@ def get_comments(request):
 
 
 
-def get_followers(request):
-    follows=Follow.objects.all()
-    return render(request, 'follows.html', {'follows':follows})
-
 
 def get_likes(request):
     likes=Like.objects.all()
     return render(request, 'likes.html', {'likes':likes})
 
-from django.shortcuts import render
-from .models import ReadingList
+
 
 def get_readinglists(request):
 
