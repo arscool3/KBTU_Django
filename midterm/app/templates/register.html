@@ -55,7 +55,7 @@
 </head>
 <body>
     <!-- Display the user registration form here -->
-    <form method="post" action="{% url 'register' %}">
+    <form method="POST" action="{% url 'register' %}">
         {% csrf_token %}
         {{ form }}
         <button type="submit">Register</button>

@@ -64,6 +64,42 @@
             color: #fff;
             text-align: center;
         }
+
+        /* Add some additional styles for better appearance */
+        section {
+            overflow: auto; /* Add scrollbar when content overflows */
+        }
+
+        ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        li {
+            min-height: 200px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        /* Add styles for the filter form */
+        .filter-form {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Style the filter button */
+        .filter-btn {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -72,12 +108,20 @@
     </header>
 
     <section>
+        <form class="filter-form" method="get" action="{% url 'vacancy_list' %}">
+            {{ vacancy_filter_form.as_p }}
+            <button class="filter-btn" type="submit">Apply Filter</button>
+        </form>
         <ul>
             {% for vacancy in vacancies %}
                 <li>
                     <a href="#">{{ vacancy.title }}</a>
                     <p>Salary: {{ vacancy.salary_min }} - {{ vacancy.salary_max }}</p>
-                    <p>Skills: {{ vacancy.skills }}</p>
+                    <p>Skills:
+                        {% for skill in vacancy.skills.all %}
+                            {{ skill.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
                     <p>Company: <a href="{{ vacancy.company.website }}" target="_blank">{{ vacancy.company.name }}</a></p>
                     <p>Description: {{ vacancy.description }}</p>
                 </li>

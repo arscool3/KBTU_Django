@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from .models import Vacancy, Company, User, Resume
-from .forms import UserProfileForm, UserRegistrationForm, UserLoginForm, ResumeForm, ResponseForm, ChangePasswordForm
+from .forms import UserProfileForm, UserRegistrationForm, UserLoginForm, ResumeForm, ResponseForm, ChangePasswordForm, \
+    VacancyFilterForm
 
 
 # GET
@@ -14,17 +15,39 @@ def home(request):
 
 def vacancy_list(request):
     vacancies = Vacancy.objects.all()
-    return render(request, 'vacancy_list.html', {'vacancies': vacancies})
+    vacancy_filter_form = VacancyFilterForm(request.GET)
+
+    if vacancy_filter_form.is_valid():
+        skills = vacancy_filter_form.cleaned_data.get('skills')
+        if skills:
+            skills_list = [skill.strip() for skill in skills.split(',')]
+            vacancies = vacancies.filter(skills__name__in=skills_list)
+
+    return render(
+        request,
+        'vacancy_list.html',
+        {'vacancies': vacancies, 'vacancy_filter_form': vacancy_filter_form})
 
 
 def vacancy_detail(request, vacancy_id):
-    vacancy = get_object_or_404(Vacancy, id=vacancy_id)
+    vacancy = get_object_or_404(Vacancy.objects.prefetch_related('skills', 'company'), id=vacancy_id)
     return render(request, 'vacancy_detail.html', {'vacancy': vacancy})
 
-
 def company_list(request):
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    selected_letter = request.GET.get('letter', '')
+
+    if selected_letter and selected_letter.upper() not in alphabet:
+        messages.error(request, 'Invalid letter selected.')
+        return redirect('company_list')
+
     companies = Company.objects.all()
-    return render(request, 'company_list.html', {'companies': companies})
+
+    if selected_letter:
+        companies = companies.filter(name__istartswith=selected_letter)
+
+    return render(request, 'company_list.html', {'companies': companies, 'alphabet': alphabet,
+                                                 'selected_letter': selected_letter})
 
 
 def user_profile(request, user_id):
@@ -46,17 +69,18 @@ def edit_profile(request, user_id):
             user.set_password(new_password)
             user.save()
 
-            messages.success(request, 'Profile and password successfully updated.')
+            messages.success(request, 'The profile and password have been successfully updated.')
+            user = User.objects.get(id=user_id)
             return redirect('user_profile', user_id=user.id)
         else:
-            messages.error(request, 'Error updating profile or password. Please check your input.')
+            messages.error(request, 'An error occurred when updating the profile or password. Please check the '
+                                    'entered data.')
     else:
         profile_form = UserProfileForm(instance=user)
         password_form = ChangePasswordForm()
 
-    return render(request, 'edit_profile.html', {'user': user, 'profile_form': profile_form, 'password_form': password_form})
-
-
+    return render(request, 'edit_profile.html',
+                  {'user': user, 'profile_form': profile_form, 'password_form': password_form})
 
 # POST
 def register_user(request):
@@ -64,10 +88,10 @@ def register_user(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Вы успешно зарегистрировались. Теперь вы можете войти в систему.')
+            messages.success(request, 'You have successfully registered. You can now log in.')
             return redirect('login')
         else:
-            messages.error(request, 'Ошибка при регистрации. Пожалуйста, проверьте введенные данные.')
+            messages.error(request, 'Error during registration. Please check the entered data.')
     else:
         form = UserRegistrationForm()
 
@@ -76,21 +100,23 @@ def register_user(request):
 
 def user_login(request):
     if request.method == 'POST':
-        form = UserLoginForm(request.POST)
+        form = UserLoginForm(data=request.POST)
+        print(form.errors)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            print(user)  # Добавьте эту строку для отладки
-            if user is not None:
+            try:
+                user = authenticate(**form.cleaned_data)
+                print(user)
                 login(request, user)
-                messages.success(request, 'Вы успешно вошли в систему.')
+                if next := request.GET.get("next"):
+                    return redirect(next)
                 return redirect('vacancy_list')
-            else:
-                messages.error(request, 'Неверное имя пользователя или пароль.')
+            except Exception:
+                return HttpResponse("something is not ok")
         else:
-            messages.error(request, 'Ошибка при входе. Пожалуйста, проверьте введенные данные.')
+            print("error")
+            messages.error(request, 'Error logging in. Please check the entered data.')
     else:
+        print("lsfkndjnfjd")
         form = UserLoginForm()
 
     return render(request, 'login.html', {'form': form})
@@ -101,16 +127,17 @@ def create_resume(request):
         form = ResumeForm(request.POST)
         if form.is_valid():
             resume = form.save(commit=False)
-            resume.user = get_user_model().objects.get(id=request.user.id)  # Прямое присвоение пользователя
+            resume.user = request.user
             resume.save()
-            messages.success(request, 'Резюме успешно создано.')
+            messages.success(request, 'The resume has been successfully created.')
             return redirect('user_profile', user_id=request.user.id)
         else:
-            messages.error(request, 'Ошибка при создании резюме. Пожалуйста, проверьте введенные данные.')
+            messages.error(request, 'An error occurred when creating a resume. Please check the entered data.')
     else:
         form = ResumeForm()
 
     return render(request, 'create_resume.html', {'form': form})
+
 
 def apply_for_vacancy(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy, id=vacancy_id)
@@ -122,10 +149,10 @@ def apply_for_vacancy(request, vacancy_id):
             response.vacancy = vacancy
             response.resume = request.user.resume
             response.save()
-            messages.success(request, 'Отклик успешно отправлен.')
+            messages.success(request, 'The response has been sent successfully.')
             return redirect('home')
         else:
-            messages.error(request, 'Ошибка при отправке отклика. Пожалуйста, проверьте введенные данные.')
+            messages.error(request, 'An error occurred when sending the response. Please check the entered data.')
     else:
         form = ResponseForm()
 
@@ -152,10 +179,10 @@ def edit_resume(request, resume_id):
         form = ResumeForm(request.POST, instance=resume)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Резюме успешно обновлено.')
+            messages.success(request, 'The resume has been successfully updated.')
             return redirect('user_profile', user_id=request.user.id)
         else:
-            messages.error(request, 'Ошибка при обновлении резюме. Пожалуйста, проверьте введенные данные.')
+            messages.error(request, 'An error occurred when updating the resume. Please check the entered data.')
     else:
         form = ResumeForm(instance=resume)
 

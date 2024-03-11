@@ -71,6 +71,10 @@
             color: #fff;
             text-align: center;
         }
+        error-message {
+            color: red;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -80,20 +84,28 @@
 
     <section>
         <h2>Edit Profile Information</h2>
-        <form method="post" action="{% url 'edit_profile' user.id %}">
-            {% csrf_token %}
-            {{ profile_form.as_p }}
-            <button type="submit">Save Changes</button>
-        </form>
+        {% if profile_form %}
+            <form method="post" action="{% url 'edit_profile' user.id %}">
+                {% csrf_token %}
+                {{ profile_form.as_p }}
+                <button type="submit">Save Changes</button>
+            </form>
+        {% else %}
+            <p class="error-message">Profile form not available.</p>
+        {% endif %}
     </section>
 
     <section>
         <h2>Change Password</h2>
-        <form method="post" action="{% url 'edit_profile' user.id %}">
-            {% csrf_token %}
-            {{ password_form.as_p }}
-            <button type="submit">Change Password</button>
-        </form>
+        {% if password_form %}
+            <form method="POST" action="{% url 'edit_profile' user.id %}">
+                {% csrf_token %}
+                {{ password_form.as_p }}
+                <button type="submit">Change Password</button>
+            </form>
+        {% else %}
+            <p class="error-message">Password form not available.</p>
+        {% endif %}
     </section>
 
     <footer>

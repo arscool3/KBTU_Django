@@ -77,18 +77,30 @@
     </header>
 
     <section>
+        <form method="get" action="{% url 'company_list' %}">
+            <label for="letter">Choose a letter:</label>
+            <select name="letter" id="letter">
+                <option value="" {% if not selected_letter %}selected{% endif %}>All</option>
+                {% for letter in alphabet %}
+                    <option value="{{ letter }}" {% if selected_letter == letter %}selected{% endif %}>{{ letter }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="submit" value="Filter">
+        </form>
+
         <ul>
             {% for company in companies %}
-                <li>
-                    <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" width="50" height="50">
-                    <div>
+                {% if selected_letter is not defined or company.name|first == selected_letter %}
+                    <li>
                         <a href="{{ company.website }}" target="_blank">{{ company.name }}</a>
-                        <p>{{ company.description }}</p>
-                    </div>
-                </li>
+                        <p>Description: {{ company.description }}</p>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </section>
+
 
     <footer>
         <p>&copy; 2024 Company List. All rights reserved.</p>

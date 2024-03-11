@@ -58,7 +58,8 @@
 
     <section>
         <p>Salary: {{ vacancy.salary_min }} - {{ vacancy.salary_max }}</p>
-        <p>Skills: {{ vacancy.skills }}</p>
+        <p>Skills: {% for skill in vacancy.skills.all %}
+        {{ skill.name }}{% if not forloop.last %}, {% endif %} {% endfor %}</p>
         <p>Company: <a href="{{ vacancy.company.website }}" target="_blank">{{ vacancy.company.name }}</a></p>
         <p>Description: {{ vacancy.description }}</p>
         <p>Apply Now: <a href="{{ vacancy.application_link }}" target="_blank">Apply</a></p>

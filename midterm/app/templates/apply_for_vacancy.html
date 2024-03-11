@@ -80,7 +80,7 @@
 
     <section>
         <h2>Submit your application</h2>
-        <form method="post">
+        <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Apply</button>

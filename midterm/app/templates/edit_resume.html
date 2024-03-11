@@ -80,7 +80,7 @@
 
     <section>
         <h2>Edit your resume</h2>
-        <form method="post">
+        <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit">Save Changes</button>
