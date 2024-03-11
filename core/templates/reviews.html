@@ -5,10 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Courses</h1>
 <ul>
-    {% for course in courses %}
-            <a href="{% url 'course_details' course.id %}">{{ course.title }}</a>
+    {% for review in reviews %}
+        <li>{{ review.student }} , {{ review.rating }}</li>
     {% endfor %}
 </ul>
 </body>

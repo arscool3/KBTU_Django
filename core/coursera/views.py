@@ -1,21 +1,97 @@
 from django.contrib.auth import authenticate, login, decorators, logout, forms
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from coursera.forms import StudentRegistrationForm, CourseForm
-from coursera.models import Course, Student
+from coursera.forms import StudentRegistrationForm, CourseForm, InstructorForm, EnrollmentForm, ReviewForm, LessonForm
+from coursera.models import *
 
 
 # Create your views here.
-
+@login_required(login_url='login')
 def get_courses(request):
     courses = Course.objects.all()
     return render(request, 'courses.html', {'courses': courses})
 
 
+@login_required(login_url='login')
+def get_course_details(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    return render(request, 'course_details.html', {'course': course})
+
+
+@login_required(login_url='login')
+@permission_required('coursera.add_course',login_url='login')
 def create_course(request):
     return add_model(request, CourseForm, 'add_genre', 'genre')
+
+
+@login_required(login_url='login')
+@permission_required('coursera.add_enrollment', login_url='login')
+def get_enrollments(request):
+    student_id = request.GET.get('student_id')
+    if student_id:
+        enrollments = Enrollment.objects.get_enrollments_of_student(student_id)
+        return render(request, 'enrollments.html', {'enrollments': enrollments})
+
+    enrollments = Enrollment.objects.all()
+    return render(request, 'enrollments.html', {'enrollments': enrollments})
+
+
+@login_required(login_url='login')
+def get_course_enrollments(request, course_id):
+    enrollments = Enrollment.objects.get_enrollments_of_course(course_id)
+    return render(request, 'enrollments.html', {'enrollments': enrollments})
+
+
+@login_required(login_url='login')
+def create_enrollment(request):
+    return add_model(request, EnrollmentForm, 'add_enrollment', 'enrollment')
+
+
+@login_required(login_url='login')
+def get_instructors(request):
+    instructors = Instructor.objects.all()
+    return render(request, 'instructors.html', {'instructors': instructors})
+
+
+@login_required(login_url='login')
+def create_instructor(request):
+    return add_model(request, InstructorForm, 'add_instructor', 'instructor')
+
+
+@login_required(login_url='login')
+def get_reviews(request):
+    course_id = request.GET.get('course_id')
+    if course_id:
+        reviews = Review.objects.get_reviews(course_id)
+        return render(request, 'reviews.html', {'reviews': reviews})
+
+    reviews = Review.objects.all()
+    return render(request, 'reviews.html', {'reviews': reviews})
+
+
+@login_required(login_url='login')
+def create_review(request):
+    return add_model(request, ReviewForm, 'add_review', 'review')
+
+
+@login_required(login_url='login')
+def get_lessons(request):
+    lessons = Lesson.objects.all()
+    return render(request, 'lessons.html', {'lessons': lessons})
+
+
+@login_required(login_url='login')
+def create_lesson(request):
+    return add_model(request, LessonForm, 'add_lesson', 'lesson')
+
+
+@login_required(login_url='login')
+def get_students(request):
+    students = Student.objects.all()
+    return render(request, 'students.html', {'students': students})
 
 
 def add_model(request, given_form, given_url, name):
@@ -36,21 +112,13 @@ def register_student(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
 
-            # Creating User instance with username and email
-            user = User.objects.create(username=username, email=email)
-
-            # Saving User instance
+            user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
-
-            # Now create the student linked to this user
             student = Student.objects.create(user=user)
-
-            # Optionally, you can set other attributes of the Student model based on the form data
-            student.name = form.cleaned_data['name']
-            # Set other attributes if needed
-
-            # Save the student instance
+            student.name = form.cleaned_data['username']
+            student.email = form.cleaned_data['email']
             student.save()
 
             return redirect('login')  # Redirect to login page after successful registration
