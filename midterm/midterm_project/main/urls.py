@@ -13,7 +13,7 @@ urlpatterns = [
     path('add/Membership', views.add_membership, name = 'membershippage'),
     path('filter/instructors', views.filter_instructors, name='filter_instructors'),
     path('filter/gyms', views.filter_gyms, name='filter_gyms'),
-    path('accounts/login', auth_views.LoginView.as_view(), name='login'),
-    path('accounts/logout', auth_views.LogoutView.as_view(), name='logout'),
-    path('accounts/register', views.register, name='register')
+    path('accounts/register', views.register, name='register'),
+    path('accounts/login', auth_views.LoginView.as_view(template_name='main/registration/login.html'), name='login'),
+    path('accounts/logout', auth_views.LogoutView.as_view(template_name='main/registration/logout.html'), name='logout'),
 ]
