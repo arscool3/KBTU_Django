@@ -23,4 +23,9 @@ urlpatterns = [
     path('memberships', views.get_memberships, name='get_memberships'),
     path('equipment', views.get_equipment, name='get_equipment'),
     path('workouts', views.get_workouts, name='get_workouts'),
+
+    path('instructors/<int:instructor_id>/', views.show_instructor, name='show_instructor'),
+    path('instructors/<int:instructor_id>/delete/', views.delete_instructor, name='delete_instructor'),
+
+
 ]

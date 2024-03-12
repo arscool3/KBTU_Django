@@ -176,4 +176,30 @@ def get_workouts(request):
     return JsonResponse(data, safe=False)
 
 
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import Instructor
+
+def show_instructor(request, instructor_id):
+    instructor = get_object_or_404(Instructor, pk=instructor_id)
+    data = {
+        'instructor_id': instructor.instructor_id,
+        'instructor_name': instructor.instructor_name,
+        'specialization': instructor.specialization,
+        'gender': instructor.gender
+    }
+    return JsonResponse(data)
+
+from django.http import JsonResponse
+from .models import Instructor
+
+def delete_instructor(request, instructor_id):
+    instructor = Instructor.objects.filter(pk=instructor_id)
+    if instructor.exists():
+        instructor.delete()
+        return JsonResponse({'message': 'Instructor deleted successfully'})
+    else:
+        return JsonResponse({'message': 'Instructor not found'}, status=404)
+
+
 
