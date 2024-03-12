@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Create a New Trip</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Add form fields for creating a trip -->
+        <button type="submit">Create Trip</button>
+    </form>
+{% endblock %}
