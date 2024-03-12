@@ -136,3 +136,44 @@ def custom_logout(request):
     return redirect('')
 
 
+from django.http import JsonResponse
+from .models import Instructor, Member, Gym, Membership, Equipment, Workout
+
+def get_instructors(request):
+    instructors = Instructor.objects.all()
+    data = [{'instructor_id': instructor.instructor_id, 'instructor_name': instructor.instructor_name,
+             'specialization': instructor.specialization, 'gender': instructor.gender} for instructor in instructors]
+    return JsonResponse(data, safe=False)
+
+def get_members(request):
+    members = Member.objects.all()
+    data = [{'member_id': member.member_id, 'name': member.name,
+             'age': member.age, 'membership_type': member.membership_type} for member in members]
+    return JsonResponse(data, safe=False)
+
+def get_gyms(request):
+    gyms = Gym.objects.all()
+    data = [{'gym_id': gym.gym_id, 'gym_name': gym.gym_name,
+             'location': gym.location} for gym in gyms]
+    return JsonResponse(data, safe=False)
+
+def get_memberships(request):
+    memberships = Membership.objects.all()
+    data = [{'membership_id': membership.membership_id, 'name': membership.name,
+             'price': membership.price} for membership in memberships]
+    return JsonResponse(data, safe=False)
+
+def get_equipment(request):
+    equipment = Equipment.objects.all()
+    data = [{'equipment_id': item.equipment_id, 'name': item.name,
+             'quantity': item.quantity} for item in equipment]
+    return JsonResponse(data, safe=False)
+
+def get_workouts(request):
+    workouts = Workout.objects.all()
+    data = [{'workout_id': workout.workout_id, 'name': workout.name,
+             'description': workout.description} for workout in workouts]
+    return JsonResponse(data, safe=False)
+
+
+
