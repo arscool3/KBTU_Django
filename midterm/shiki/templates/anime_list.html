@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Genre</title>
+    <title>Anime List</title>
 </head>
 <body>
-    <h1>Create Genre</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.name|capfirst }} <!-- Добавляем фильтр capfirst для поля name -->
-        {{ form.icon }}
-        {{ form.description }}
-        <button type="submit">Save</button>
-    </form>
+    <h1>Anime List</h1>
+    <ul>
+        {% for anime in anime %}
+            <li>{{ anime.title }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'shiki:anime_create' %}">Add Anime</a>
 </body>
 </html>

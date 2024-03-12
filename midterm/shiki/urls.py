@@ -12,6 +12,10 @@ urlpatterns = [
     path('genres/<int:genre_id>/', genre_read, name='genre_read'),
     path('genres/<int:genre_id>/update/', genre_update, name='genre_update'),
     path('genres/<int:genre_id>/delete/', genre_delete, name='genre_delete'),
-    path('signup/', signup, name='signup')
+    path('signup/', signup, name='signup'),
+    path('anime/', anime_list, name='anime_list'),
+    path('anime/<int:anime_id>/', anime_read, name='anime_read'),
+    path('anime/<int:anime_id>/update/', anime_update, name='anime_update'),
+    path('anime/<int:anime_id>/delete/', anime_delete, name='anime_delete'),
 
 ]
