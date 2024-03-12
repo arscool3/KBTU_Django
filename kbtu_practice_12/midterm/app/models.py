@@ -1,21 +1,23 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 class Country(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 
 class City(models.Model):
     name = models.CharField(max_length=255)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
+
 class Role(models.Model):
     name = models.CharField(max_length=255, unique=True)
-
-class User(models.Model):
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255, null=True)
-    phone = models.CharField(max_length=255, unique=True, null=True)
-    full_name = models.CharField(max_length=255, null=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
 
 class Resume(models.Model):
     first_name = models.CharField(max_length=255)
@@ -31,8 +33,11 @@ class Resume(models.Model):
     main_language = models.CharField(max_length=255)
     skills = models.TextField()
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='resume_city')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_user')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='resume_user')
     citizenship_obj = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='resume_citizenship_obj')
+    
+    def __str__(self):
+        return self.position
 
 class Education(models.Model):
     level = models.CharField(max_length=255)
@@ -49,6 +54,9 @@ class ForeignLanguage(models.Model):
 
 class EmploymentType(models.Model):
     name = models.CharField(max_length=255)
+    
+    def __str__(self):
+        return self.name
 
 class ResumeEmploymentType(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='employment_types_resume')
