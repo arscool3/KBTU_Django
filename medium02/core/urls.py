@@ -22,6 +22,10 @@ urlpatterns = [
     path('topics/', get_topics, name='topics'),
     path('hot_topic/',articles_by_hot_topic, name='hot_topic'),
 
+    path('add_comments/<int:pk>/', add_comments, name='add_comments'),   
+    path('add_likes/<int:pk>/', add_likes, name='add_likes'),
+    path('add_follows/<str:username>/',add_follows,name='add_follows'),
+    
     path('article_detail/<int:pk>/', article_detail, name='article_detail'),
     path('articles/<int:pk>/liked_users/', liked_users, name='liked_users'),
     path('articles/<int:pk>/article_comments/', article_comments, name='article_comments'),
@@ -31,15 +35,8 @@ urlpatterns = [
     path('delete_articles/<int:pk>/', delete_articles, name='delete_articles'),
 
     path('articles/<int:pk>/add_to_reading_list/', add_to_reading_list, name='add_to_reading_list'),
-    #path('add_readinglists/',add_readinglists,name='add_readinglists'),
-
     path('readinglists/',get_readinglists,name='readinglists'),
 
-    path('comments/', get_comments, name='comments'),
-    path('add_comments/<int:pk>/', add_comments, name='add_comments'),
-    
-    path('add_likes/<int:pk>/', add_likes, name='add_likes'),
-    path('likes/',get_likes,name='likes'),
-    path('add_follows/<str:username>/',add_follows,name='add_follows'),
+
 
 ]

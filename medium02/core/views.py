@@ -228,13 +228,6 @@ def get_profiles(request):
     return render(request, 'profiles.html', {'profiles': profiles})
 
 
-def get_comments(request):
-    comments =Comment.objects.all()
-    return render(request, 'comments.html', {'comments': comments})
-
-def get_likes(request):
-    likes=Like.objects.all()
-    return render(request, 'likes.html', {'likes':likes})
 
 def liked_users(request, pk):
     article = get_object_or_404(Article, pk=pk)
