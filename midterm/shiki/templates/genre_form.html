@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create/Edit Genre</title>
+</head>
+<body>
+    <h1>Create/Edit Genre</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.name|capfirst }}
+        {{ form.icon }}
+        {{ form.description|linebreaks }}
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

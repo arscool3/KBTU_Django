@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genre Detail</title>
+</head>
+<body>
+    <h1>Genre Detail</h1>
+    <p>Name: {{ genre.name|capfirst }}</p>
+    <p>Description: {{ genre.description|linebreaks }}</p>
+    <a href="{% url 'shiki:genre_update' genre.id %}">Edit</a>
+    <form action="{% url 'shiki:genre_delete' genre.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>

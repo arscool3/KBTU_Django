@@ -1,0 +1,12 @@
+<h2>Register</h2>
+<form method="POST">
+    {% csrf_token %}
+    <table style="padding: 2ex;">
+    {{ form.as_table }}     {# this line shows the sign-up form #}
+    <tr>
+    <td colspan="2">
+    <button type="submit">Register</button>
+    </td>
+    </tr>
+    </table>
+</form>
