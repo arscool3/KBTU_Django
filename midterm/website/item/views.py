@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib.auth.views import LogoutView as DjangoLogoutView
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView
 
-from .forms import NewItemForm, EditItemForm
+from .forms import ItemReviewForm, NewItemForm, EditItemForm
 from .models import Category, Item
 
 def items(request):
@@ -77,3 +79,49 @@ def delete(request, pk):
     item.delete()
 
     return redirect('dashboard:index')
+
+@login_required
+def write_review(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    
+    if request.method == 'POST':
+        form = ItemReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.item = item
+            review.save()
+
+            # Redirect to the item detail page after submitting the review
+            return redirect('item:detail', pk=item.id)
+    else:
+        form = ItemReviewForm()
+
+    return render(request, 'item/write_review.html', {
+        'form': form,
+        'item': item,
+    })
+
+class CustomLogoutView(DjangoLogoutView):
+    def get_next_page(self):
+        next_page = super().get_next_page()
+        if next_page:
+            return next_page
+        else:
+            return '/dashboard/'
+
+class CategoryItemListView(ListView):
+    model = Item
+    template_name = 'category_items.html'
+    context_object_name = 'items'
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_id']
+        category = get_object_or_404(Category, id=category_id)
+        
+        return Item.objects.get_available_items().filter(category=category)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all() 
+        return context

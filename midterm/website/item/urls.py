@@ -10,4 +10,6 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     path('<int:pk>/delete/', views.delete, name='delete'),
     path('<int:pk>/edit/', views.edit, name='edit'),
+    path('<int:pk>/write-review/', views.write_review, name='write_review'),
+    path('category/<int:category_id>/', views.CategoryItemListView.as_view(), name='category_items'),
 ]

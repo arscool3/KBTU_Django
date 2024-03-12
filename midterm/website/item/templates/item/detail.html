@@ -30,6 +30,27 @@
         {% else %}  
             <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact seller</a>
         {% endif %}
+
+        <div class="mt-6">
+            <h2 class="text-2xl mb-3">Item Review</h2>
+            {% if item.review %}
+                <p><strong>Comment:</strong> {{ item.review.comment }}</p>
+                <p><strong>Rating:</strong> {{ item.review.rating }}</p>
+            {% else %}
+                <p>No reviews yet. Be the first to review!</p>
+                <div class="mt-6">
+                    <a href="{% url 'item:write_review' item.id %}" class="bg-green-500 text-white px-4 py-2 rounded">Write a Review</a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="mt-6">
+            <h2 class="text-2xl mb-3">Item Detail</h2>
+            {% if item.detail %}
+                <p><strong>Specifications:</strong> {{ item.detail.specifications }}</p>
+            {% else %}
+                <p>No detailed information available.</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 
