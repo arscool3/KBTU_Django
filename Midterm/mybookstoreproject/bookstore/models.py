@@ -48,3 +48,38 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review of {self.book.title} by {self.user.username}"
+
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home') 
+    else:
+        form = AuthenticationForm()
+    return render(request, 'registration/login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')  
+
+
+from django.contrib.auth.models import User, Group, Permission
+
+admin_group, created = Group.objects.get_or_create(name='Admin')
+regular_user_group, created = Group.objects.get_or_create(name='Regular User')
+
+admin_permissions = Permission.objects.all()
+for permission in admin_permissions:
+    admin_group.permissions.add(permission)
+
+admin_user.groups.add(admin_group)
+regular_user.groups.add(regular_user_group)
