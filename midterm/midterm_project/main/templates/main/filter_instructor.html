@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Instructors</title>
+</head>
+<body>
+    <h1>Filter Instructors</h1>
+    <form method="GET">
+        {{ form.as_p }}
+        <button type="submit">Apply Filter</button>
+    </form>
+    {% if instructors %}
+        <h2>Filtered Instructors</h2>
+        <ul>
+            {% for instructor in instructors %}
+                <li>{{ instructor.instructor_name }} - {{ instructor.specialization }} - {{ instructor.gender }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No instructors found.</p>
+    {% endif %}
+</body>
+</html>
