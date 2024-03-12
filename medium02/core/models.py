@@ -3,6 +3,17 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class ArticleQuerySet(models.QuerySet):
+    def by_topic(self, topic_name):
+        return self.filter(topic__name=topic_name)
+
+class ArticleManager(models.Manager):
+    def get_queryset(self):
+        return ArticleQuerySet(self.model, using=self._db)
+
+    def by_topic(self, topic_name):
+        return self.get_queryset().by_topic(topic_name)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField()
@@ -29,12 +40,11 @@ class Article(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     body = models.TextField()
     date_created = models.DateTimeField(default=timezone.now, editable=False)
+    objects = ArticleManager()
 
     def __str__(self):
         return self.title + "|" + str(self.author)
 
-    def formatted_date_created(self):
-        return self.date_created.strftime('%b %d, %Y')
 
     def get_absolute_url(self):
         return reverse('articles')
@@ -74,3 +84,5 @@ class Like(models.Model):
 
     def __str__(self):
         return f'{self.user.username} likes {self.article.title}'
+
+

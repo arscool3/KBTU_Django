@@ -4,9 +4,10 @@
 
 
 {% for article in readinglists.articles.all %}
-    <li>{{ article.title }} by {{article.author}}</li>            
-{% endfor %}
+    <li><a href="{% url 'article_detail' article.pk %}">"{{ article.title }}"" </a> article written by {{article.author}}
 
+{% endfor %}
+<br>
 <a href="{% url 'articles' %}">Back to all articles</a>
 {% endblock %}
 

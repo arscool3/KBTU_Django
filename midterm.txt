@@ -9,7 +9,7 @@
  # 6 Models
  # 3 Relationships (1 Many to One, 2 One to One)
  # 1 Templates
- # 2 Filters for templates
+ # 2 Filters for templates: formated the date, truncated the body
  # 12 Endpoints (6 get, 6 post)
 (validating user input, customizing form appearance, more CRUD, Managers,querysets,Class-Base views)
 

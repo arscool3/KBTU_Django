@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
     {% if creating_profile %}
     <h1>Create Profile for {{ request.user.username }}</h1>
     {% else %}
