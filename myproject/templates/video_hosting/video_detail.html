@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ video.title }}</title>
+</head>
+<body>
+    <h1>{{ video.title }}</h1>
+    <p>{{ video.description }}</p>
+    <video width="320" height="240" controls>
+        <source src="{{ video.file.url }}" type="video/mp4">
+        Ваш браузер не поддерживает элемент <code>video</code>.
+    </video>
+</body>
+</html>
