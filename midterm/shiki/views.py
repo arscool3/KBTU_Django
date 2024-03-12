@@ -1,12 +1,15 @@
 # api/views.py
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import AnimeForm, MangaForm, LightNovelForm, GenreForm
+from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView, LogoutView
+from .forms import AnimeForm, MangaForm, LightNovelForm, GenreForm, ProfileForm
 from .models import Anime, Manga, LightNovel, Genre
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction, IntegrityError
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 
 
 def signup(request):
@@ -15,21 +18,17 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            # get named fields from the form data
             username = form.cleaned_data.get('username')
-            # password input field is named 'password1'
             raw_passwd = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_passwd)
             login(request, user)
-        # return redirect('anime_list')
-        # what if form is not valid?
-        # we should display a message in signup.html
+        return redirect('signup_redirect')
     else:
-        # create a user form and display it the signup page
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 
+@login_required
 def anime_create(request):
     if request.method == 'POST':
         form = AnimeForm(request.POST)
@@ -41,6 +40,7 @@ def anime_create(request):
     return render(request, 'anime_form.html', {'form': form})
 
 
+@login_required
 def manga_create(request):
     if request.method == 'POST':
         form = MangaForm(request.POST)
@@ -52,6 +52,7 @@ def manga_create(request):
     return render(request, 'manga_form.html', {'form': form})
 
 
+@login_required
 def light_novel_create(request):
     if request.method == 'POST':
         form = LightNovelForm(request.POST)
@@ -63,6 +64,7 @@ def light_novel_create(request):
     return render(request, 'light_novel_form.html', {'form': form})
 
 
+@login_required
 def genre_create(request):
     if request.method == 'POST':
         form = GenreForm(request.POST)
@@ -84,6 +86,7 @@ def genre_read(request, genre_id):
     return render(request, 'genre_detail.html', {'genre': genre})
 
 
+@login_required
 def genre_update(request, genre_id):
     genre = get_object_or_404(Genre, pk=genre_id)
     if request.method == 'POST':
@@ -96,6 +99,7 @@ def genre_update(request, genre_id):
     return render(request, 'genre_form.html', {'form': form})
 
 
+@login_required
 def genre_delete(request, genre_id):
     genre = get_object_or_404(Genre, pk=genre_id)
     if request.method == 'POST':
@@ -118,6 +122,7 @@ def anime_read(request, anime_id):
     return render(request, 'anime_detail.html', {'anime': anime})
 
 
+@login_required
 def anime_update(request, anime_id):
     anime = get_object_or_404(Anime, pk=anime_id)
     if request.method == 'POST':
@@ -130,9 +135,40 @@ def anime_update(request, anime_id):
     return render(request, 'anime_form.html', {'form': form})
 
 
+@login_required
 def anime_delete(request, anime_id):
     anime = get_object_or_404(Genre, pk=anime_id)
     if request.method == 'POST':
         anime.delete()
         return redirect('shiki:anime_list')
     return render(request, 'anime_delete_confirm.html', {'anime': anime})
+
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    success_url = reverse_lazy('login_redirect')
+
+
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
+
+
+class CustomLogoutView(LogoutView):
+    def get_next_page(self):
+        next_page = super().get_next_page()
+        if next_page:
+            return next_page
+        else:
+            return reverse_lazy('logged_out')
+
+
+@login_required
+def profile(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    return render(request, 'profile.html', {'form': form})

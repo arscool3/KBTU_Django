@@ -13,9 +13,12 @@ urlpatterns = [
     path('genres/<int:genre_id>/update/', genre_update, name='genre_update'),
     path('genres/<int:genre_id>/delete/', genre_delete, name='genre_delete'),
     path('signup/', signup, name='signup'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(), name='logged_out'),
     path('anime/', anime_list, name='anime_list'),
     path('anime/<int:anime_id>/', anime_read, name='anime_read'),
     path('anime/<int:anime_id>/update/', anime_update, name='anime_update'),
     path('anime/<int:anime_id>/delete/', anime_delete, name='anime_delete'),
+    path('profile/', profile, name='profile'),
 
 ]

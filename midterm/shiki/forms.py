@@ -25,3 +25,9 @@ class GenreForm(forms.ModelForm):
     class Meta:
         model = Genre
         fields = '__all__'
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'

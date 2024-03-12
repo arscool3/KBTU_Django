@@ -310,3 +310,11 @@ User.groups.field.remote_field.related_name = 'auth_user_groups'
 User.user_permissions.field.remote_field.related_name = 'auth_user_permissions'
 Group.user_set.field.remote_field.related_name = 'auth_group_users'
 Permission.user_set.field.remote_field.related_name = 'auth_permission_users'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.user.username + ' Profile'

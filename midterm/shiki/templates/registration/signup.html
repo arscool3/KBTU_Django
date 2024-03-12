@@ -1,5 +1,5 @@
 <h2>Register</h2>
-<form method="POST">
+<form method="POST" action="{% url 'signup' %}">
     {% csrf_token %}
     <table style="padding: 2ex;">
     {{ form.as_table }}     {# this line shows the sign-up form #}
