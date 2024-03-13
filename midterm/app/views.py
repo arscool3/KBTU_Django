@@ -61,26 +61,49 @@ def edit_profile(request, user_id):
 
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, instance=user)
-        password_form = ChangePasswordForm(request.POST)
+        # password_form = ChangePasswordForm(request.POST)
 
-        if profile_form.is_valid() and password_form.is_valid():
+        if profile_form.is_valid():
             profile_form.save()
-            new_password = password_form.cleaned_data['new_password1']
-            user.set_password(new_password)
             user.save()
 
-            messages.success(request, 'The profile and password have been successfully updated.')
+            messages.success(request, 'The profile have been successfully updated.')
             user = User.objects.get(id=user_id)
             return redirect('user_profile', user_id=user.id)
         else:
-            messages.error(request, 'An error occurred when updating the profile or password. Please check the '
+            print("error")
+            messages.error(request, 'An error occurred when updating the profile. Please check the '
                                     'entered data.')
     else:
         profile_form = UserProfileForm(instance=user)
         password_form = ChangePasswordForm()
 
     return render(request, 'edit_profile.html',
-                  {'user': user, 'profile_form': profile_form, 'password_form': password_form})
+                  {'user': user, 'profile_form': profile_form})
+
+@login_required
+def change_password(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        password_form = ChangePasswordForm(request.POST)
+
+        if password_form.is_valid():
+            password_form.save()
+            user.save()
+
+            messages.success(request, 'The password have been successfully updated.')
+            user = User.objects.get(id=user_id)
+            return redirect('user_profile', user_id=user.id)
+        else:
+            print("error")
+            messages.error(request, 'An error occurred when updating the password. Please check the '
+                                    'entered data.')
+    else:
+        password_form = ChangePasswordForm()
+
+    return render(request, 'change_password.html',
+                  {'user': user, 'password_form': password_form})
 
 # POST
 def register_user(request):
