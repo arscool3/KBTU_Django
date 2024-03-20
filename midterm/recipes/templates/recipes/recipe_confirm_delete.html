@@ -1,0 +1,13 @@
+{% extends "../base.html" %}
+{% block title %} Delete recipe {% endblock title %}
+{% block content %}
+  <h1>
+    Are you sure you want to delete {{ recipe.title }}?
+  </h1>
+  <a href="{% url 'recipes' %}">Cancel</a>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+  </form>
+
+{% endblock content %}
