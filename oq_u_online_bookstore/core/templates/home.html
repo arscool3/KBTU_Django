@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore - Home</title>
+</head>
+
+<body>
+    <h1>Welcome to the Online Bookstore</h1>
+    <!-- Add any content or links to other pages here -->
+    <p>Explore our collection:</p>
+    <ul>
+        <li><a href="{% url 'books_list' %}">Books</a></li>
+        <li><a href="{% url 'authors_list' %}">Authors</a></li>
+        <li><a href="{% url 'genres_list' %}">Genres</a></li>
+        <br>
+        <br>
+        <a href="{% url 'login' %}">Login</a>
+        <br>
+        <a href="{% url 'register' %}">Register</a>
+
+    </ul>
+</body>
+
+</html>
