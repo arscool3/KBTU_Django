@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+</head>
+<body>
+    <h1>Add New Book</h1>
+    <form action="{% url 'add_book' %}" method="post">
+        {% csrf_token %}
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author" required><br>
+        <label for="genre">Genre:</label><br>
+        <input type="text" id="genre" name="genre" required><br>
+        <label for="publish_date">Publish Date:</label><br>
+        <input type="date" id="publish_date" name="publish_date" required><br>
+        <input type="submit" value="Add Book">
+    </form>
+</body>
+</html>
