@@ -8,11 +8,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>{{object}}</h2>
+    <h2>{{object|upper}}</h2>
 
     <ul>
         {% for item in iterable %}
-            <li>{{item}}</li>
+            <li>{{item|capfirst }}</li>
         {% endfor %}
     </ul>
 
