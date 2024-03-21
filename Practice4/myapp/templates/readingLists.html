@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadingLists</title>
+</head>
+<body>
+    <h1>ReadingLists</h1>
+    <ul>
+        {% for readingList in readingLists %}
+            <li>
+                <strong>Title:</strong> {{ readingList.title }}<br>
+                <strong>Reader:</strong> {{ readingList.reader.name }}<br>
+                <strong>Book:</strong>
+                <ul>
+                    {% for book in readingList.books.all %}
+                    <li><strong>Title:</strong> {{ book.title }}</li>
+                    <li><strong>Author:</strong> {{ book.author.name }}</li>
+                    <li><strong>Published Date:</strong> {{ book.publishedDate }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
