@@ -1,0 +1,22 @@
+<!-- country_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Country List</title>
+</head>
+<body>
+    <h1>Country List</h1>
+
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search for a country">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for country in countries %}
+            <li>{{ country.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

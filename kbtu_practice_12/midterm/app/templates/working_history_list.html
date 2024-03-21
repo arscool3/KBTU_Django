@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Working History List</title>
+</head>
+<body>
+    <h1>Working History List</h1>
+    <ul>
+        {% for working_history in working_histories %}
+            <li>
+                <h2>{{ working_history.company_name }}</h2>
+                <p>Description: {{ working_history.company_description }}</p>
+                <p>Responsibilities: {{ working_history.responsibilities }}</p>
+                <p>Start Date: {{ working_history.start_date }}</p>
+                <p>End Date: {{ working_history.end_date }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

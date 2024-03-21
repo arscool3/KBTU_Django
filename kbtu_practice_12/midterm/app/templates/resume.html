@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Detail</title>
+</head>
+<body>
+    <h1>Resume Detail</h1>
+    <h2>{{ resume.position }}</h2>
+    <p>{{ resume.first_name }} {{ resume.last_name }}</p>
+    <p>Phone: {{ resume.phone }}</p>
+    <p>Birthday: {{ resume.birthday }}</p>
+    <p>Gender: {{ resume.gender }}</p>
+    <p>About: {{ resume.about }}</p>
+    <p>Citizenship: {{ resume.citizenship }}</p>
+    <p>Salary: {{ resume.salary }} {{ resume.salary_type }}</p>
+    <p>Main Language: {{ resume.main_language }}</p>
+    <p>Skills: {{ resume.skills }}</p>
+    <p>City: {{ resume.city.name }}, {{ resume.city.country.name }}</p>
+    <p>User: {{ resume.user.username }}</p>
+    <p>Citizenship Object: {{ resume.citizenship_obj.name }}</p>
+
+    <h3>Education:</h3>
+    <ul>
+        {% for education in resume.education_resume.all %}
+            <li>{{ education.level }} in {{ education.major }} from {{ education.university_name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Languages:</h3>
+    <ul>
+        {% for language in resume.foreign_languages_resume.all %}
+            <li>{{ language.name }} ({{ language.level }})</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Employment Types:</h3>
+    <ul>
+        {% for employment_type in resume.employment_types_resume.all %}
+            <li>{{ employment_type.employment_type.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Working Histories:</h3>
+    <ul>
+        {% for working_history in resume.working_histories_resume.all %}
+            <li>{{ working_history.company_name }} - {{ working_history.start_date }} to {{ working_history.end_date }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

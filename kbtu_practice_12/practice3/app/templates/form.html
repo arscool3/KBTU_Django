@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Моя форма</title>
+  </head>
+  <body>
+    <h2>Моя форма</h2>
+
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Отправить</button>
+    </form>
+    <ul>
+      {% for person in allPeople %}
+      <li>{{ person.name }} - {{ person.age }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
