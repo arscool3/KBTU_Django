@@ -1,3 +1,5 @@
+{% load utils %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,7 +12,7 @@
 <body>
     <ol>
         {% for project in projects %}
-            <li>{{project.title}}</li>
+            <li>{{ project.title|capitalize }}</li>
         {% endfor %}
     </ol>
 </body>
