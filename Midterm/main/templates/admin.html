@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimalistic Design</title>
+<style>
+    body {
+        background-color: black;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        justify-content: space-around;
+    }
+
+    .block {
+        width: 200px;
+        height: 200px; /* Adjust the height as needed */
+        background-color: #333;
+        margin: 10px;
+        text-align: center;
+        line-height: 200px; /* Adjust line-height to center content vertically */
+        font-size: 24px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .block:hover {
+        background-color: #555;
+    }
+
+    .arrow {
+        position: absolute;
+        top: 50%;
+        right: -20px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 20px solid white;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="block">
+        <a href="{% url 'admin:index' %}">Go to admin panel</a>
+    </div>
+    <div class="block">
+        <a href="{% url 'aircraft_time_scheduling' %}">Scheduling</a>
+    </div>
+    <!-- Add more blocks as needed -->
+</div>
+</body>
+</html>

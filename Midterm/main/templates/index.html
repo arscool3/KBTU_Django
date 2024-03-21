@@ -1,0 +1,105 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: right;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% if request.user.is_authenticated %}
+            <a class="btn" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </header>
+    <h3>{{header}}</h3>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Flight Code</th>
+            <th>Airline</th>
+            <th>Aircraft</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+        </tr>
+        {% for date, flights in grouped_flights.items %}
+            {% for flight in flights %}
+                <tr>
+                    {% if forloop.first %}
+                        <td rowspan="{{ flights|length }}">{{ date }}</td>
+                    {% endif %}
+                    <td>{{ flight.flight_code }}</td>
+                    <td>{{ flight.flight_code.airline_name }}</td>
+                    <td>{{ flight.aircraft }}</td>
+                    <td>{{ flight.flight_code.dept_time|time:"H:i" }}</td>
+                    <td>{{ flight.flight_code.arr_time|time:"H:i" }}
+                        <sup>
+                        {% if flight.flight_code.diff_days != 0 %}
+                            {% if flight.flight_code.diff_days > 0 %}
+                                +{{ flight.flight_code.diff_days }}
+                            {% else %}
+                                {{ flight.flight_code.diff_days }}
+                            {% endif %}
+                        {% endif %}
+                        </sup>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+</body>
+</html>

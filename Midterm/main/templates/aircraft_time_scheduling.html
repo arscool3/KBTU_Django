@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheduling Table</title>
+<style>
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: right;
+    }
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    table {
+    border-collapse: collapse;
+    }
+    td {
+    border: 1px solid black;
+    width: 1.25em; /* Adjust cell width as needed */
+    height: 1.25em; /* Adjust cell height as needed */
+    }
+    .line-container {
+        position: relative;
+        width: 100px; /* Line width */
+        height: 864px; /* Adjust height as needed */
+        background-color: #ffffff; /* Background color for visibility */
+        border: 1px solid black;
+    }
+
+    /* Style for the vertical lines */
+
+    /* Style for the colored area */
+    .colored-area {
+        position: absolute; /* Ensure the colored area starts at the left of the line container */
+        width: 100%;
+        background-color: #c0c0c0;
+        z-index: 10;
+        border-radius: 10px;
+    }
+
+    .desc_flight {
+        position: absolute;
+        top: -25px;
+    }
+</style>
+</head>
+<body>
+<header>
+        {% if request.user.is_authenticated %}
+            <a class="btn" href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+    </header>
+<h3>{{ header }}</h3>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="Search">
+</form>
+{% if data %}
+    <p>{{ data }}</p>
+    <div class="line-container" id="flight-time-frame">
+        <div class="colored-area" id="flight-time">
+            <div class="desc_flight" id="top_right">
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        function setColoredAreaHeight(departureTime, arrivalTime) {
+            const departure = new Date(`2024-03-18T${departureTime}`);
+            const arrival = new Date(`2024-03-18T${arrivalTime}`);
+            const frame_height_per_minut = 864 / (24 * 60);
+
+            const top = ((departure.getHours() * 60) + departure.getMinutes()) * frame_height_per_minut;
+
+            const height = (((arrival.getHours() * 60) + arrival.getMinutes()) - ((departure.getHours() * 60) + departure.getMinutes())) * frame_height_per_minut;
+            const coloredArea = document.getElementById('flight-time');
+            coloredArea.style.top = `${top}px`;
+            coloredArea.style.height = `${height}px`;
+
+            const top_right = document.getElementById('top_right');
+            top_right.style.right = '-70px'
+            top_right.innerHTML = `<p>${departureTime}</p>`
+        }
+
+        const data = JSON.parse('{{ data|safe }}');
+        console.log(data);
+        setColoredAreaHeight(data.dept_arr_times.dept_time, data.dept_arr_times.arr_time);
+    </script>
+
+
+{% endif %}
+</body>
+</html>
