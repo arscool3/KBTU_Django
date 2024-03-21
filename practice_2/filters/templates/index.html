@@ -1,0 +1,8 @@
+{% load utils %}
+
+<h1>Unique List Elements</h1>
+<ul>
+  {% for item in my_list|unique %}
+    <li>{{ item }}</li>
+  {% endfor %}
+</ul>

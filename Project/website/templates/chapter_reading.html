@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reading {{ chapter.title }}</title>
+    <style>
+        :root {
+
+        --background-color: #ffffff;
+        --text-color: #333;
+        --secondary-background-color: #f8f8f8;
+        --border-color: #ddd;
+        --box-shadow-color: rgba(0, 0, 0, 0.1);
+        --link-color: #007bff;
+        --hover-bg-color: #555;
+        --hover-text-color: #ffffff;
+    }
+
+    [data-theme="dark"] {
+
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --secondary-background-color: #242424;
+        --border-color: #444;
+        --box-shadow-color: rgba(255, 255, 255, 0.1);
+        --link-color: #1e90ff;
+        --hover-bg-color: #333;
+        --hover-text-color: #dddddd;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin-top: 50px;
+        padding: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .chapter-content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border-color: var(--border-color);
+        box-shadow: 0 2px 4px var(--box-shadow-color);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .chapter-navigation {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .chapter-navigation a {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .chapter-navigation a:hover {
+            background-color: #0056b3;
+        }
+
+        .disabled {
+            padding: 10px 15px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
+            border-radius: 20px;
+        }
+
+    .navbar {
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        box-shadow: 0 2px 5px var(--box-shadow-color);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .nav-item {
+        margin-right: 20px;
+        color: var(--link-color);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .nav-item:hover {
+        color: var(--hover-text-color);
+    }
+
+    .theme-toggle {
+
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+        background-color: var(--hover-bg-color);
+        color: var(--hover-text-color);
+    }
+    .bookmark-button{
+    padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+    }
+
+    </style>
+</head>
+<body data-theme="light">
+ <nav class="navbar">
+    <a href="{% url 'home' %}" class="nav-item">Home</a>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'user_profile' user_id=request.user.id %}" class="nav-item">Profile</a>
+        <a href="{% url 'logout' %}" class="nav-item">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="nav-item">Login</a>
+    {% endif %}
+    <form action="{% url 'search_results' %}" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Search novels...">
+        <button type="submit">Search</button>
+    </form>
+    <button class="theme-toggle">Toggle Theme</button>
+</nav>
+    <h1>{{ chapter.title }}</h1>
+ <div class="chapter-navigation">
+
+    <form action="{% url 'bookmark_chapter' chapter.novel.id chapter.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="bookmark-button">Bookmark This Chapter</button>
+</form>
+
+</div>
+    <div class="chapter-content">
+        {{ chapter.content | safe }}
+    </div>
+
+
+    <div class="chapter-navigation">
+        {% if prev_chapter %}
+            <a href="{% url 'chapter_reading' prev_chapter.novel.id prev_chapter.id %}">&lt; Previous Chapter</a>
+        {% else %}
+            <span class="disabled">&lt; Previous Chapter</span>
+        {% endif %}
+
+        <a href="{% url 'novel_detail' chapter.novel.id %}">Back to Novel</a>
+
+        {% if next_chapter %}
+            <a href="{% url 'chapter_reading' next_chapter.novel.id next_chapter.id %}">Next Chapter &gt;</a>
+        {% else %}
+            <span class="disabled">Next Chapter &gt;</span>
+        {% endif %}
+    </div>
+<script>
+
+        const themeToggleButton = document.querySelector('.theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggleButton.textContent = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggleButton.textContent = newTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        });
+    </script>
+</body>
+</html>
