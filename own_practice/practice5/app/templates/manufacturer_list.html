@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturer List</title>
+</head>
+<body>
+    <h1>Manufacturers with Products</h1>
+    <ul>
+        {% for manufacturer in manufacturers_with_products %}
+            <li>{{ manufacturer.name }}</li>
+        {% endfor %}
+    </ul>
+    <h1>Ordered Manufacturers</h1>
+    <ul>
+        {% for manufacturer in ordered_manufacturers %}
+            <li>{{ manufacturer.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Delete Manufacturer</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="manufacturer_id">Manufacturer ID:</label>
+        <input type="text" id="manufacturer_id" name="manufacturer_id">
+        <button type="submit">Delete Manufacturer</button>
+    </form>
+</body>
+</html>

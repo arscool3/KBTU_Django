@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Products Available in Store</h1>
+    <ul>
+        {% for product in products_available_in_store %}
+            <li>{{ product.name }}</li>
+        {% endfor %}
+    </ul>
+    <h1>Ordered Products</h1>
+    <ul>
+        {% for product in ordered_products %}
+            <li>{{ product.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Update Product Price</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="product_id">Product ID:</label>
+        <input type="text" id="product_id" name="product_id">
+        <label for="new_price">New Price:</label>
+        <input type="text" id="new_price" name="new_price">
+        <button type="submit">Update Price</button>
+    </form>
+</body>
+</html>
