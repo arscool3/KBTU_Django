@@ -1,0 +1,39 @@
+<!-- Load custom filters -->
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <!-- Include CSS files -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'products' %}">Products</a></li>
+            <!-- Add more navigation links as needed -->
+        </ul>
+    </nav>
+
+    <!-- Content area -->
+    <div class="content">
+        {% block content %}
+        <!-- Default content if not overridden by child templates -->
+        <h1>Welcome to My Website</h1>
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; {{ year|date:"Y" }} My Website. All rights reserved.</p>
+    </footer>
+
+    <!-- Include JavaScript files -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
