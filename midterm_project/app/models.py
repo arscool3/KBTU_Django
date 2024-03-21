@@ -2,13 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True)
+class CourseQuerySet(models.QuerySet):
+    def created_after(self, date):
+        return self.filter(created_at__gte=date)
 
-    def __str__(self):
-        return self.user.username
+
+class CourseManager(models.Manager):
+    def get_queryset(self):
+        return CourseQuerySet(self.model, using=self._db)
+
+    def created_after(self, date):
+        return self.get_queryset().created_after(date)
 
 
 class Course(models.Model):
@@ -17,8 +21,19 @@ class Course(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = CourseManager()
+
     def __str__(self):
         return self.title
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Lesson(models.Model):
