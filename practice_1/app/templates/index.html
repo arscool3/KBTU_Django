@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students</title>
+</head>
+<body>
+    <h1>{{ header_title }}</h1>
+    <ul>
+        {% for student in students_list %}
+        <li>{{student}}</li>
+        {% endfor %}
+    </ul>
+    <div>Date: <strong>{{ time|date:"Y-m-d" }}</strong></div>
+</body>
+</html>
