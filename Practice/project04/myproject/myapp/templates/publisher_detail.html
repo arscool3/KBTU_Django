@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publisher Detail</title>
+</head>
+<body>
+    <h1>Publisher Detail</h1>
+    <p>Name: {{ publisher.name }}</p>
+    <p>Location: {{ publisher.location }}</p>
+
+    <h2>Associated Books</h2>
+    <ul>
+        {% for book in publisher.books.all %}
+            <li>{{ book.title }} - {{ book.author.name }} - {{ book.publication_date }}</li>
+        {% empty %}
+            <li>No associated books</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
