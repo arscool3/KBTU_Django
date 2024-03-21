@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Author, Book, Publisher, Magazine
 from .forms import AuthorForm, BookForm, PublisherForm, MagazineForm
+from django.http import HttpResponseNotAllowed
 
 def author_list(request):
     authors = Author.objects.all()
     return render(request, 'author_list.html', {'authors': authors})
 
 def book_list(request):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
     name_filter = request.GET.get('name')
     books = Book.objects.all()
     if name_filter:
@@ -92,18 +95,18 @@ def book_detail(request, pk):
 
 def book_update(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+    if request.method in ['POST', 'PUT']:
+        form = BookForm(request.POST or None, instance=book)
         if form.is_valid():
             form.save()
-            return redirect('book_detail', pk=pk)
+            return redirect('book_detail', pk=book.pk)
     else:
         form = BookForm(instance=book)
     return render(request, 'book_form.html', {'form': form})
 
 def book_delete(request, pk):
     book = get_object_or_404(Book, pk=pk)
-    if request.method == 'POST':
+    if request.method in ['POST', 'DELETE']:
         book.delete()
         return redirect('book_list')
     return render(request, 'book_delete_confirm.html', {'book': book})
