@@ -1,0 +1,16 @@
+<!-- templates/myapp/object_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <ul>
+        {% for obj in objects %}
+            <li>{{ obj }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

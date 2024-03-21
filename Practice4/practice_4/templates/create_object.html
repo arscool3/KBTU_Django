@@ -1,0 +1,16 @@
+<!-- templates/myapp/create_object.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Book</title>
+</head>
+<body>
+    <h1>Create Book</h1>
+    <form method="post" action="{% url 'create_book' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Create">
+    </form>
+</body>
+</html>
