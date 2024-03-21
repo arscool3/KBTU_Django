@@ -15,7 +15,7 @@ def get_student_assignements(request):
 
 @login_required(login_url='login')
 # @permission_required('can_add_courses')
-def instructor_create_assignment(request):
+def instructor_assignment(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = AssignmentForm(request.POST)
