@@ -1,10 +1,12 @@
 from django.db import models
 from auth_.models import CustomUser
 from .managers import ProductManager, CategoryManager
+from .managers import *
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     objects = CategoryManager()
+
     def __str__(self):
         return self.name
 
@@ -15,6 +17,10 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     stock_quantity = models.PositiveIntegerField()
     objects = ProductManager()
+    
+    #managers & quesrysets
+    objects = models.Manager()
+    is_delivered = DeliveryManager()
 
     def __str__(self):
         return self.name
