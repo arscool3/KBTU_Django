@@ -1,0 +1,56 @@
+/* Apply basic styles to the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+/* Style the news container */
+.news-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style the news title */
+.news-container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Style the news list */
+.news-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Style the news item */
+.news-list li {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+/* Style the news item title */
+.news-list li h3 {
+    color: #0066cc;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+/* Style the news item content */
+.news-list li p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+/* Style the published date */
+.news-list li p.published-date {
+    color: #999;
+    font-size: 14px;
+}

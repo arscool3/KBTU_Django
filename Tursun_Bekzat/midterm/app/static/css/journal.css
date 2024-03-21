@@ -1,0 +1,46 @@
+/* styles.css */
+
+/* Reset default browser styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.journal-entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+}
+
+.entry {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.entry-title {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.entry-date {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.entry-content {
+    font-size: 16px;
+    line-height: 1.6;
+}

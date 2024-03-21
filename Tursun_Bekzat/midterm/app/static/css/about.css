@@ -1,0 +1,69 @@
+/* CSS for about.html */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.about-section {
+    background-color: #f7f7f7;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h2 {
+    font-size: 48px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+}
+
+.about-section p {
+    font-size: 20px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.about-section ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.about-section ul li {
+    font-size: 20px;
+    color: #666;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.about-section ul li:before {
+    content: '\2022';
+    color: #4CAF50;
+    font-size: 24px;
+    position: absolute;
+    left: -20px;
+    top: 6px;
+}
+
+.about-section a {
+    display: inline-block;
+    padding: 20px 40px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 24px;
+    transition: background-color 0.3s;
+}
+
+.about-section a:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
