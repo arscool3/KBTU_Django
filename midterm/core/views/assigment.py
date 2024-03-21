@@ -4,7 +4,7 @@ from core.models import *
 from core.forms import AssignmentForm
 
 @login_required(login_url='login')
-def getStudentAssignements(request):
+def get_student_assignements(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             student = Student.objects.get(user=request.user)
