@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Paper Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .paper-details {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .abstract {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .authors {
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .created-at {
+            color: #888;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+        #comments-section{
+          background-color: #f9f9f9;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+        }
+
+        #comments-section ul {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        #comments-section ul li {
+          margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Paper Details</h1>
+        <div class="paper-details">
+            <div class="title">{{ paper.title|title}}</div>
+            <div class="abstract"><strong>Abstract:</strong> {{ paper.abstract }}</div>
+            <div class="authors"><strong>Authors:</strong> {{ paper.authors.all|join:", " }}</div>
+            <div class="created-at"><strong>Created At:</strong> {{ paper.created_at|date:"Y-m-d" }}</div>
+        </div>
+        <h2>Comments</h2>
+        <div id="comments-section">
+          <ul>
+            {% for comment in comments %}
+              <li>{{ comment.text }} - {{ comment.user.user.username }} ({{ comment.created_at }})</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+
+        <div class="button-container">
+            <a href="{% url 'home' %}">
+                <button>Go Home</button>
+            </a>
+            <a href="{% url 'add_comment' paper.pk %}">
+                <button>add_comment</button>
+            </a>
+            {% if user.is_authenticated %}
+            <form class="button-container" method="POST" action="{% url 'add_to_shelf' paper_id=paper.pk %}">
+                {% csrf_token %}
+                <button type="submit">Add to Shelf</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+

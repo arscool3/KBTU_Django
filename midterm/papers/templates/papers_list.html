@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Papers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .abstract {
+            color: #666;
+        }
+        .profile-button {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .profile-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>List of Papers</h1>
+        <ul>
+            {% for paper in papers %}
+            <a href="{% url 'paper_detail' paper_id=paper.pk %}">
+                <li>
+                    <div class="title">{{ paper.title }}</div>
+                    <div>Authors: {{ paper.authors.all|join:", " }}</div>
+                    <div>Created At: {{ paper.created_at }}</div>
+                    <div>Tags: {{ paper.tags.all|join:", " }}</div>
+                </li>
+            </a>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'accounts:profile' %}" class="profile-button">Go to Profile</a>
+    </div>
+</body>
+</html>
+
