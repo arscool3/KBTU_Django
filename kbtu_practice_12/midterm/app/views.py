@@ -130,3 +130,38 @@ def get_all_working_histories(request):
 def get_working_history_by_id(request, working_history_id):
     working_history = get_object_or_404(WorkingHistory, pk=working_history_id)
     return render(request, 'wh.html', {'working_history': working_history})
+
+@login_required(login_url='/app/auth/sign_in/')
+def delete_country(request, country_id):
+    if request.method == 'POST':
+        form = CountryDeleteForm(request.POST)
+        if form.is_valid():
+            country_id = form.cleaned_data['country_id']
+            country = Country.objects.get(pk=country_id)
+            country.delete()
+            return redirect('/') 
+    else:
+        initial_data = {'country_id': country_id}
+        form = CountryDeleteForm(initial=initial_data)
+    return render(request, 'delete_country.html', {'form': form})
+
+@login_required(login_url='/app/auth/sign_in/')
+def update_country(request, country_id):
+    country = Country.objects.get(pk=country_id)
+    if request.method == 'POST':
+        form = CountryUpdateForm(request.POST, instance=country)
+        if form.is_valid():
+            form.save()
+            return redirect('update_country.html') 
+    else:
+        form = CountryUpdateForm(instance=country)
+    return render(request, 'update_country.html', {'form': form})
+
+@login_required(login_url='/app/auth/sign_in/')
+def country_list_query(request):
+    query = request.GET.get('q')
+    countries = None  
+    if query:
+        countries = Country.objects.filter(name__icontains=query)
+
+    return render(request, 'country_query.html', {'countries': countries})

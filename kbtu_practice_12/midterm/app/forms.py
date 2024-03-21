@@ -41,3 +41,12 @@ class EmploymentTypeForm(forms.ModelForm):
     class Meta:
         model = EmploymentType
         fields = '__all__'
+
+
+class CountryDeleteForm(forms.Form):
+    country_id = forms.IntegerField(widget=forms.HiddenInput())
+    
+class CountryUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Country
+        fields = ['name']

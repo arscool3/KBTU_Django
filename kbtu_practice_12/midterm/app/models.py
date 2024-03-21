@@ -69,3 +69,13 @@ class WorkingHistory(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='working_histories_resume')
+class CountryQuerySet(models.QuerySet):
+    def search(self, query):
+        return self.filter(name__icontains=query)
+
+class CountryManager(models.Manager):
+    def get_queryset(self):
+        return CountryQuerySet(self.model, using=self._db)
+    
+    def search(self, query):  # Добавим этот метод в менеджер
+        return self.get_queryset().search(query)

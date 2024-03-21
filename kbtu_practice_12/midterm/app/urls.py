@@ -19,4 +19,7 @@ urlpatterns = [
     path('countries/<int:country_id>/', get_country_by_id, name='get_country_by_id'),
     path('working_histories/', get_all_working_histories, name='get_all_working_histories'),
     path('working_histories/<int:working_history_id>/', get_working_history_by_id, name='get_working_history_by_id'),
+    path('country/delete/<int:country_id>/', delete_country, name='delete_country_by_id'),
+    path('country/update/<int:country_id>/', update_country, name='update_country'),
+    path('countriesq/', country_list_query, name='country_list_query'),
 ]

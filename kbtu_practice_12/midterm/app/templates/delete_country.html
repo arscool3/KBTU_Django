@@ -1,0 +1,16 @@
+<!-- delete_country.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Country</title>
+</head>
+<body>
+    <h1>Delete Country</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>
