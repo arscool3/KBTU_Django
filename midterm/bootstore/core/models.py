@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
@@ -13,14 +14,33 @@ class Publisher(models.Model):
     def __str__(self):
         return self.name
 
+class BookQuerySet(models.QuerySet):
+    def by_publisher(self, publisher_id):
+        return self.filter(publisher__id=publisher_id)
+
+    def by_author(self, author_id):
+        return self.filter(author__id=author_id)
+
+class BookManager(models.Manager):
+    def get_queryset(self):
+        return BookQuerySet(self.model, using=self._db)
+
+    def by_publisher(self, publisher_id):
+        return self.get_queryset().by_publisher(publisher_id)
+
+    def by_author(self, author_id):
+        return self.get_queryset().by_author(author_id)
+
 class Book(models.Model):
     title = models.CharField(max_length=100)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=5, decimal_places=2)
+    objects = BookManager()
 
     def __str__(self):
         return self.title
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
