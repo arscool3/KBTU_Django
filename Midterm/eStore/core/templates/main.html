@@ -8,21 +8,20 @@
     <title>Document</title>
 </head>
 <body>
+    
     <h1>User Details</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
     <h2>{{object}}</h2>
     <ul>
         {% for item in iterable %}
-            <li>{{item.product}} -- {{item.quantity}} -- {{item.rating}} -{{item.user}}- {{item.created_at}}</li>
+        <li>{{ item.name|title }} -- <img src="{{ item.photoUrl }}" alt="{{ item.name }}" /> -- {{ item.rating|default:"N/A" }} -{{ item.user|default:"Anonymous" }}- {{ item.created_at|date:"Y-m-d" }}</li>
         {% endfor %}
     </ul>
 
-    <h2>Add New {{object}}</h2>
+     <h2>Add New {{object}}</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Submit</button>
-    </form>
+    </form> 
 </body>
 </html>

@@ -11,18 +11,17 @@ def basic_form(request, given_form):
         form = given_form(data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse("OK")
+            return redirect('products')
         else:
             raise Exception(f"some erros {form.errors}")
     return render(request, 'index.html', {'form': given_form()})
 
 def register_view(request):
-
     return basic_form(request, CustomUserCreationForm)
 
 def logout_view(request):
     logout(request)
-    return HttpResponse("You have logout")
+    return redirect('products')
 
 def check_view(request):
     if request.user.is_authenticated:
@@ -38,26 +37,26 @@ def login_view(request):
                 login(request, user)
                 if next := request.GET.get("next"):
                     return redirect(next)
-                return HttpResponse("everything is ok")
+                return redirect('products')
             except Exception:
                 return HttpResponse("something is not ok")
         else:
             raise Exception(f"some erros {form.errors}")
     return render(request, 'index.html', {'form': AuthenticationForm()})
 
-# @decorators.login_required(login_url='login')
-# def get_products(request):
-#     products = Product.objects
-#     form = CategoryForm()
-#     if name := request.GET.get('name'):
-#         products = products.filter(name=name.capitalize())
-#     products = products.all()
-#     return render(request, "main.html", {"iterable": products, "object": "Categories", 'form': form})
+
+def get_products(request):
+    categories = Category.objects.all()
+    products = Product.objects
+    form = ProductPriceForm(request.POST)
+    if name := request.GET.get('name'):
+        products = products.filter(name=name.capitalize())
+    products = products.all()
+    return render(request, "productlist.html", {"iterable": products,"categories": categories, "object": "Products", 'form': form, "user":request.user.is_authenticated})
 
 
 
 def add_category(request):
-    # categories = Category.objects
     form = CategoryForm(request.POST)
     if form.is_valid():
             form.save()
@@ -81,12 +80,14 @@ def add_product(request):
     return render(request, "main.html", { "object": "Products", 'form': form})
 
 def get_product_list_by_category(request, category_name):
+    categories = Category.objects.all()
     product = Product.objects.get_products_by_category(category_name)
-    return render(request, "main.html", {"iterable": product, "object": "Products"})
+    return render(request, "productlist.html", {"iterable": product,"categories": categories, "object": "Products","user":request.user.is_authenticated})
+
 
 def get_product_details(request, product_id):
      product = Product.objects.get_product_details(product_id)
-     return render(request, "main.html", {"iterable": product, "object": "Product details"})
+     return render(request, "product.html", {"iterable": product, "object": "Product details"})
      
 
 
