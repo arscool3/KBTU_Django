@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Chat Room</title>
+</head>
+<body>
+    <h1>Create Chat Room</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Room</button>
+    </form>
+</body>
+</html>

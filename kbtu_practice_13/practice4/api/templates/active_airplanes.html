@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Airplanes</title>
+</head>
+<body>
+    <h1>Active Airplanes</h1>
+    <ul>
+        {% for airplane in active_airplanes %}
+            <li>name: {{ airplane.name }} --- model: {{ airplane.model }} --- active:{{ airplane.active }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

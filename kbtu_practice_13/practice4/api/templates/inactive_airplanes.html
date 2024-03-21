@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inactive Airplanes</title>
+</head>
+<body>
+    <h1>Inactive Airplanes</h1>
+    <ul>
+        {% for airplane in inactive_airplanes %}
+            <li>{{ airplane.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

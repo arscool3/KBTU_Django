@@ -1,0 +1,16 @@
+{%load utils%}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>cars</title>
+</head>
+<body>
+    <h1>cars List :</h1>
+    <ul>
+        {% for car in cars %}
+            <li><button></button>{{ car | filterO }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
