@@ -3,9 +3,9 @@ import dataclasses
 from django.shortcuts import render, HttpResponse, redirect
 from .models import Airline, Aircraft, City, Airport, Flight_fact, Flight_dim
 from collections import defaultdict
-from .forms import TicketSearchForm
+from .forms import TicketSearchForm, FlightForm
 from django.contrib.auth import authenticate, login, decorators, logout, forms
-
+import json
 
 def format_time(time):
     # Format time using strftime
@@ -14,6 +14,9 @@ def format_time(time):
 
 def entry_page(request):
     return render(request, 'entry_page.html')
+
+def admin_view(request):
+    return render(request, 'admin.html')
 
 
 def search_ticket(request):
@@ -43,8 +46,8 @@ def search_ticket(request):
                     'flight_id': flight.flight_id,
                     'flight_code': flight.flight_code.flight_code,
                     'airline_name': flight.flight_code.airline_name.airline_name,
-                    'dept_time': format_time(flight.flight_code.dept_time),
-                    'arr_time': format_time(flight.flight_code.arr_time)
+                    'dept_time': flight.flight_code.dept_time,
+                    'arr_time': flight.flight_code.arr_time
                 }
                 serialized_flights.append(serialized_flight)
 
@@ -92,7 +95,6 @@ def logout_view(request):
     logout(request)
     return redirect('entry_page')
 
-
 def login_view(request):
     if request.method == 'POST':
         form = forms.AuthenticationForm(data=request.POST)
@@ -101,7 +103,8 @@ def login_view(request):
                 user = authenticate(**form.cleaned_data)
                 login(request, user)
                 if user.is_superuser:
-                    return redirect('admin:index')
+                    #return redirect('admin:index')
+                    return redirect('admin_page')
                 return redirect('search_ticket')
             except Exception:
                 pass
@@ -110,12 +113,22 @@ def login_view(request):
     elif request.method == "GET":
         return render(request, 'log_reg.html', {'form': forms.AuthenticationForm()})
 
+def aircraft_time_scheduling(request):
+    form = FlightForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        flight_code = form.cleaned_data['Flight']
+        flight_date = form.cleaned_data['Date']
 
-@decorators.login_required(login_url='login')
-def check_view(request):
-    if request.user.is_authenticated:
-        return HttpResponse(f"{request.user} is authenticated")
-    raise Exception(f"{request.user} is not authenticated")
+        flight_fact = Flight_fact.objects
+        data = flight_fact.filter(flight_code=flight_code).values('dept_time', 'arr_time').first()
+        print(data)
+        data = {k: str(v) for k, v in data.items()}
+        print(data)
+        data = {'dept_arr_times': data, 'date': str(flight_date)}
+        print(data)
+        return render(request, 'aircraft_time_scheduling.html', {'form': form, 'data': json.dumps(data), 'header': 'Choose the aircraft operating the flight'})
+    elif request.method == "GET":
+        return render(request, 'aircraft_time_scheduling.html', {'form': form, 'header': 'Choose flight to process'})
 
 
 
