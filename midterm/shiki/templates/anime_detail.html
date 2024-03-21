@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anime Detail</title>
+</head>
+<body>
+    <h1>Anime Detail</h1>
+    <p>Name: {{ anime.name|capfirst }}</p>
+    <p>synopsis: {{ anime.synopsis|linebreaks }}</p>
+    <a href="{% url 'shiki:anime_update' anime.id %}">Edit</a>
+    <form action="{% url 'shiki:anime_delete' anime.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>

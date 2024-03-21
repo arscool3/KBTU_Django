@@ -1,0 +1,23 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shiki</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Shiki</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'shiki:signup' %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

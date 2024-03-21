@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create/Edit Anime</title>
+</head>
+<body>
+    <h1>Create/Edit Anime</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.name|capfirst }}
+        {{ form.icon }}
+        {{ form.description|linebreaks }}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'shiki:anime_list' %}">Back to Anime List</a>
+</body>
+</html>

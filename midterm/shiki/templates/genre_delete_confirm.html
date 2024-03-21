@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Genre</title>
+</head>
+<body>
+    <h1>Delete Genre</h1>
+    <p>Are you sure you want to delete "{{ genre.name }}"?</p>
+    <form action="{% url 'shiki:genre_delete' pk=genre.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Confirm</button>
+    </form>
+</body>
+</html>

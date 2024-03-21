@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Anime</title>
+</head>
+<body>
+    <h1>Delete Anime</h1>
+    <p>Are you sure you want to delete "{{ anime.name }}"?</p>
+    <form action="{% url 'shiki:anime_delete' anime.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Confirm</button>
+    </form>
+</body>
+</html>
