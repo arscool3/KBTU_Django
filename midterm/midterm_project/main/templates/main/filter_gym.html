@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Gyms</title>
+</head>
+<body>
+    <h1>Filter Gyms</h1>
+    <form method="GET">
+        {{ form.as_p }}
+        <button type="submit">Apply Filter</button>
+    </form>
+    {% if gyms %}
+        <h2>Filtered Gyms</h2>
+        <ul>
+            {% for gym in gyms %}
+                <li>{{ gym.gym_name }} - {{ gym.location }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No gyms found.</p>
+    {% endif %}
+</body>
+</html>

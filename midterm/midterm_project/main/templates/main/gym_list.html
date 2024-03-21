@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym List</title>
+</head>
+<body>
+    <h1>Gym List</h1>
+    {% if gyms %}
+        <ul>
+            {% for gym in gyms %}
+                <li>{{ gym.gym_name }} - {{ gym.location }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No gyms found.</p>
+    {% endif %}
+</body>
+</html>

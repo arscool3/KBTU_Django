@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor List</title>
+</head>
+<body>
+    <h1>Instructor List</h1>
+    {% if instructors %}
+        <ul>
+            {% for instructor in instructors %}
+                <li>{{ instructor.instructor_name }} - {{ instructor.specialization }} - {{ instructor.gender }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No instructors found.</p>
+    {% endif %}
+</body>
+</html>
