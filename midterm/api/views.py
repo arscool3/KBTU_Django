@@ -17,7 +17,7 @@ def test(request):
     if request.method == 'GET':
         return HttpResponse('test')
 
-def chatPage(request):
+def chat_page(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             context = {}
