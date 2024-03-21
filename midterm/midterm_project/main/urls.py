@@ -5,8 +5,8 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', views.index, name = 'mainpage'),
     path('about', views.about, name = 'aboutpage'),
-    path('add/instructors', views.add_instructor, name = 'instructorpage'),
-    path('add/members', views.add_member, name = 'memberpage'),
+    path('addInstructors', views.add_instructor, name = 'instructorpage'),
+    path('addMembers', views.add_member, name = 'memberpage'),
     path('add/equipments', views.add_equipment, name = 'equipmentpage'),
     path('add/gyms', views.add_gym, name = 'gympage'),
     path('add/workouts', views.add_workout, name = 'workoutpage'),
