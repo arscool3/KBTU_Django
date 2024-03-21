@@ -84,10 +84,10 @@
     <div class="container">
         <h1>Paper Details</h1>
         <div class="paper-details">
-            <div class="title">{{ paper.title }}</div>
+            <div class="title">{{ paper.title|title}}</div>
             <div class="abstract"><strong>Abstract:</strong> {{ paper.abstract }}</div>
             <div class="authors"><strong>Authors:</strong> {{ paper.authors.all|join:", " }}</div>
-            <div class="created-at"><strong>Created At:</strong> {{ paper.created_at }}</div>
+            <div class="created-at"><strong>Created At:</strong> {{ paper.created_at|date:"Y-m-d" }}</div>
         </div>
         <h2>Comments</h2>
         <div id="comments-section">
