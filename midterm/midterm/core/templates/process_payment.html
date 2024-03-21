@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Process Payment</title>
+</head>
+<body style="background-color: white;">
+    <h2>Process Payment for Order #{{ order.id }}</h2>
+    <form method="post" action="{% url 'process_payment' order_id=order.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Process Payment</button>
+    </form>
+</body>
+</html>
