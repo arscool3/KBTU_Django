@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Projects List</title>
+</head>
+<body>
+    <h1>Projects List</h1>
+    <ul>
+        {% for project in projects %}
+            <li>{{ project.name }} - Budget: {{ project.budget }}, Successful: {% if project.is_successful %}Yes{% else %}No{% endif %}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

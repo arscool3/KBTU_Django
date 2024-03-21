@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Users who Liked "{{ article.title }}"</h1>
+    <ul>
+        {% for username in liked_users %}
+        <li><a href="{% url 'profile' username=username %}">{{ username }}</a></li>
+        {% empty %}
+            <li>No users liked this article yet.</li>
+        {% endfor %}
+    </ul>
+{%endblock%}

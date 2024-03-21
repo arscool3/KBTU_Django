@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Articles by {{ username }}</h1>
+
+    <ul>
+        {% for article in user_articles %}
+            <li>
+                <a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a>
+                <br>
+                Topic: {{ article.topic }}
+                <br>
+                Short Description: {{ article.short_description }}
+
+                <br>
+                {% if request.user == article.author %}
+                <div style="display: inline-block;">
+                    <a href="{% url 'update_articles' article.pk %}">
+                        <button class='btn btn-secondary' style="display: inline-block; margin-right: 5px;">Update</button>
+                    </a>
+
+
+                    <form action="{% url 'delete_articles' article.pk %}" method="post" style="display: inline-block;">
+                        {% csrf_token %}
+                        <button class='btn btn-secondary'  type="submit">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </li>
+
+            <hr>
+        {% empty %}
+            <li>No articles found.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
