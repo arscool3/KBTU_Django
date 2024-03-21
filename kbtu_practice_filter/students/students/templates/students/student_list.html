@@ -1,0 +1,8 @@
+{% load filters %}
+
+<h1>Student List</h1>
+<ul>
+    {% for student in students %}
+    <li>{{ student.name}}, {{student.age}}, {{student.phone | format_phone}}, {{student.email}}, {{student.address}}</li>
+    {% endfor %}
+</ul>

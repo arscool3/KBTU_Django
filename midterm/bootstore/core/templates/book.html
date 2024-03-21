@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Book List</h1>
+    <ul>
+        {% load my_filters %}
+        {% for book in books %}
+            <li>{{ book.title|capitalize_first }} by {{ book.author.name }} ({{ book.publisher.name }}) - ${{ book.price|{{ price|format_price }}}}</li>
+        {% empty %}
+            <li>No books available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
