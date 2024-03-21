@@ -1,0 +1,16 @@
+{% load utils %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+</head>
+<body>
+<h1>{{ course.title }}</h1>
+<p>{{ course.description }}</p>
+<p>Instructor: {{ course.instructor| uppercase_name }}</p>
+<a href="{% url 'get_course_enrollments' course.id %}">View Enrollments</a>
+
+</body>
+</html>

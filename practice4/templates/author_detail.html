@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ author.name }}</title>
+</head>
+<body>
+ <h1>Author: {{ author.name }}</h1>
+  <h1>Bio: {{ author.biography }}</h1>
+
+    <a href="{% url 'authors-list' %}">Back to author List</a>
+</body>
+</html>
