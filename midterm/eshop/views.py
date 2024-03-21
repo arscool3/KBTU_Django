@@ -39,8 +39,8 @@ class ProductDetailView(View):
         return JsonResponse({'message': 'Product added to cart successfully'})
 
 
-@method_decorator(login_required(login_url='/login/'), name='dispatch')
 class UserProfileView(View):
+    @method_decorator(login_required(login_url='/login/'), name='dispatch')
     def get(self, request):
         user_profile, created = UserProfile.objects.get_or_create(user=request.user)
 
@@ -58,8 +58,9 @@ class CategoryView(View):
         return render(request, 'category.html', context)
 
 
-@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
+
 class CartView(View):
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def get(self, request):
         user_cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = user_cart.cartitem_set.all()
@@ -71,6 +72,7 @@ class CartView(View):
 
         return render(request, 'cart.html', context)
 
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def post(self, request):
         action = request.POST.get('action')
 
@@ -83,6 +85,7 @@ class CartView(View):
         else:
             return JsonResponse({'message': 'Invalid action'})
 
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def remove_from_cart(self, request):
         product_id = request.POST.get('product_id')
         user_cart, created = Cart.objects.get_or_create(user=request.user)
@@ -96,6 +99,7 @@ class CartView(View):
 
         return JsonResponse({'message': message})
 
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def clear_cart(self, request):
         user_cart, created = Cart.objects.get_or_create(user=request.user)
 
@@ -103,6 +107,7 @@ class CartView(View):
 
         return JsonResponse({'message': 'Cart cleared successfully'})
 
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def create_order(self, request):
         user_cart, created = Cart.objects.get_or_create(user=request.user)
 
@@ -134,8 +139,9 @@ class CustomSignUpView(CreateView):
     template_name = 'signup.html'
 
 
-@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
+
 class OrderView(View):
+    @method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
     def get(self, request):
         user_orders = Order.objects.filter(user=request.user)
         order_items = OrderItem.objects.filter(order__user=request.user)
