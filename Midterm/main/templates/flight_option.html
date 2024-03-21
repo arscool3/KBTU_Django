@@ -118,8 +118,8 @@
           {% for flight in flights %}
             <div class="flight-option">
               <div class="flight-info">
-                <span>{{ flight.airline_name }} - {{ flight.flight_code }}</span>
-                <span>Departure Time: {{ flight.dept_time }} &rarr; {{ flight.arr_time }}</span>
+                <span>{{ flight.airline_name|capfirst }} - {{ flight.flight_code }}</span>
+                <span>Departure Time: {{ flight.dept_time|time:"H:i" }} &rarr; {{ flight.arr_time|time:"H:i" }}</span>
               </div>
               <button onclick="toggleFares(this)">Expand</button>
               <div class="fares hidden">
