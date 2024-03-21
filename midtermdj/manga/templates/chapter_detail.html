@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+<style>
+    .page-image-container {
+        text-align: center;
+    }
+    .page-image {
+        width: 50%;
+        height: auto;
+    }
+    .navigation-buttons {
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+    .btn {
+        margin: 5px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+    }
+    .btn[disabled] {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+</style>
+
+{% block content %}
+<h2>{{ chapter.manga.title }} - Chapter {{ chapter.number }}</h2>
+<h3>{{ chapter.title }}</h3>
+<div class="page-image-container">
+  {% for page in pages %}
+    <img src="{{ page.image.url }}" alt="Page {{ page.page_number }}" class="page-image">
+  {% endfor %}
+</div>
+
+<div class="navigation-buttons">
+    {% if previous_chapter %}
+        <a href="{% url 'chapter_detail' previous_chapter.id %}" class="btn btn-primary">&laquo;  Previous Chapter</a>
+    {% else %}
+        <button disabled>&laquo; Previous Chapter</button>
+    {% endif %}
+
+    <a href="{% url 'manga_detail' chapter.manga.id %}" class="btn btn-primary">Back to Manga</a>
+
+    {% if next_chapter %}
+        <a href="{% url 'chapter_detail' next_chapter.id %}" class="btn btn-primary">Next Chapter &raquo;</a>
+    {% else %}
+        <button disabled>Next Chapter &raquo;</button>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+/* static/css/styles.css */
+.page-image-container {
+    text-align: center;
+}
+
+.page-image {
+    width: 50%;
+    height: auto;
+}

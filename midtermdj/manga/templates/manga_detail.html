@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .manga-detail {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .manga-detail img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    h2, h3 {
+        color: #333;
+    }
+
+    p {
+        text-align: justify;
+        color: #666;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    ul li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn {
+        display: inline-block;
+        background-color: #007bff;
+        color: #ffffff;
+        padding: 10px 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .review-item {
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        margin: 10px 0;
+        padding: 15px;
+    }
+
+    .review-rating {
+        font-weight: bold;
+    }
+    .chapters-list {
+        padding: 0;
+        margin: 20px 0;
+        list-style-type: none;
+    }
+
+    .chapter-item {
+        background-color: #f0f0f0;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .chapter-item:hover {
+        background-color: #e0e0e0;
+    }
+
+    .chapter-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .chapter-link:hover {
+        text-decoration: underline;
+    }
+    .review-form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    }
+
+    .review-form h4 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .review-form form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-form form p {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .review-form form input[type="text"],
+    .review-form form textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .review-form form button.btn {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .review-form form button.btn:hover {
+        background-color: #0056b3;
+    }
+
+    p a {
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    p a:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="manga-detail">
+    <img src="{{ manga.cover_image.url }}" alt="{{ manga.title }} Cover">
+    <h2>{{ manga.title }}</h2>
+    <p><strong>Author:</strong> {{ manga.author }}</p>
+    <p>{{ manga.summary }}</p>
+    <h3>Chapters</h3>
+    <ul class="chapters-list">
+    {% for chapter in manga.chapters.all %}
+        <li class="chapter-item">
+            <a href="{% url 'chapter_detail' chapter.id %}" class="chapter-link">Chapter {{ chapter.number }}: {{ chapter.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'add_chapter' manga_id=manga.id %}" class="btn">Add Chapter</a>
+    {% endif %}
+    <h3>Reviews</h3>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li class="review-item">
+                    <strong>{{ review.user.username }}</strong>: {{ review.comment }} (<span class="review-rating">{{ review.rating }}</span> / 5)
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
+{% if user.is_authenticated %}
+    <div class="review-form">
+        <h4>Add a Review</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" class="btn">Submit Review</button>
+        </form>
+    </div>
+{% else %}
+    <p><a href="{% url 'login' %}">Log in</a> to add a review.</p>
+{% endif %}
+</div>
+{% endblock %}
