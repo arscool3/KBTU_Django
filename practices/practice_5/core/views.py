@@ -16,7 +16,7 @@ def get_clan_by_name(request):
 
 def get_castle(request):
     castles = Castle.objects
-    if castle_name := request.GET.get('castle_name'):
+    if castle_name := request.GET.get('name'):
         castles = castles.filter(castle__name=castle_name.capitalize())
     castles = castles.all()
     return render(request, 'index.html', {"iterable": castles, "object": "Castles"})
@@ -37,7 +37,7 @@ def get_dragons(request):
 
 def get_heroes(request):
     heroes = Hero.objects
-    if hero_name := request.GET.get('hero_name'):
+    if hero_name := request.GET.get('name'):
         heroes = heroes.filter(hero__name=hero_name.capitalize())
 
     heroes = heroes.all()
