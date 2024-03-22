@@ -1,0 +1,12 @@
+<!-- myblog/blog/templates/blog/post_detail.html -->
+{% extends "blog/base.html" %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.body }}</p>
+<p>Posted by {{ object.author }} on {{ object.created_at }}</p>
+<!-- Comments Section -->
+{% for comment in object.comments.all %}
+    <p>{{ comment.name }} says "{{ comment.body }}"</p>
+{% endfor %}
+{% endblock %}
