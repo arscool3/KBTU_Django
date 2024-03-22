@@ -1,44 +1,85 @@
-from django.contrib.auth.models import AbstractUser, User
+import bcrypt
 from django.db import models
 
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
-    time = models.CharField(max_length=100, default="")
-    def __str__(self):
-        return f"{self.sender}, content: {self.content}"
 
-class ChatRoom(models.Model):
-    name = models.CharField(max_length=255)
-    members = models.ManyToManyField(User, related_name='chat_rooms')
-    messages = models.ManyToManyField(Message, related_name='chat_room_messages')
-    def get_all_messages(self):
-        return self.messages.all()
-    def __str__(self):
-        return self.name
-
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-    message = models.TextField()
-    is_read = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
+# Create your models here.
+class Organization(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.user}: {self.message}"
+        return f'{self.id}: {self.name}'
 
-class Attachment(models.Model):
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name='attachments')
-    file = models.FileField(upload_to='attachments/')
-    timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Attachment for {self.message}"
-
-class OnlineUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='online_status')
-    last_activity = models.DateTimeField(auto_now=True)
-    is_online = models.BooleanField(default=False)
+class Role(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.user} - Online: {self.is_online}"
+        return f'{self.id}: {self.name}'
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=50)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.id}: {self.name}'
+
+
+class User(models.Model):
+
+    username = models.CharField(max_length=50, unique=True)
+
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    password = models.CharField(max_length=250)
+    email = models.CharField(max_length=50)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    is_active = models.BooleanField(default=True, blank=True)
+    is_verified = models.BooleanField(default=True, blank=True)
+
+    def set_password(self, password):
+        salt = bcrypt.gensalt()
+        self.password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+
+    def check_password(self, password):
+        salt = bcrypt.gensalt()
+        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+
+    def generate_username(self, name, surname):
+        users = User.objects.filter(name=name, surname=surname)
+        if len(users) < len(name):
+            result = name[0:len(users) + 1].lower() + "_" + surname.lower()
+        else:
+            result = name[0].lower() + "_" + surname.lower() + str(len(users) - len(name) + 1)
+        self.username = result
+
+    def __str__(self):
+        return f'{self.id}: {self.name}, {self.role}, {self.group}, {self.organization}'
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=50)
+    capacity = models.IntegerField()
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.id}: {self.name}, {self.organization}'
+
+
+class Events(models.Model):
+    discipline = models.CharField(max_length=150)
+    event_start_time = models.IntegerField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    day = models.IntegerField()
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    status = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+
+    def __str__(self):
+        return f'{self.id}: {self.discipline}, {self.event_start_time}, {self.day}, {self.room.name}, {self.tutor}'

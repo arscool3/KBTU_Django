@@ -1,23 +1,20 @@
 from django.urls import path
 from .views import *
-from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    path('test/', test),
-
-    path('chatApp/', chatPage, name='chat-page'), #GET
-    path('auth/sign_in/', LoginView.as_view(template_name="Login.html"), name="login-user"), #POST
-    path('auth/sign_out/<str:username>/', LogoutViewCustom.as_view(), name="logout-user"), #GET
-    path('auth/register/', register, name='register-user'), #post
-    path('save-messages/', save_message, name='save_messages'), #POST
-    path('get-messages/', get_message, name='get_messages'), #GET
-    path('create-room/', create_room, name='create_room'), #POST
-    path('get-rooms/', get_groups, name='get_groups'), #GET
-    path('get-the-room/<str:room_name>/', get_the_group, name='get-room'),#GET
-    path('save-message/<str:room_name>/', save_message_by_room, name='save-message-room'), #POST
-    path('get-users/', get_online_users, name="online-users"), #GET
-    path('set-user-activity/<str:username>/', set_users_activity, name="set-activity-user"), #POST
-    path('set-notification/<str:username>/', set_notification, name="set-notification") #POST
-
-
+    path('login/', LoginView.as_view()),
+    path('group/', GroupListAPIView.as_view()),
+    path('group/<int:group_id>', GroupDetailAPIView.as_view()),
+    path('user/', UserListAPIView.as_view()),
+    path('tutors/', TutorListAPIView.as_view()),
+    path('students/', StudentListAPIView.as_view()),
+    path('user/<int:user_id>', UserDetailAPIView.as_view()),
+    path('room/', RoomListAPIView.as_view()),
+    path('room/<int:room_id>', RoomDetailAPIView.as_view()),
+    path('event/', EventListAPIView.as_view()),
+    path('event/<int:event_id>', EventDetailAPIView.as_view()),
+    path('available_rooms/', get_available_rooms),
+    path('student/<int:user_id>/events', get_users_events),
+    path('tutor/<int:user_id>/events', get_tutor_events),
+    path('change_event_status/', change_event_status)
 ]
