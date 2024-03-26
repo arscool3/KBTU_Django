@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{lesson}}
+        </title>
+    </head>
+    <body>
+        <h1>{{lesson}}</h1>
+        <p>{{lesson.text}}</p>
+        <h3>{{quiz}}</h3>
+        <div>
+            {%for q in questions %}
+            <div>
+                <h5>{{q}}</h5>
+                <input type="radio" id="Choice0" name="{{q.id}}" value="{{q.id}}:0" />
+                <label for="Choice0">{{q.answer0}}</label>
+
+                <input type="radio" id="Choice1" name="{{q.id}}" value="{{q.id}}:1" />
+                <label for="Choice1">{{q.answer1}}</label>
+
+                <input type="radio" id="Choice2" name="{{q.id}}" value="{{q.id}}:2" />
+                <label for="Choice2">{{q.answer2}}</label>
+
+                <input type="radio" id="Choice3" name="{{q.id}}" value="{{q.id}}:3" />
+                <label for="Choice3">{{q.answer3}}</label>
+            </div>
+            {%endfor%}
+            <input type="submit" value="Submit">
+        </div>
+    </body>
+</html>

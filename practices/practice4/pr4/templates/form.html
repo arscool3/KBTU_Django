@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            New {{entity}}
+        </title>
+    </head>
+    <h1>New {{entity}}:</h1>
+    <form method="POST" style="display: flex; flex-direction: column; width : 30%;">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Send">
+    </form>
+</html>

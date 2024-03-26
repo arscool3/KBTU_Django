@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            List of cities
+        </title>
+    </head>
+    <body>
+        <h1>
+            List of Cities:
+        </h1>
+        <ul> {% for c in cities %}
+            <a href='/views/city/{{c.name}}'><li>{{c.name}}</li></a>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

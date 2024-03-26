@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{president.fname}} {{president.lname}}
+        </title>
+    </head>
+    <body>
+        <h1>{{president.fname}} {{president.lname}}</h1>
+        <p><b>Age:</b> {{president.age}}</p>
+        <p><b>Country:</b> <a href='/views/country/{{president.country.englishName}}'>{{president.country}}</a></p>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{course}}
+        </title>
+    </head>
+    <body>
+        <h1>{{course}}</h1>
+        <p>{{course.descr}}</p>
+        <h3>Lessons:</h3>
+        <div>
+            {% for l in lessons %}
+            <a href="/lessons/{{l.id}}"><div>
+                <h5>{{l.title}}</h5>
+                <p>{{l.text|truncatewords:"100"}}...</p>
+            </div></a>
+            {% endfor %}
+        </div>
+    </body>
+</html>

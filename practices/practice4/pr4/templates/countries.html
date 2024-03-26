@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            List of countries
+        </title>
+    </head>
+    <body>
+        <h1>
+            List of Countries:
+        </h1>
+        <p><b>Ordered by:</b>
+            {% if o == 0 %}<span> Name</span>{% endif %}
+            {% if o == 1 %}<span> Area</span>{% endif %}
+            {% if o == 2 %}<span> Official Name</span>{% endif %}
+        </p>
+        <ul> {% for c in countries %}
+            <li><a href='/views/country/{{c.englishName}}'>{{c.englishName}}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

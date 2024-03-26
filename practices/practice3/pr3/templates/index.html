@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+    <h1>Welcome</h1>
+    <ul>
+    {% for p in people %}
+        <li>{{p.fname}} {{p.lname}}: {{p.age}}</li>
+    {% endfor %}
+    </ul>
+    <p>Register <a href="test/">here.</a></p>
+</html>

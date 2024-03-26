@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Form
+        </title>
+    </head>
+    <body>
+        <form method="POST" style="display: flex; flex-direction: column; width : 30%;">
+            {% csrf_token %}
+            {{form}}
+            <input type="submit" value="Send">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html>
+    <title>test</title>
+    <body>
+        <h4>Students:</h4>
+        <ul>
+        {% for s in students %}
+            <li>{{s.fname | lower}} {{s.lname | upper}}</li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{country.englishName}}
+        </title>
+    </head>
+    <body>
+        <h1>{{country.englishName | capfirst}}</h1>
+        <p><b>Official name:</b> {{country.officialName}}</p>
+        <p><b>Area:</b> {{country.area}} km<sup>2</sup></p>
+        <p><b>President:</b> <a href='/views/president/{{president.fname}}'>{{president}}</a></p>
+        <p><b>Cities:</b></p>
+        {% for c in cities %}
+        <a href='/views/city/{{c.name}}'>{{c}}</a><br>
+        {% endfor %}
+    </body>
+</html>
