@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <h2 class="mt-5 mb-4">Create Gist</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" name="Comment" id="name" placeholder="Enter comment">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<ul>
+    {% for item in form %}
+        <li>{{ item.Comment }}</li>
+        <br>
+    {% endfor %}
+</ul>
+</body>
+</html>
