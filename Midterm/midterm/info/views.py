@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import Event, Participant, Organizer, Ticket, Sponsor, Profile
 from django.contrib.auth.models import User
@@ -6,7 +7,10 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 import json
+from django.contrib.auth.views import LoginView, LogoutView
+from .forms import CustomUserCreationForm
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, decorators, logout, forms
 
@@ -56,32 +60,44 @@ def get_events(request):
     events = Event.objects.all()
     return render(request, 'home.html', {'events': events})
 
+
 @require_http_methods(["GET"])
 def get_event(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     return render(request, 'event_detail.html', {'event': event})
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @require_http_methods(["GET"])
 def get_event_participants(request, event_id):
     participants = Participant.objects.filter(event_id=event_id).values()
     return render(request, 'participant_list.html', {'participants': participants})
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @require_http_methods(["GET"])
 def get_user_tickets(request, user_id):
     tickets = Ticket.objects.filter(purchaser_id=user_id).values()
     return JsonResponse(list(tickets), safe=False)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @require_http_methods(["GET"])
 def get_user_profile(request, user_id):
     profile = get_object_or_404(Profile, user_id=user_id)
     return JsonResponse({'bio': profile.bio, 'avatar': profile.avatar.url})
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @require_http_methods(["GET"])
 def get_event_sponsors(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     sponsors = event.sponsor_set.all().values()
     return JsonResponse(list(sponsors), safe=False)
 
+
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def create_event(request):
@@ -93,6 +109,8 @@ def create_event(request):
     except (ValueError, KeyError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def register_participant(request, event_id):
@@ -106,6 +124,8 @@ def register_participant(request, event_id):
     except (User.DoesNotExist, Event.DoesNotExist, ValueError, KeyError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def create_organizer(request):
@@ -118,6 +138,8 @@ def create_organizer(request):
     except (User.DoesNotExist, ValueError, KeyError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def purchase_ticket(request, event_id):
@@ -131,6 +153,8 @@ def purchase_ticket(request, event_id):
     except (User.DoesNotExist, Event.DoesNotExist, ValueError, KeyError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_sponsor(request, event_id):
@@ -144,6 +168,8 @@ def add_sponsor(request, event_id):
     except (Event.DoesNotExist, ValueError, KeyError) as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+@method_decorator(login_required(login_url='/accounts/login/'), name='dispatch')
 @csrf_exempt
 @require_http_methods(["POST"])
 def update_profile(request, user_id):
