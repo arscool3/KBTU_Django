@@ -1,0 +1,22 @@
+{% load products_tag %}
+<div style="background-color: green; height: 50px; color: white; padding: 10px">
+    {% for m in menu %}
+    <a style="text-decoration: none; color: white" href="{% url m.link %}">
+        <em style="padding: 3px">{{m.title}}</em>
+    </a>
+    {%endfor%}
+
+    {% if menu|isAuthMenu %}
+        <div style="position: relative; float: right;">
+            <a style="text-decoration: none; color: white" href="{% url 'profil' %}">
+                <em style="padding: 3px">Профиль</em>
+            </a>
+
+            <a style="text-decoration: none; color: white" href="{% url 'logout' %}">
+                <em style="padding: 3px">Выйти</em>
+            </a>
+
+        </div>
+    {% endif %}
+</div>
+

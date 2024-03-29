@@ -1,0 +1,25 @@
+{% load products_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+     {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+     <h1>Ваши покупки</h1>
+
+    {% for b in busket %}
+        <h3>{{b.purch.date|dateTime}}</h3>
+        <p><img src="{{b.product.photo.url}}" width="200px"></p>
+        {{b.product.name}}
+        <br>цена: {{b.product.cost}}
+        <br>количество: {{b.amount}}
+        <br>адресс: {{b.purch.adress | adress1}}
+    {% endfor %}
+</body>
+</html>

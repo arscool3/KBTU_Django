@@ -1,0 +1,25 @@
+{% extends 'Store/base.html' %}
+
+{% block content %}
+{% for product in Products %}
+        <div>
+            {% if product.photo %}
+        <p><img src="{{product.photo.url}}" width="200px"></p>
+            {% endif %}
+    {{product.name}}
+            <p>цена: {{product.cost}}
+
+
+            <button id="getValueButton" type="submit"
+                     onclick="location.href='{% url 'addBusket' pr=product.pk am=1%}'" name='mybtn1'>
+                В Корзину
+            </button></p>
+            количество: <input type="number" id="myInput" min="1" max="{{product.amount}}" value=1 />
+
+
+
+
+
+        </div>
+    {% endfor %}
+{% endblock %}

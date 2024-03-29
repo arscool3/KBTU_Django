@@ -1,0 +1,10 @@
+{% load products_tag %}
+{% ShowMenu 1 %}
+
+<h1>Регистрация</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Готово</button>
+</form>
