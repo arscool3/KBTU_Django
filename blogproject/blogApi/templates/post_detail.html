@@ -8,8 +8,8 @@
 
 </head>
 <body>
-    <h1>{{ post.title }}</h1>
-    <h2>{{ post.category }}</h2>
+    <h1>{{ post.title | capfirst }}</h1>
+    <h2>{{ post.category | center:"15" }}</h2>
     <p>{{ post.description }}</p>
     <form action="{% url 'add_comments' post.id %}", method="post">
         {% csrf_token %}
