@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Consumers</h1>
+<form method="post" action="{% url 'consumers' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Consumer</button>
+</form>
+<ul>
+  {% for consumer in consumers %}
+  <li>{{ consumer }}</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'index' %}">Go to homepage</a>
+{% endblock %}

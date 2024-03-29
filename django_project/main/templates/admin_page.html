@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Admin Page</h1>
+
+<ul>
+  <li><a href="{% url 'users' %}">Users</a></li>
+  <li><a href="{% url 'authors' %}">Authors</a></li>
+  <li><a href="{% url 'categories' %}">Categories</a></li>
+  <li><a href="{% url 'books' %}">Books</a></li>
+  <li><a href="{% url 'consumers' %}">Consumers</a></li>
+  <li><a href="{% url 'reviews' %}">Reviews</a></li>
+</ul>
+{% endblock %}
