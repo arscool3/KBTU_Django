@@ -4,6 +4,11 @@ from django.http import HttpResponse
 from Library.forms import *
 from Library.models import Book, Client
 
+from rest_framework.generics import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from Library.serializers import *
 
 # Create your views here.
 def get_books(request):
@@ -76,3 +81,16 @@ def add_loan(request):
 
 def add_publishing_office(request):
     return add_model(request, PublishingOfficeForm, 'add_publishing_office', 'publishing_office')
+
+
+class BookViewSet(ModelViewSet):
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+
+    @action(detail=True, methods=['get'])
+    def availability(self, request, pk=None):
+        book = self.get_object()
+        if book.available:
+            return Response({'available': True})
+        else:
+            return Response({'available': False})

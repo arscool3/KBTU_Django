@@ -38,22 +38,23 @@ class PublishingOffice(models.Model):
 
 class BookQuerySet(models.QuerySet):
     def available_books(self):
-        return self.all()
+        return self.filter(available=True)
     def books_by_genre(self, genre__id):
         return self.filter(genre__id=genre__id)
 
 class Book(AbstractTimestampedModel):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(to=Author, on_delete=models.CASCADE)
-    genre = models.ForeignKey(to=Genre, on_delete=models.CASCADE)
-    publishing_office = models.ForeignKey(to=PublishingOffice, on_delete=models.CASCADE, default="AlmatyKitap")
+    author = models.ForeignKey('Author', on_delete=models.CASCADE)
+    genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+    publishing_office = models.ForeignKey('PublishingOffice', on_delete=models.CASCADE, default="AlmatyKitap")
+    year = models.IntegerField()
+    available = models.BooleanField(default=True)  # Add the available field
     objects = BookQuerySet.as_manager()
 
     def __str__(self):
         return self.title
 
-    year = models.IntegerField()
-    class Meta(object):
+    class Meta:
         db_table = 'my_book'
 
 class ClientQuerySet(models.QuerySet):
