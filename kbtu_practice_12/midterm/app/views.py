@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from django.contrib.auth.decorators import login_required
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializer import *
 @login_required(login_url='/app/auth/sign_in/')
 def create_education(request):
     if request.method == 'POST':
@@ -107,8 +109,11 @@ def get_resumes(request):
     return render(request, 'resume_list.html', {'resumes': resumes})
 
 @login_required(login_url='/app/auth/sign_in/')
+@api_view(['GET'])
 def get_resume_by_id(request, resume_id):
     resume = get_object_or_404(Resume, pk=resume_id)
+    serializer = ResumeSerializer(resume)
+    return Response(serializer.data)
     return render(request, 'resume.html', {'resume': resume})
 
 @login_required(login_url='/app/auth/sign_in/')
