@@ -3,16 +3,20 @@ import logging
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from rest_framework.viewsets import ModelViewSet
+
 from .forms import *
+
 
 from .models import *
 
 
 # Create your views here.
+from .serializers import *
+
 
 def homepage(request):
     Products = Product.objects.get_all_products()
@@ -167,4 +171,16 @@ def buy_Buscket(request):
             return redirect(previous_page_url)
     except:
         return redirect('addAdress')
+
+
+# DRF views
+
+class ProductViewSet(ModelViewSet):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+class CatViewSet(ModelViewSet):
+    serializer_class = CatSerializer
+    queryset = Category.objects.all()
+
 

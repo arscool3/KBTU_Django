@@ -21,7 +21,10 @@ urlpatterns = [
 
     path('addBusket/<int:pr>/<int:am>/', add_Buscket, name='addBusket'),
     path('delBusket/<int:id>/', del_Buscket, name='delBusket'),
-    path('buyBusket', buy_Buscket, name='buyBysket')
+    path('buyBusket', buy_Buscket, name='buyBysket'),
+
+    path('api/products/', ProductViewSet.as_view({'get' : 'list'})),
+    path('api/categories/', CatViewSet.as_view({'get' : 'list'}))
 ]
 
 
