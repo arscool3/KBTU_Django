@@ -12,3 +12,8 @@ MIDTERM <br>
  2 Filters for templates <br>
  12 Endpoints (6 get, 6 post) <br>
 Authorization <br>
+
+PRACTICE 6 TODO: <br>
+
+Add Django Rest Framework to your midterm. <br>
+You need to add drf views with serializers to your current midterm and connect them with your models
