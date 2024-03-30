@@ -140,13 +140,13 @@ class CategoryDetailView(View):
         return render(request, 'categories/category_detail.html', {'category': category})
 
 class UpdateCategoryView(View):
-    @decorators.permission_required('core.can_change_category', login_url='login')
+    @method_decorator(permission_required('core.can_change_category', login_url='login'))
     def get(self, request, category_id):
         category = get_object_or_404(Category, pk=category_id)
         form = CategoryForm(instance=category)
         return render(request, 'categories/update_category.html', {'form': form, 'category_id': category_id})
 
-    @decorators.permission_required('core.can_change_category', login_url='login')
+    @method_decorator(permission_required('core.can_change_category', login_url='login'))
     def post(self, request, category_id):
         category = get_object_or_404(Category, pk=category_id)
         form = CategoryForm(request.POST, instance=category)
@@ -164,19 +164,26 @@ class CategoryListView(View):
     
 #Customer
 class CreateCustomerView(View):
-    @decorators.permission_required('core.can_add_customer', login_url='login')
+    @method_decorator(permission_required('core.can_add_customer', login_url='login'))
     def get(self, request):
-        form = CustomerForm()
-        return render(request, 'customers/create_customer.html', {'form': form})
-
-    @decorators.permission_required('core.can_add_customer', login_url='login')
-    def post(self, request):
-        form = CustomerForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('customer_list')
-        else:
+        try:
+            form = CustomerForm()
             return render(request, 'customers/create_customer.html', {'form': form})
+        except:
+            return HttpResponse("Doesn't have permission to create customer")
+
+    @method_decorator(permission_required('core.can_add_customer', login_url='login'))
+    def post(self, request):
+        try:
+            form = CustomerForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('customer_list')
+            else:
+                return render(request, 'customers/create_customer.html', {'form': form})
+        except:
+            return HttpResponse("Doesn't have permission to create customer") 
+        
 
 class CustomerDetailView(View):
     @method_decorator(login_required(login_url='login'))
@@ -185,13 +192,15 @@ class CustomerDetailView(View):
         return render(request, 'customers/customer_detail.html', {'customer': customer})
 
 class UpdateCustomerView(View):
-    @decorators.permission_required('core.can_change_customer', login_url='login')
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(permission_required('core.can_change_customer', login_url='login'))
     def get(self, request, customer_id):
         customer = get_object_or_404(Customer, pk=customer_id)
         form = CustomerForm(instance=customer)
         return render(request, 'customers/update_customer.html', {'form': form, 'customer_id': customer_id})
 
-    @decorators.permission_required('core.can_change_customer', login_url='login')
+    @method_decorator(login_required(login_url='login'))
+    @method_decorator(permission_required('core.can_change_customer', login_url='login'))
     def post(self, request, customer_id):
         customer = get_object_or_404(Customer, pk=customer_id)
         form = CustomerForm(request.POST, instance=customer)
@@ -210,12 +219,12 @@ class CustomerListView(View):
 #Orders
 
 class CreateOrderView(View):
-    @decorators.permission_required('core.can_add_order', login_url='login')
+    @method_decorator(permission_required('core.can_add_order', login_url='login'))
     def get(self, request):
         form = OrderForm()
         return render(request, 'orders/create_order.html', {'form': form})
 
-    @decorators.permission_required('core.can_add_order', login_url='login')
+    @method_decorator(permission_required('core.can_add_order', login_url='login'))
     def post(self, request):
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -231,13 +240,13 @@ class OrderDetailView(View):
         return render(request, 'orders/order_detail.html', {'order': order})
 
 class UpdateOrderView(View):
-    @decorators.permission_required('core.can_change_order', login_url='login')
+    @method_decorator(permission_required('core.can_change_order', login_url='login'))
     def get(self, request, order_id):
         order = get_object_or_404(Order, pk=order_id)
         form = OrderForm(instance=order)
         return render(request, 'orders/update_order.html', {'form': form, 'order_id': order_id})
 
-    @decorators.permission_required('core.can_change_order', login_url='login')
+    @method_decorator(permission_required('core.can_change_order', login_url='login'))
     def post(self, request, order_id):
         order = get_object_or_404(Order, pk=order_id)
         form = OrderForm(request.POST, instance=order)
