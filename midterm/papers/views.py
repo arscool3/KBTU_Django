@@ -3,6 +3,27 @@ from .models import Paper, Category
 from accounts.models import PaperShelf
 from .forms import *
 from comments.views import all_comments
+from .serializers import PaperSerializer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .premissions import IsAuthorOrReadOnly
+
+# DRF for paper
+class PaperListView(generics.ListCreateAPIView):
+    queryset = Paper.objects.all()
+    serializer_class = PaperSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user.account)
+
+
+class PaperRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Paper.objects.all()
+    serializer_class = PaperSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+
+
 
 # GET
 def home(request):

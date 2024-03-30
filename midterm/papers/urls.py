@@ -12,6 +12,8 @@ urlpatterns = [
     path('create_tag/', create_tag, name='create_tag'),
     path('create_category/', create_category, name='create_category'),
     path('search_by_tags/',search_by_tags, name='search_by_tags'),
+    path('drf_papers', PaperListView.as_view(), name='drf_paper'),
+    path('drf_papers/<int:pk>/', PaperRetrieveUpdateDestroyView.as_view(), name='drf_paper_detail'),
 ]
 
 
