@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Categories</h1>
+{% if request.user.is_staff %}
+<form method="post" action="{% url 'categories' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Category</button>
+</form>
+{% endif %}
+<ul>
+  {% for category in categories %}
+  <li>{{ category.name }}</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'index' %}">Go to homepage</a>
+{% endblock %}

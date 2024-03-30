@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% load custom_filter %} {% block content %}
+<h1>Books</h1>
+{% if request.user.is_staff %}
+<form method="post" action="{% url 'books' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Book</button>
+</form>
+{% endif %}
+<form action="{% url 'books' %}" method="get">
+  <button
+    type="submit"
+    name="sort_by"
+    value="author"
+    style="
+      text-decoration: none;
+      color: black;
+      background-color: #2fe6d4;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-right: 10px;
+      transition: background-color 0.3s ease;
+      border: none;
+    "
+  >
+    Sort by Author
+  </button>
+</form>
+<ul>
+  {% for book in books %}
+  <li>
+    <a href="{% url 'get_book' book.id %}">
+      {{ book.title }} --- {{ book.category }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'index' %}">Go to homepage</a>
+{% endblock %}
