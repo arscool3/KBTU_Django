@@ -2,6 +2,11 @@
 from django.contrib import admin
 from django.urls import path, include
 from main.views import get_products, sort_by_category, get_prod, login_user, logout_user, signup_user, addProduct, addShop, get_shops_by_city, order_prods_by_price, order_shops_budget, addCart
+from rest_framework import routers
+from main.views import CartViewSet
+
+router = routers.SimpleRouter()
+router.register(r"cart", CartViewSet)
 
 urlpatterns = [
     path('', get_products, name='main'),
@@ -17,4 +22,4 @@ urlpatterns = [
     path('shops_budget', order_shops_budget, name='order_shops_budget'),
     path('add_cart', addCart, name='add_cart')
 
-]
+] + router.urls
