@@ -7,7 +7,9 @@ from django.utils import timezone
 from django.views import View
 from django.views.decorators import csrf
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializer import *
 from .forms import ChatRoomForm, UserForm
 from .models import *
 
@@ -44,17 +46,17 @@ def save_message(request):
         }
         return JsonResponse(response_data, status=405)
 
-@csrf_exempt
+@api_view(['GET'])
 def get_message(request):
     if request.method == 'GET':
         messages = Message.objects.all().values('sender__username', 'content', 'timestamp', 'time')
-        messages_list = list(messages)
-        return JsonResponse(messages_list, safe=False)
+        serializer = MessageSerializer(messages)
+        return Response(serializer.data, status=200)
     else:
         response_data = {
             'error': 'Only GET method is allowed'
         }
-        return JsonResponse(response_data, status=405)
+        return Response(response_data, status=405)
 
 @csrf_exempt
 def create_room(request):

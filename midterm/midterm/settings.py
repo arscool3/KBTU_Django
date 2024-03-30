@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'daphne',
     'django.contrib.staticfiles',
     'api',
-    'channels'
+    'channels',
+    'rest_framework'
 ]
 ASGI_APPLICATION = 'midterm.asgi.application'
 
