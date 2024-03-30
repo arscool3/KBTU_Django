@@ -7,24 +7,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from coursera.forms import StudentRegistrationForm, CourseForm, InstructorForm, EnrollmentForm, ReviewForm, LessonForm
 from coursera.models import *
 
-from rest_framework.decorators import action
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from coursera.serializers import CourseSerializer
 
-
-class CourseViewSet(ModelViewSet):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-    lookup_field = 'id'
-
-    @action(detail=True, methods=['get'])
-    def get_course(self, request, id: int):
-        course = self.get_object()
-        if course.prerequisite is not None:
-            return Response("Course have prerequisite")
-        return Response('Course does not have prerequisite')
-
+# Create your views here.
 
 @login_required(login_url='login')
 def get_courses(request):
