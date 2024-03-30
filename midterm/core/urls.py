@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 
 from core.views import *
+from core.drf_views import *
 urlpatterns = [
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
@@ -18,6 +19,6 @@ urlpatterns = [
     path('products/', get_all_products, name='all_products'),  # Путь для создания заказа
     path('add_to_oder/<int:order_id>', add_product_to_order , name = 'add_product_to_order'),
     path('add_profile_info/', add_profile_info , name = 'add_profile_info'),
-    path('get_cart_info/', cart_detail , name = 'cart_detail')
-    
+    path('get_cart_info/', cart_detail , name = 'cart_detail'),
+    path('products/drf', get_all_products_drf, name='all_products_drf')
 ]
