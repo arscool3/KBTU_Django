@@ -1,11 +1,23 @@
 from django.shortcuts import render, redirect
-from main.models import Product, Shop
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from main.forms import ProductForm, ShopForm, CartForm
 from django.contrib.auth.decorators import login_required, permission_required
+from rest_framework.generics import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from main.models import Product, Shop, Cart, Order, Review
+from main.serializers import ProductSerializer, CartSerializer
+
+class CartViewSet(ModelViewSet):
+    serializer_class = CartSerializer
+    queryset = Cart.objects.all()
+    lookup_field='id'
+
+        
 
 
 def get_products(request):
@@ -23,6 +35,7 @@ def get_prod(request):
 def order_prods_by_price(request):
     products = Product.objects.sort_by_price()
     return render(request, "index.html", {"products":products})
+
 
 def get_shops_by_city(request):
     shops = Shop.objects.cities_shops(request.GET['city_name'])
