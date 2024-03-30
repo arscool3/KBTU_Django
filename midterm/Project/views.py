@@ -152,6 +152,14 @@ class AttachmentViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=201)
         else:
             return Response(serializer.errors, status=400)
+    def update(self, request, pk):
+        data = Attachment.objects.get(pk=pk)
+        serializer = AttachmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.update()
+            return Response(serializer.data, status=201)
+        else:
+            return Response(serializer.errors, status=400)
 
 
 class TeamViewSet(viewsets.ModelViewSet):
