@@ -17,7 +17,7 @@ urlpatterns = [
     path('settings/', settings_view, name='settings'),
 
 
-    # post endpoints
+    # post endpoints 
     path('crud_news/', crud_news, name='crud_news'),
     path('crud_student/', crud_student, name='crud_student'),
     path('crud_faculty/', crud_faculty, name='crud_faculty'),

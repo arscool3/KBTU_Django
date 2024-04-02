@@ -3,9 +3,13 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import forms, authenticate, login, decorators, logout
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from app.forms import *
 from app.models import *
+from app.serializers import SpecialitySerializer, FacultySerializer
 
 
 def basic_form(request, given_form):
@@ -156,3 +160,32 @@ def crud_discipline(request):
 
 def crud_speciality(request):
     return crud(request, SpecialityForm)
+
+
+
+class FacultyListCreateAPIView(APIView):
+    def get(self, request):
+        faculties = Faculty.objects.all()
+        serializer = FacultySerializer(faculties, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FacultySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SpecialityListCreateAPIView(APIView):
+    def get(self, request):
+        specialities = Speciality.objects.all()
+        serializer = SpecialitySerializer(specialities, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = SpecialitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
