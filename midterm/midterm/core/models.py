@@ -58,3 +58,10 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+#Model for DRF ( practice 6 )
+class Favorite(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.email}'s Favorite - {self.product.name}" 
