@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Write Review for {{ item.name }}{% endblock %}
+
+{% block content %}
+  <h1 class="text-3xl mb-6">Write a Review for {{ item.name }}</h1>
+
+  <form method="post" action="{% url 'item:write_review' item.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit Review</button>
+  </form>
+  
+  <a href="{% url 'item:detail' item.id %}" class="mt-4 block text-blue-500">Back to Item Details</a>
+{% endblock %}
