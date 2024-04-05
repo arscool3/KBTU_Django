@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Lesson</title>
+</head>
+<body>
+    <h1>Create Lesson</h1>
+    <form action="{% url 'create_lesson' course_id %}" method="post">
+        {% csrf_token %}
+         <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content"></textarea><br>
+        <button type="submit">Create Lesson</button>
+    </form>
+</body>
+</html>
