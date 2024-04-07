@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Verification Report</title>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.passed {
+    color: green;
+}
+
+.failed {
+    color: red;
+}
+
+.warning {
+    color: orange;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.bug-report {
+    margin-bottom: 20px;
+}
+
+.bug-id {
+    font-weight: bold;
+}
+
+.summary {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.nav-links {
+    text-align: center;
+}
+
+.description {
+    display: none;
+    margin-bottom: 10px;
+}
+
+</style>
+</head>
+<body>
+
+<h1>Unit Verification Report</h1>
+
+<section id="method-info">
+    <h2>Method Information</h2>
+    <table>
+        <tr>
+            <th>Method Name</th>
+            <th>Class Name</th>
+            <th>Package Name</th>
+        </tr>
+        <tr>
+            <td><span class="method-name" onclick="toggleDescription(this)">method1()</span></td>
+            <td>ExampleClass</td>
+            <td>com.example.package</td>
+        </tr>
+        <tr>
+            <td><span class="method-name" onclick="toggleDescription(this)">method2()</span></td>
+            <td>AnotherClass</td>
+            <td>com.another.package</td>
+        </tr>
+        <tr>
+            <td><span class="method-name" onclick="toggleDescription(this)">method3()</span></td>
+            <td>YetAnotherClass</td>
+            <td>com.yetanother.package</td>
+        </tr>
+    </table>
+</section>
+
+
+<section id="verification-status">
+    <h2>Verification Status</h2>
+    <table>
+        <tr>
+            <th>Method Name</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>method1()</td>
+            <td class="passed">Passed</td>
+        </tr>
+        <tr>
+            <td>method2()</td>
+            <td class="failed">Failed</td>
+        </tr>
+        <tr>
+            <td>method3()</td>
+            <td class="warning">Warning</td>
+        </tr>
+    </table>
+</section>
+
+<section id="bug-reports">
+    <h2>Bug Reports</h2>
+    <div class="bug-report">
+        <p class="bug-id">Bug ID: 001</p>
+        <p>Method: method2()</p>
+        <p>Description: Null pointer exception</p>
+        <p>Severity: High</p>
+        <p>Steps to Reproduce:...</p>
+    </div>
+    <div class="bug-report">
+        <p class="bug-id">Bug ID: 002</p>
+        <p>Method: method3()</p>
+        <p>Description: Potential resource leak</p>
+        <p>Severity: Medium</p>
+        <p>Steps to Reproduce:...</p>
+    </div>
+</section>
+
+
+<section id="reachability">
+    <h2>Reachability of Code</h2>
+    <p>During the verification process, the following unreachable code segments were identified:</p>
+    <ul>
+        <li>Unreachable if statement in method1(): The condition is always false and the block of code inside the if statement is never executed.</li>
+        <li>Dead code after return statement in method2(): The code following the return statement is unreachable and does not contribute to the program's functionality.</li>
+    </ul>
+</section>
+
+
+<section id="analysis-info">
+    <h2>Analysis Information</h2>
+    <p>During the verification process, various metrics and statistics were collected to assess the performance and resource usage of the verification runs.</p>
+    <h3>Performance Metrics:</h3>
+    <ul>
+        <li>Execution time: Total time taken to perform the verification run.</li>
+        <li>CPU usage: Percentage of CPU resources utilized during the verification process.</li>
+        <li>Memory usage: Amount of memory consumed by the verification tool.</li>
+    </ul>
+    <h3>Resource Usage:</h3>
+    <ul>
+        <li>Processor cores: Number of CPU cores utilized during the verification.</li>
+        <li>Memory consumption: Total memory usage by the verification tool and associated processes.</li>
+        <li>Storage requirements: Disk space required for storing intermediate and final verification results.</li>
+    </ul>
+</section>
+
+<section id="overall-summary">
+    <h2>Overall Summary</h2>
+    <p class="summary">Total Methods Verified: 3</p>
+    <p class="summary">Passed Methods: 1</p>
+    <p class="summary">Failed Methods: 1</p>
+    <p class="summary">Warning Methods: 1</p>
+</section>
+
+<section class="nav-links">
+    <a href="#method-info">Method Information</a> |
+    <a href="#verification-status">Verification Status</a> |
+    <a href="#bug-reports">Bug Reports</a> |
+    <a href="#reachability">Reachability of Code</a> |
+    <a href="#analysis-info">Analysis Information</a> |
+    <a href="#overall-summary">Overall Summary</a>
+</section>
+
+<script>
+function toggleDescription(element) {
+    var description = element.nextElementSibling;
+    if (description.style.display === "none") {
+        description.style.display = "block";
+    } else {
+        description.style.display = "none";
+    }
+}
+</script>
+
+</body>
+</html>
+

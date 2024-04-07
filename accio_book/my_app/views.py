@@ -8,7 +8,8 @@ from my_app.serializers import AuthorSerializer, BookSerializer, UserProfileSeri
 from django.contrib.auth.decorators import login_required
 from my_app.models import Author, Book, UserProfile, Favorite, Genre, User
 from my_app.forms import BookForm, AuthorForm, FavoriteForm, GenreForm
-
+from rest_framework import viewsets
+from my_app.tasks import send_notification_email
 
 # 6 Post requests
 
@@ -69,7 +70,9 @@ def add_book(request):
     if request.method == 'POST':
         serializer = BookSerializer(data=request.POST)
         if serializer.is_valid():
-            serializer.save()
+            book = serializer.save()
+            # Enqueue the task to send notification email
+            send_notification_email.send(book.id)
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
     else:
@@ -166,3 +169,16 @@ def get_genre_details(request, genre_id):
     except genre.DoesNotExist:
         return JsonResponse({'error': 'genre not found'}, status=404)
 
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+class AuthorViewSet(viewsets.ModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
