@@ -1,9 +1,44 @@
+from rest_framework.generics import get_object_or_404
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import RoomFilter
 
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, decorators, logout, forms
 
 from .forms import CustomerForm, RoomForm, ReservationForm
-from .models import Hotel, Room, Reservation
+from .models import Hotel, Room, Reservation, Customer
+from .serializers import HotelSerializer, RoomSerializer, CustomerSerializer, ReservationSerializer
+
+
+
+class HotelViewSet(ModelViewSet):
+    serializer_class = HotelSerializer
+    queryset = Hotel.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name']
+
+class RoomViewSet(ModelViewSet):
+    serializer_class = RoomSerializer
+    queryset = Room.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = RoomFilter
+
+class CustomerViewSet(ModelViewSet):
+    serializer_class = CustomerSerializer
+    queryset = Customer.objects.all()
+
+class ReservationViewSet(ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    def perform_create(self, serializer):
+        reservation = serializer.save()
+        room = reservation.room
+        room.available = False
+        room.save()
 
 
 @decorators.login_required(login_url='login')
