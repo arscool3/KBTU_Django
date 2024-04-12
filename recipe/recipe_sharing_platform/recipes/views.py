@@ -21,7 +21,8 @@ def get_all_recipes(request):
             'ingredients': [ingredient.name for ingredient in recipe.ingredients.all()]  # Extract ingredients
         }
         data.append(recipe_data)
-    return JsonResponse(data, safe=False)
+    serializer = RecipeSerializer(recipes, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 def get_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
@@ -32,27 +33,33 @@ def get_recipe(request, recipe_id):
         'category': recipe.category.name,
         'ingredients': [ingredient.name for ingredient in recipe.ingredients.all()]  # Extract ingredients
     }
-    return JsonResponse(data)
+    serializer = RecipeSerializer(recipe)
+    return JsonResponse(serializer.data)
 
 def get_recipes_by_category(request, category_id):
     recipes = Recipe.objects.filter(category=category_id)
     data = [{'id': recipe.id, 'title': recipe.title, 'author': recipe.author.username, 'category': recipe.category.name} for recipe in recipes]
-    return JsonResponse(data, safe=False)
+    serializer = RecipeSerializer(recipes, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 def get_all_ratings(request):
     ratings = Rating.objects.all()
     data = [{'id': rating.id, 'recipe_id': rating.recipe.id, 'user': rating.user.username, 'rating': rating.rating} for rating in ratings]
-    return JsonResponse(data, safe=False)
+    serializer = RatingSerializer(ratings, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 def get_ratings_for_recipe(request, recipe_id):
     ratings = Rating.objects.filter(recipe_id=recipe_id)
     data = [{'id': rating.id, 'user': rating.user.username, 'rating': rating.rating} for rating in ratings]
-    return JsonResponse(data, safe=False)
+    serializer = RatingSerializer(ratings, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
 
 def get_comments_for_recipe(request, recipe_id):
     comments = Comment.objects.filter(recipe_id=recipe_id)
     data = [{'id': comment.id, 'user': comment.user.username, 'text': comment.text} for comment in comments]
-    return JsonResponse(data, safe=False)
+    serializer = CommentSerializer(comments, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 #POST endpoints
 @csrf_exempt
@@ -93,7 +100,8 @@ def rate_recipe(request, recipe_id):
         rating, created = Rating.objects.get_or_create(recipe=recipe, user=user)
         rating.rating = rating_value
         rating.save()
-        return JsonResponse({'id': rating.id, 'message': 'Rating updated successfully'})
+        serializer = RatingSerializer(rating)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 @login_required
@@ -106,7 +114,8 @@ def add_comment(request, recipe_id):
         user = request.user
         recipe = get_object_or_404(Recipe, pk=recipe_id)
         comment = Comment.objects.create(recipe=recipe, user=user, text=text)
-        return JsonResponse({'id': comment.id, 'message': 'Comment added successfully'})
+        serializer = CommentSerializer(comment)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 @login_required
@@ -118,7 +127,8 @@ def leave_comment(request, recipe_id):
         user = request.user
         recipe = Recipe.objects.get(pk=recipe_id)
         comment = Comment.objects.create(recipe=recipe, user=user, text=text)
-        return JsonResponse({'id': comment.id, 'message': 'Comment added successfully'})
+        serializer = CommentSerializer(comment)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 def create_category(request):
@@ -127,8 +137,8 @@ def create_category(request):
         name = data.get('name')
         if not name:
             return HttpResponseBadRequest("Category name is required")
-        category = Category.objects.create(name=name)
-        return JsonResponse({'id': category.id, 'name': category.name, 'message': 'Category created successfully'})
+        serializer = CategorySerializer(category)
+        return JsonResponse(serializer.data)
     else:
         return HttpResponseNotAllowed(['POST'])
 
@@ -139,8 +149,8 @@ def create_ingredient(request):
         name = data.get('name')
         if not name:
             return HttpResponseBadRequest("Ingredient name is required")
-        ingredient = Ingredient.objects.create(name=name)
-        return JsonResponse({'id': ingredient.id, 'name': ingredient.name, 'message': 'Ingredient created successfully'})
+        serializer = IngredientSerializer(ingredient)
+        return JsonResponse(serializer.data)
     else:
         return HttpResponseNotAllowed(['POST'])
     
@@ -156,7 +166,8 @@ def update_user_info(request):
         if 'email' in data:
             user.email = data['email']
         user.save()
-        return JsonResponse({'message': 'User information updated successfully'})
+        serializer = UserSerializer(user)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 @login_required
@@ -176,7 +187,8 @@ def update_recipe_info(request, recipe_id):
         if 'instructions' in data:
             recipe.instructions = data['instructions']
         recipe.save()
-        return JsonResponse({'message': 'Recipe information updated successfully'})
+        serializer = RecipeSerializer(recipe)
+        return JsonResponse(serializer.data)
 
 #Auth
 def login_view(request):
