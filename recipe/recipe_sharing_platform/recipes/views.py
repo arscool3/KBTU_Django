@@ -6,6 +6,8 @@ from .forms import LoginForm, RegistrationForm, RecipeForm
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from .models import Recipe, Rating, Comment, Category, Ingredient
+from .serializers import RecipeSerializer, RatingSerializer, CommentSerializer, CategorySerializer, IngredientSerializer
+from .tasks import send_registration_confirmation_email
 import json
 
 # GET Endpoints
@@ -210,6 +212,7 @@ def register_view(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            send_registration_confirmation_email.send(user.id)
             return redirect('login')  # Redirect to the login page after successful registration
     else:
         form = RegistrationForm()
