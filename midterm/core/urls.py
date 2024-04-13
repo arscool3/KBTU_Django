@@ -20,5 +20,13 @@ urlpatterns = [
     path('add_to_oder/<int:order_id>', add_product_to_order , name = 'add_product_to_order'),
     path('add_profile_info/', add_profile_info , name = 'add_profile_info'),
     path('get_cart_info/', cart_detail , name = 'cart_detail'),
-    path('products/drf', get_all_products_drf, name='all_products_drf')
+    path('products/drf', get_all_products_drf, name='all_products_drf'),
+
+    #practise 8 
+    path('add_to_cart/', add_to_cart ,name = 'add_to_cart'),
+    path('make_order/', make_order ,name = 'make_order'),
+    path('remove_from_cart/<int:id>/',remove_from_cart,name = 'remove_from_cart'),
+    path('cart_detail/',cart_detail_drf,name = 'cart_detail'),
+
+
 ]
