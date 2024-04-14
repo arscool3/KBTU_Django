@@ -5,8 +5,10 @@ from dramatiq.results.backends.redis import RedisBackend
 
 from .models import Genre
 
-result_backend = RedisBackend()
-redis_broker = RedisBroker()
+REDIS_URL = "redis://localhost:6379/0"
+
+result_backend = RedisBackend(url=REDIS_URL)
+redis_broker = RedisBroker(url=REDIS_URL)
 redis_broker.add_middleware(Results(backend=result_backend))
 dramatiq.set_broker(redis_broker)
 

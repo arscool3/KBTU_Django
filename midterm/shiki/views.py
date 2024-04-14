@@ -48,10 +48,11 @@ from .tasks import *
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def genre_list(request):
-    genre_update_task.send()
+    genre_update_task.send(timeout=60)
 
     genres = Genre.objects.all()
     serializer = GenreSerializer(genres, many=True)
+    # print(result.get())
     return Response(serializer.data)
 
 @api_view(['GET'])
