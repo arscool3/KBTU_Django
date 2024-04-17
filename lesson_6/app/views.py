@@ -8,6 +8,7 @@ def get_students(request):
     # SELECT * From Students where course = '3' and name = 'Arslan'
     return render(request, 'index.html', {'students': students})
 
+
 def get_lessons(request):
     lessons = Lesson.objects.get_today_lessons_by_teacher(request.GET['teacher'])
     return render(request, 'lesson.html', {'lessons': lessons})
