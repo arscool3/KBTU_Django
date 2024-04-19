@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'users',
-	'main'
+	'main',
+    'rest_framework',
+    #'django_dramatiq'
 ]
 
 MIDDLEWARE = [
@@ -102,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+DRAMATIQ_BROKER = 'dramatiq.brokers.redis.RedisBroker'
 
 
 # Internationalization

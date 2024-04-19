@@ -1,6 +1,11 @@
 from django.shortcuts import render,redirect
 from .models import Product,Basket,In_Basket,Order,In_Order
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets
+from .serializers import BasketSerializer, ProductSerializer, InBasketSerializer, OrderSerializer, InOrderSerializer
+
+from django.http import HttpResponse
+
 # Create your views here.
 def main(request):
 	products =Product.objects.all()
@@ -85,3 +90,23 @@ def order_detail(request,order_id):
 def product_details(request,product_id):
 	product =Product.objects.get(id=product_id)
 	return render(request, 'product_details.html', {'product': product})
+
+class BasketViewSet(viewsets.ModelViewSet):
+    queryset = Basket.objects.all()
+    serializer_class = BasketSerializer
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class InBasketViewSet(viewsets.ModelViewSet):
+    queryset = In_Basket.objects.all()
+    serializer_class = InBasketSerializer
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+class InOrderViewSet(viewsets.ModelViewSet):
+    queryset = In_Order.objects.all()
+    serializer_class = InOrderSerializer
