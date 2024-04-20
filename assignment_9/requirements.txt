@@ -1,0 +1,2 @@
+#Fastapi Application
+#With 3 examples of Dependency Injection
