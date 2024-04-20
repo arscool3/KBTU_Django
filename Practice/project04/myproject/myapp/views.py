@@ -7,6 +7,14 @@ from rest_framework import generics
 from .models import Author, Book, UserProfile, Category, Post, Comment
 from .serializers import AuthorSerializer, BookSerializer, UserProfileSerializer, CategorySerializer, PostSerializer, CommentSerializer
 
+from django.http import HttpResponse
+from myapp.tasks import send_email_task
+
+def send_email_view(request):
+    recipient_email = "recipient@example.com"
+    message = "Hello, this is a test email!"
+    send_email_task.send(recipient_email, message)
+    return HttpResponse("Email sent asynchronously!")
 
 def author_list(request):
     authors = Author.objects.all()
