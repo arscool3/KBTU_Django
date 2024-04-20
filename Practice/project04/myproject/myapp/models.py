@@ -1,5 +1,22 @@
 from django.db import models
 from django.db.models import Count
+from django.contrib.auth.models import User
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField()
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+
+class Comment(models.Model):
+    content = models.TextField()
+
+
 
 class AuthorManager(models.Manager):
     def authors_with_more_than_one_book(self):

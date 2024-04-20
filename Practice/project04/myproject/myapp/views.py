@@ -3,6 +3,11 @@ from .models import Author, Book, Publisher, Magazine
 from .forms import AuthorForm, BookForm, PublisherForm, MagazineForm
 from django.http import HttpResponseNotAllowed
 
+from rest_framework import generics
+from .models import Author, Book, UserProfile, Category, Post, Comment
+from .serializers import AuthorSerializer, BookSerializer, UserProfileSerializer, CategorySerializer, PostSerializer, CommentSerializer
+
+
 def author_list(request):
     authors = Author.objects.all()
     return render(request, 'author_list.html', {'authors': authors})
@@ -155,3 +160,26 @@ def magazine_delete(request, pk):
         return redirect('magazine_list')
     return render(request, 'magazine_delete_confirm.html', {'magazine': magazine})
 
+class AuthorListCreate(generics.ListCreateAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+class BookListCreate(generics.ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+class UserProfileListCreate(generics.ListCreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+class CategoryListCreate(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class PostListCreate(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class CommentListCreate(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
