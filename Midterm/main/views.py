@@ -1,4 +1,7 @@
 import dataclasses
+from rest_framework.views import APIView
+from .serializers import FlightDimSerializer
+from django.http import Http404, JsonResponse
 
 from django.shortcuts import render, HttpResponse, redirect
 from .models import Airline, Aircraft, City, Airport, Flight_fact, Flight_dim
@@ -130,6 +133,15 @@ def aircraft_time_scheduling(request):
     elif request.method == "GET":
         return render(request, 'aircraft_time_scheduling.html', {'form': form, 'header': 'Choose flight to process'})
 
-
-
-
+class AircraftByFlightIdView(APIView):
+    def get(self, request):
+        flight_id = request.query_params.get('id')
+        try:
+            flight_dim = Flight_dim.objects.get(flight_id=flight_id)
+            serializer = FlightDimSerializer(flight_dim)
+            if serializer.data['aircraft']:
+                return JsonResponse({'aircraft_full_name': serializer.data['aircraft']['full_name']})
+            else:
+                return JsonResponse({'aircraft_full_name': 'Aircraft do not assigned yet'})
+        except Flight_dim.DoesNotExist:
+            raise Http404('Flight does not exist')

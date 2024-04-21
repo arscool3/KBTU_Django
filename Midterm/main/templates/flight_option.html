@@ -121,8 +121,9 @@
                 <span>{{ flight.airline_name|capfirst }} - {{ flight.flight_code }}</span>
                 <span>Departure Time: {{ flight.dept_time|time:"H:i" }} &rarr; {{ flight.arr_time|time:"H:i" }}</span>
               </div>
-              <button onclick="toggleFares(this)">Expand</button>
+              <button onclick="toggleFares(this, '{{ flight.flight_id }}')">Expand</button>
               <div class="fares hidden">
+                <div id="aircraft-info-{{ flight.flight_id }}">Aircraft: ...</div>
                 <div class="fares_option">
                     <span>Fare Option 1</span>
                     <span>10,000KZT</span>
@@ -155,7 +156,7 @@
     </div>
 
     <script>
-        function toggleFares(button) {
+        async function toggleFares(button, flightId) {
             var fares = button.nextElementSibling;
             fares.classList.toggle('hidden');
             if (fares.classList.contains('hidden')) {
@@ -163,7 +164,19 @@
             } else {
                 button.textContent = 'Collapse';
             }
-        }
+
+            if (!fares.classList.contains('hidden')) {
+                let aircraftInfo = document.getElementById(`aircraft-info-${flightId}`);
+                fetch(`/api/aircraft_by_flight_id?id=${flightId}`, {headers: {"Accept": "application/json"}})
+                    .then(response => {
+                        return response.json()
+                    })
+                    .then(data => {
+                        aircraftInfo.textContent = `Aircraft: ${data.aircraft_full_name}`;
+                    });
+            }
+
+        };
     </script>
 </body>
 </html>
