@@ -1,9 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
+from rest_framework import permissions
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
+
 from .forms import *
+from .serializers import *
+
+
+class ProfileView(APIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+
+    def get(self, request):
+        user = request.user
+        serializer = self.serializer_class(user)
+        try:
+            return Response(serializer.data)
+        except Exception as e:
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 @login_required
@@ -53,15 +74,8 @@ class UserView(View):
         users = User.objects.all()
         return render(request, 'users.html', {'users': users})
 
-    @login_required
-    @csrf_exempt
-    def post(self, request):
-        form = UserForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('')
-        else:
-            return render(request, 'create_user.html', {'form': form})
+    #@login_required
+
 
 
 class CategoryView(View):
