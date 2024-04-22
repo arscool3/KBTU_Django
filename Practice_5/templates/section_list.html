@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section List</title>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="mb-4">Popular Sections</h1>
+        <ul class="list-group mb-4">
+            {% for section in popular_sections %}
+                <li class="list-group-item">{{ section.name }} - {{ section.description | truncatewords:10 }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h1 class="mb-4">Ordered Sections by Description</h1>
+        <ul class="list-group">
+            {% for section in ordered_sections %}
+                <li class="list-group-item">{{ section.name }} - {{ section.description | truncatewords:10 }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="mt-5">Update Section Description</h2>
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-6">
+                <label for="section_id" class="form-label">Section ID:</label>
+                <input type="text" id="section_id" name="section_id" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label for="new_description" class="form-label">New Description:</label>
+                <input type="text" id="new_description" name="new_description" class="form-control">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Update Description</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
