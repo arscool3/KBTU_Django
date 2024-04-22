@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>My Orders</h2>
+  <ul>
+    {% for order in orders %}
+      <li><a href="{% url 'order-detail' order.pk %}">Order {{ order.pk }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
