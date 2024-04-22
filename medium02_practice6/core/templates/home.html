@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<a href="{% url 'articles' %}">Check All Available Articles</a>
+<br>
+<a href="{% url 'topics' %}">Check All Article Topics</a>
+<br>
+<a href="{% url 'hot_topic' %}">Check the Hot Topic of the Week!</a>
+{% endblock %}
+
