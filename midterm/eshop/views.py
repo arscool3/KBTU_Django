@@ -3,12 +3,13 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+from rest_framework import generics
 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm
-
+from .serializers import CategorySerializer, ProductSerializer, UserProfileSerializer, OrderItemSerializer, CartItemSerializer
 from .models import *
 
 
@@ -152,3 +153,24 @@ class OrderView(View):
         }
 
         return render(request, 'order.html', context)
+
+
+class CategoryListCreate(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class ProductListCreate(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class UserProfileListCreate(generics.ListCreateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+class OrderItemListCreate(generics.ListCreateAPIView):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+
+class CartItemListCreate(generics.ListCreateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer

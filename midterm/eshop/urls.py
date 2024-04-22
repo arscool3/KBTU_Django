@@ -11,6 +11,13 @@ urlpatterns = [
     path('logout/', CustomLogoutView.as_view(), name='logout'),  # POST
     path('signup/', CustomSignUpView.as_view(), name='signup'),  # POST
     path('orders/', OrderView.as_view(), name='orders'),  # GET
+
+    #DRF
+    path('categories/', CategoryListCreate.as_view(), name='category-list-create'),
+    path('products/', ProductListCreate.as_view(), name='product-list-create'),
+    path('user-profiles/', UserProfileListCreate.as_view(), name='user-profile-list-create'),
+    path('order-items/', OrderItemListCreate.as_view(), name='order-item-list-create'),
+    path('cart-items/', CartItemListCreate.as_view(), name='cart-item-list-create'),
 ]
 
 #  POST requests
