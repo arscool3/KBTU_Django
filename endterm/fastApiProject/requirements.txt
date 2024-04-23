@@ -1,0 +1,6 @@
+sqlalchemy
+asyncpg
+psycopg2-binary
+passlib
+PyJWT
+python-multipart
