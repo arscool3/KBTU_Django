@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'item',
     'dashboard',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

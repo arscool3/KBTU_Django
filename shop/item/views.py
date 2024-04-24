@@ -3,12 +3,17 @@ from django.db.models import Q
 from .forms import NewItemForm, EditItemForm
 from .models import Item, Category
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .serializers import ItemSerializer
 
+
+# Create your views here.
+@api_view(['GET'])
 def items(request):
     query = request.GET.get('query', '')
     category_id = request.GET.get('category', 0)
-    categories = Category.objects.all()
+    # categories = Category.objects.all()
     items = Item.objects.filter(is_sold=False)
 
     if category_id:
@@ -17,21 +22,16 @@ def items(request):
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
 
-    return render(request, 'item/items.html', {
-        'items': items,
-        'query': query,
-        'categories': categories,
-        'categories_id': int(category_id),
-    })
+    return Response(ItemSerializer(items, many=True).data, status=200, template_name='item/items.html')
+
+
+@api_view(['GET'])
 def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
 
+    return Response(ItemSerializer(item).data, status=200, template_name='item/detail.html')
 
-    return render(request, 'item/detail.html', {
-        'item': item,
-        'related_items': related_items,
-    })
 
 @login_required
 def new(request):
