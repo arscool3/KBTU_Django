@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from starlette import status
 
@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 import models
 import schemas
-from crud import user_crud, country_crud, city_crud, airport_crud
+from crud import user_crud, country_crud, city_crud, airport_crud, plane_crud, flight_crud
 from crud.user_crud import ALGORITHM, SECRET_KEY
 from dto import Token
 from database import SessionLocal, engine
@@ -45,6 +45,9 @@ class TokenVerifier:
             payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
             username: str = payload.get("sub")
             if username is None:
+                raise credentials_exception
+            expiration_timestamp = payload.get("exp")
+            if expiration_timestamp is None or datetime.utcnow() > datetime.fromtimestamp(expiration_timestamp):
                 raise credentials_exception
         except jwt.JWTError:
             raise credentials_exception
@@ -133,7 +136,7 @@ def read_city(city_id: int, db: Session = Depends(get_db), username: str = Depen
 
 @app.post("/cities/", response_model=schemas.City)
 def create_city(city: schemas.CityCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    print(f"{username} is creating a city")
+    print(f"{username} is creating a city: {city}")
     return city_crud.create_city(db=db, city=city)
 
 @app.put("/cities/{city_id}", response_model=schemas.City)
@@ -164,7 +167,7 @@ def read_airport(airport_id: int, db: Session = Depends(get_db), username: str =
 
 @app.post("/airports/", response_model=schemas.Airport)
 def create_airport(airport: schemas.AirportCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    print(f"{username} is creating an airport")
+    print(f"{username} is creating an airport: {airport}")
     return airport_crud.create_airport(db=db, airport=airport)
 
 @app.put("/airports/{airport_id}", response_model=schemas.Airport)
@@ -176,3 +179,62 @@ def update_airport(airport_id: int, airport: schemas.AirportCreate, db: Session 
 def delete_airport(airport_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
     print(f"{username} is deleting an airport with id: {airport_id}")
     return airport_crud.delete_airport(db=db, airport_id=airport_id)
+
+@app.get("/planes/", response_model=list[schemas.Plane])
+def read_planes(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is reading planes")
+    planes = plane_crud.get_planes(db, skip=skip, limit=limit)
+    return planes
+
+@app.get("/planes/{plane_id}", response_model=schemas.Plane)
+def read_plane(plane_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is reading a plane with id: {plane_id}")
+    plane = plane_crud.get_plane(db, plane_id=plane_id)
+    if plane is None:
+        raise HTTPException(status_code=404, detail="Plane not found")
+    return plane
+
+@app.post("/planes/", response_model=schemas.Plane)
+def create_plane(plane: schemas.PlaneCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is creating a plane: {plane}")
+    return plane_crud.create_plane(db=db, plane=plane)
+
+@app.put("/planes/{plane_id}", response_model=schemas.Plane)
+def update_plane(plane_id: int, plane: schemas.PlaneCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is updating a plane with id: {plane_id}")
+    return plane_crud.update_plane(db=db, plane_id=plane_id, plane=plane)
+
+@app.delete("/planes/{plane_id}", response_model=schemas.Plane)
+def delete_plane(plane_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is deleting a plane with id: {plane_id}")
+    return plane_crud.delete_plane(db=db, plane_id=plane_id)
+
+
+@app.get("/flights/", response_model=list[schemas.Flight])
+def read_flights(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is reading flights")
+    planes = flight_crud.get_flights(db, skip=skip, limit=limit)
+    return planes
+
+@app.get("/flights/{flight_id}", response_model=schemas.Flight)
+def read_flight(flight_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is reading a flight with id: {flight_id}")
+    plane = flight_crud.get_flight(db, flight_id=flight_id)
+    if plane is None:
+        raise HTTPException(status_code=404, detail="Plane not found")
+    return plane
+
+@app.post("/flights/", response_model=schemas.Flight)
+def create_flight(flight: schemas.FlightCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is creating a flight: {flight}")
+    return flight_crud.create_flight(db=db, flight=flight)
+
+@app.put("/flights/{flight_id}", response_model=schemas.Flight)
+def update_flight(flight_id: int, flight: schemas.FlightCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is updating a flight with id: {flight_id}")
+    return flight_crud.update_flight(db=db, flight_id=flight_id, flight=flight)
+
+@app.delete("/flights/{flight_id}", response_model=schemas.Flight)
+def delete_flight(flight_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+    print(f"{username} is deleting a flight with id: {flight_id}")
+    return flight_crud.delete_flight(db=db, flight_id=flight_id)

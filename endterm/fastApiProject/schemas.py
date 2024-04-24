@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, DateTime
 
 class UserBase(BaseModel):
     username: str
@@ -14,8 +14,11 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
-class CountryCreate(BaseModel):
+class CountryBase(BaseModel):
     name: str
+
+class CountryCreate(CountryBase):
+    pass
 
 class Country(BaseModel):
     id: int
@@ -29,9 +32,7 @@ class CityBase(BaseModel):
     country_id: int
 
 class CityCreate(BaseModel):
-    name: str
-    city_code: str
-    country_id: int
+    pass
 
 class City(CityBase):
     id: int
@@ -45,6 +46,31 @@ class AirportCreate(AirportBase):
     city_id: int
 
 class Airport(AirportBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class PlaneCreate(BaseModel):
+    name: str
+    capacity: str
+
+class Plane(BaseModel):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class FlightBase(BaseModel):
+    departure_airport_id: int
+    destination_airport_id: int
+    departure_time: DateTime
+    arrival_time: DateTime
+
+class FlightCreate(FlightBase):
+    pass
+
+class Flight(FlightBase):
     id: int
 
     class Config:
