@@ -1,11 +1,14 @@
 from rest_framework import serializers
-from .models import User, Category, Post, Comment, Like, Chat, Message
+
+from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'image']
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'image']
 
 
 class CategorySerializer(serializers.ModelSerializer):

@@ -1,7 +1,9 @@
-from django.urls import path
-from .views import *
+from django.urls import path, include
+from .routers import router
 
 urlpatterns = [
+    path('', include(router.urls)),
+    path('drf-auth', include('rest_framework.urls')),
     # # get full
     # path('', UserView.as_view(), name="users_default"),
     # path('users/', UserView.as_view(), name="users"),
@@ -34,6 +36,6 @@ urlpatterns = [
     # -----------------------------------
     # -----------------------------------
     # auth
-    path('login/', logIn, name='login'),
-    path('profile/', ProfileView.as_view(), name='profile'),
+    # path('login/', logIn, name='login'),
+    # path('profile/', ProfileView.as_view(), name='profile'),
 ]
