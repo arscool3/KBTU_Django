@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from .serializers import *
+from .tasks import *
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -48,6 +49,17 @@ class CategoryViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data,
+                                         partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostViewSet(viewsets.ModelViewSet):
