@@ -39,7 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "main",
     "rest_framework",
+    "dramatiq",
 ]
+
+DRAMATIQ_BROKER = "dramatiq.brokers.rabbitmq.RabbitmqBroker"
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
