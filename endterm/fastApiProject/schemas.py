@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from datetime import datetime
 class UserBase(BaseModel):
     username: str
     email: str
@@ -65,6 +65,25 @@ class PlaneUpdate(PlaneBase):
 
 
 class Plane(PlaneBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class FlightBase(BaseModel):
+    departure_airport_id: int
+    destination_airport_id: int
+    departure_time: datetime
+    arrival_time: datetime
+
+class FlightCreate(FlightBase):
+    pass
+
+class FlightUpdate(FlightBase):
+    pass
+
+class Flight(FlightBase):
     id: int
 
     class Config:
