@@ -1,0 +1,12 @@
+#FastAPI Application
+#Add minimum 3 models with 1 relationalship
+#add get, post queries for them
+
+
+
+alembic init alembic
+
+docker run --name fastapi2 -e POSTGRES_PASSWORD=aru -p 5433:5433 postgres
+alembic revision -m 'initial_migration' --autogenerate
+alembic upgrade head
+uvicorn main:app --reload
