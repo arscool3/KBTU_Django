@@ -49,3 +49,23 @@ class Airport(AirportBase):
 
     class Config:
         orm_mode = True
+
+
+class PlaneBase(BaseModel):
+    name: str
+    capacity: int
+
+
+class PlaneCreate(PlaneBase):
+    pass
+
+
+class PlaneUpdate(PlaneBase):
+    pass
+
+
+class Plane(PlaneBase):
+    id: int
+
+    class Config:
+        orm_mode = True

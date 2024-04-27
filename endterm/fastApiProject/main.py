@@ -3,23 +3,25 @@ from datetime import timedelta
 from starlette import status
 
 import jwt
+import os
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-
+from celery.app import Celery
 
 import models
 import schemas
-from crud import user_crud, country_crud, city_crud, airport_crud
+from crud import user_crud, country_crud, city_crud, airport_crud, plane_crud
 from crud.user_crud import ALGORITHM, SECRET_KEY
 from dto import Token
 from database import SessionLocal, engine
+from task import celery_app, log_to_file, reserve_ticket
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-
+celery_app = celery_app
+filename = "post_requests"
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -102,7 +104,7 @@ def read_country(country_id: int, db: Session = Depends(get_db), username: str =
 
 @app.post("/countries/", response_model=schemas.Country)
 def create_country(country: schemas.CountryCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    print(f"{username} is creating a country: {country}")
+    log_to_file.delay("post_requests", f"{username} is creating a country: {country}")
     return country_crud.create_country(db=db, country=country)
 
 @app.put("/countries/{country_id}", response_model=schemas.Country)
@@ -176,3 +178,38 @@ def update_airport(airport_id: int, airport: schemas.AirportCreate, db: Session 
 def delete_airport(airport_id: int, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
     print(f"{username} is deleting an airport with id: {airport_id}")
     return airport_crud.delete_airport(db=db, airport_id=airport_id)
+
+
+@app.get("/planes/{plane_id}", response_model=schemas.Plane)
+def read_plane(plane_id: int, db: Session = Depends(get_db)):
+    plane = plane_crud.get_plane(db, plane_id)
+    if plane is None:
+        raise HTTPException(status_code=404, detail="Plane not found")
+    return plane
+
+# Endpoint to get a list of planes
+@app.get("/planes/", response_model=list[schemas.Plane])
+def read_planes(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    planes = plane_crud.get_planes(db, skip=skip, limit=limit)
+    return planes
+
+# Endpoint to create a new plane
+@app.post("/planes/", response_model=schemas.Plane)
+def create_plane(plane: schemas.PlaneCreate, db: Session = Depends(get_db)):
+    return plane_crud.create_plane(db=db, plane=plane)
+
+# Endpoint to update an existing plane
+@app.put("/planes/{plane_id}", response_model=schemas.Plane)
+def update_plane(plane_id: int, plane: schemas.PlaneUpdate, db: Session = Depends(get_db)):
+    updated_plane = plane_crud.update_plane(db=db, plane_id=plane_id, plane=plane)
+    if updated_plane is None:
+        raise HTTPException(status_code=404, detail="Plane not found")
+    return updated_plane
+
+# Endpoint to delete a plane
+@app.delete("/planes/{plane_id}", response_model=schemas.Plane)
+def delete_plane(plane_id: int, db: Session = Depends(get_db)):
+    deleted_plane = plane_crud.delete_plane(db=db, plane_id=plane_id)
+    if deleted_plane is None:
+        raise HTTPException(status_code=404, detail="Plane not found")
+    return deleted_plane
