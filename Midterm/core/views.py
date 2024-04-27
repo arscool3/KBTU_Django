@@ -1,11 +1,12 @@
 from django.db.models import Q
 from django.shortcuts import render, HttpResponse
 from werkzeug.utils import redirect
-
+from core.serializers import CountrySerializer, CitySerializer, CitizenSerializer, CarSerializer
 from core.forms import LoginForm
 from django.contrib.auth import authenticate, login, decorators, logout
-
+from rest_framework.response import Response
 from core.models import Country, City, Citizen, Car
+from rest_framework.decorators import api_view
 
 
 def login_view(request):
@@ -38,14 +39,16 @@ def add(request):
     pass
 
 
+@api_view(['GET'])
 def get_country_by_name(request):
     countries = Country.objects
     if name := request.GET.get('name'):
         countries = countries.filter(name=name.capitalize())
     countries = countries.all()
-    return render(request, 'index.html', {'iterable': countries, 'object': 'Countries'})
+    return Response(CountrySerializer(countries, many=True).data, status=200, template_name='index.html')
 
 
+@api_view(['GET'])
 def get_cities(request):
     cities = City.objects
     if country_name := request.GET.get('country_name'):
@@ -53,9 +56,10 @@ def get_cities(request):
             country__name=country_name.lower())
                                )
     cities = cities.all()
-    return render(request, 'index.html', {'iterable': cities, 'object': 'Cities'})
+    return Response(CitySerializer(cities, many=True).data, status=200, template_name='index.html')
 
 
+@api_view(['GET'])
 def get_citizens(request):
     citizens = Citizen.objects
     if country_name := request.GET.get('country_name'):
@@ -79,10 +83,10 @@ def get_citizens(request):
         citizens = citizens.not_licence()
 
     citizens = citizens.all()
+    return Response(CitizenSerializer(citizens, many=True).data, status=200, template_name='index.html')
 
-    return render(request, 'index.html', {'iterable': citizens, 'object': 'Citizens'})
 
-
+@api_view(['GET'])
 def get_cars(request):
     cars = Car.objects
     if country_name := request.GET.get('country_name'):
@@ -106,20 +110,22 @@ def get_cars(request):
         cars = cars.not_active()
 
     cars = cars.all()
+    return Response(CarSerializer(cars, many=True).data, status=200, template_name='index.html')
 
-    return render(request, 'index.html', {'iterable': cars, 'object': 'Cars'})
 
-
+@api_view(['GET'])
 def get_only_new_cars(request):
     cars = Car.objects.get_only_new_cars()
-    return render(request, 'index.html', {'iterable': cars, 'object': 'cars'})
+    return Response(CarSerializer(cars, many=True).data, status=200, template_name='index.html')
 
 
+@api_view(['GET'])
 def get_only_german_cars(request):
     cars = Car.objects.get_only_german_cars()
-    return render(request, 'index.html', {'iterable': cars, 'object': 'cars'})
+    return Response(CarSerializer(cars, many=True).data, status=200, template_name='index.html')
 
 
+@api_view(['GET'])
 def get_only_usa_cars(request):
     cars = Car.objects.get_only_usa_cars()
-    return render(request, 'index.html', {'iterable': cars, 'object': 'cars'})
+    return Response(CarSerializer(cars, many=True).data, status=200, template_name='index.html')

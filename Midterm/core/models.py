@@ -60,9 +60,6 @@ class CitizenQuerySet(models.QuerySet):
 #         return self.get_queryset().not_licence()
 
 
-
-
-
 class Citizen(Base):
     age = models.IntegerField()
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
