@@ -1,0 +1,4 @@
+LOG_ID: 2387d7cb-07c1-4a39-8f2e-5e288285abe5 ---- TIME: 2024-04-29 00:34:49.224208 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='asdasd' city_id=1
+LOG_ID: 55ee2040-ebe2-4151-ab59-e9f4316c3165 ---- TIME: 2024-04-29 00:34:58.625332 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='rwrwewer' city_id=2
+LOG_ID: 2f8912e6-b7c6-4371-9e7b-67bd066e78d6 ---- TIME: 2024-04-29 00:36:15.699843 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='werwer' city_id=3
+LOG_ID: 456aa2f3-9249-430b-9230-ef8a1077aa4d ---- TIME: 2024-04-29 00:37:27.855198 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='string' city_id=3

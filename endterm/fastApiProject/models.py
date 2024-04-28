@@ -22,7 +22,7 @@ class User(Base):
     password = Column(String)
     is_blocked = Column(Boolean, default=False)
 
-    tickets = relationship("Ticket", back_populates="user")
+    ticket_reservation = relationship("TicketReservation", back_populates="user")
 
 class Country(Base):
     __tablename__ = "countries"
@@ -90,13 +90,23 @@ class Ticket(Base):
     __tablename__ = "tickets"
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    # user_id = Column(Integer, ForeignKey("users.id"), default=None)
     flight_id = Column(Integer, ForeignKey("flights.id"))
     plane_id = Column(Integer, ForeignKey("planes.id"))
 
     seat_number = Column(String)
     is_reserved = Column(Boolean, default=False)
 
-    user = relationship("User", back_populates="tickets")
+    # user = relationship("User", back_populates="tickets")
     flight = relationship("Flight", back_populates="tickets")
     plane = relationship("Plane", back_populates="tickets")
+    ticket_reservation = relationship("TicketReservation", back_populates="ticket")
+
+class TicketReservation(Base):
+    __tablename__ = "ticket_reservations"
+    id = Column(Integer, primary_key=True)
+    ticket_id = Column(Integer, ForeignKey("tickets.id"))
+    user_id = Column(Integer, ForeignKey("users.id"))
+
+    ticket = relationship("Ticket", back_populates="ticket_reservation")
+    user = relationship("User", back_populates="ticket_reservation")

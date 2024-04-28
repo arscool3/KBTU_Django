@@ -88,3 +88,17 @@ class Flight(FlightBase):
 
     class Config:
         orm_mode = True
+
+class TicketBase(BaseModel):
+    flight_id: int
+    plane_id: int
+    seat_number: str
+
+class TicketCreate(TicketBase):
+    pass
+
+class Ticket(TicketBase):
+    id: int
+    is_reserved: bool
+    class Config:
+        orm_mode = True
