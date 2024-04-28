@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -74,11 +75,8 @@ def borrow_book(request, user_id):
     return render(request, 'borrow.html', {'form': form})
 
 
-class PersonViewSet(ModelViewSet):
-    serializer_class = PersonSerializer
-    queryset = Person.objects.all()
-    lookup_field = 'id'
-
-    @action(methods=['get'], detail=True)
-    def get_genre(self, request):
-        return Response('some persons')
+class PersonViewSet(APIView):
+    def get(self, request):
+        persons = Person.objects.all()
+        serializer = PersonSerializer(persons, many=True)
+        return Response(serializer.data)

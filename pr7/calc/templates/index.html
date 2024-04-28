@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>calculator</title>
+</head>
+<body>
+    <form action="" method="POST">
+  {% csrf_token %}
+  <label>
+    a: <input type="number" name="a" />
+  </label>
+  <br/>
+  <label>
+    b: <input type="number" name="b" />
+  </label>
+  <br/>
+  <button type="submit">Add</button>
+</form>
+</body>
+</html>

@@ -1,11 +1,22 @@
 # pip install fastapi uvicorn
 # uvicorn views:app --reload
 from fastapi import FastAPI
+from typing import Union
 from dramatiq.results.errors import ResultMissing
 
 from tasks import add_employee_task, result_backend
 
 app = FastAPI()
+
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
 
 
 @app.post("/add_employee")
@@ -21,7 +32,6 @@ def get_response(message_id: str):
     except ResultMissing:
         return {"status": "pending"}
     return {'status': status}
-
 
 # redis
 # task_queue 1 -> 2 -> 3
