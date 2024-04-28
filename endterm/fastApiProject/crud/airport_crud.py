@@ -1,14 +1,20 @@
 # crud.py
 
 from sqlalchemy.orm import Session
-from models import Airport
+from models import Airport, City, Country
 from schemas import AirportCreate
 
 def get_airport(db: Session, airport_id: int):
     return db.query(Airport).filter(Airport.id == airport_id).first()
 
-def get_airports(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Airport).offset(skip).limit(limit).all()
+def get_airports(db: Session, skip: int = 0, limit: int = 10, country_id: int = None):
+    query = db.query(Airport).join(City).join(Country)
+
+    if country_id is not None:
+        query = query.filter(City.country_id == country_id)
+
+    airports = query.offset(skip).limit(limit).all()
+    return airports
 
 def create_airport(db: Session, airport: AirportCreate):
     db_airport = Airport(**airport.dict())

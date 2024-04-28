@@ -87,4 +87,4 @@ class Flight(FlightBase):
     id: int
 
     class Config:
-        orm_mode = True //
+        orm_mode = True
