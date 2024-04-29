@@ -1,0 +1,8 @@
+LOG_ID: 1e496137-3436-4a1b-aca7-3d25ecce2247 ---- TIME: 2024-04-29 19:05:24.890708 ---- USER: <models.User object at 0x73eeee04b880> ---- OPERATION: POST ---- MESSAGE: <models.User object at 0x73eeee04b880> IS TRYING TO LOG IN
+LOG_ID: ce1d5a14-2676-4c4b-b75b-094d501b8023 ---- TIME: 2024-04-29 19:05:24.937219 ---- USER: <models.User object at 0x73eeee04b880> ---- OPERATION: POST ---- MESSAGE: <models.User object at 0x73eeee04b880> SUCCESSFULLY LOGGED IN
+LOG_ID: a961ee12-9085-470f-a82c-ccaec0239e01 ---- TIME: 2024-04-29 19:05:34.051851 ---- USER: <models.User object at 0x73eeed8c3dc0> ---- OPERATION: POST ---- MESSAGE: <models.User object at 0x73eeed8c3dc0> IS TRYING TO LOG IN
+LOG_ID: 411825e2-a849-4af9-ab92-95a33cb944ef ---- TIME: 2024-04-29 19:05:34.053643 ---- USER: <models.User object at 0x73eeed8c3dc0> ---- OPERATION: POST ---- MESSAGE: <models.User object at 0x73eeed8c3dc0> SUCCESSFULLY LOGGED IN
+LOG_ID: 2185cc9d-e861-4bce-be87-d405b90436d8 ---- TIME: 2024-04-29 19:07:04.490099 ---- USER: <models.User object at 0x7fdf7848b850> ---- OPERATION: POST ---- MESSAGE: string IS TRYING TO LOG IN
+LOG_ID: 171147f7-fdf8-40d9-a574-a2cfc857bf28 ---- TIME: 2024-04-29 19:07:04.539752 ---- USER: <models.User object at 0x7fdf7848b850> ---- OPERATION: POST ---- MESSAGE: string SUCCESSFULLY LOGGED IN
+LOG_ID: 51661bd7-0579-4887-a785-8777b9f2c128 ---- TIME: 2024-04-29 19:07:49.079696 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS TRYING TO LOG IN
+LOG_ID: 38135db3-dc04-4a87-8b84-6004d1aa52e5 ---- TIME: 2024-04-29 19:07:49.127184 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string SUCCESSFULLY LOGGED IN
