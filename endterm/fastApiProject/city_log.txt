@@ -5,3 +5,4 @@ LOG_ID: 32a9f053-bc76-4d54-87ec-0ae82ad55657 ---- TIME: 2024-04-29 00:29:13.5255
 LOG_ID: b127c5c7-c470-48a8-b9d7-3a662e3a373e ---- TIME: 2024-04-29 00:30:35.332408 ---- USER: string ---- OPERATION: DELETE ---- MESSAGE: string IS DELETING A CITY WITH ID: 2
 LOG_ID: 22612aee-1767-487e-849b-7ecf07d80113 ---- TIME: 2024-04-29 00:30:44.456864 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Astana' city_code='TSE' country_id=1
 LOG_ID: 1b7c07c0-7b7f-4621-93a0-04b0c33d3ce7 ---- TIME: 2024-04-29 00:35:42.187429 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='string' city_code='string' country_id=1
+LOG_ID: 12ba478b-281a-4b08-9b2e-28a3e26b7514 ---- TIME: 2024-04-29 18:49:23.585567 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES

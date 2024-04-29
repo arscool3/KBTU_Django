@@ -385,10 +385,10 @@ def delete_ticket(request: Request, ticket_id: int, db: Session = Depends(get_db
     return deleted_ticket
 
 @app.get("/tickets/available/", response_model=list[schemas.Ticket], tags=["ticket"])
-def read_available_tickets(request: Request, skip: int = 0, limit: int = 10, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
+def read_available_tickets(request: Request, plane_name: str = "", skip: int = 0, limit: int = 10, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
     message = f"{username} IS READING AVAILABLE TICKETS"
     create_log(ticket_log_filename, username, request.method, message)
-    tickets = ticket_crud.get_tickets_available(db=db, skip=skip, limit=limit)
+    tickets = ticket_crud.get_tickets_available(db=db, skip=skip, limit=limit, plane_name=plane_name)
     if tickets is None:
         raise HTTPException(status_code=404, detail="Tickets not found")
     return tickets
@@ -402,7 +402,7 @@ def reserve_ticket(request: Request, ticket_id: int, db: Session = Depends(get_d
         raise HTTPException(status_code=400, detail="Ticket is reserved")
     departure_airport_id = flight_crud.get_flight(db, ticket.flight_id).departure_airport_id
     destination_airport_id = flight_crud.get_flight(db, ticket.flight_id).destination_airport_id
-    flight = f"FLIGHT ID: {ticket.flight_id} | DEPARTURE: {airport_crud.get_airport(db, departure_airport_id).name} | DESTINATION:{airport_crud.get_airport(db, destination_airport_id).name}"
+    flight = f"FLIGHT ID: {ticket.flight_id} | DEPARTURE: {airport_crud.get_airport(db, departure_airport_id).name} | DESTINATION: {airport_crud.get_airport(db, destination_airport_id).name}"
     message = f"{username} IS RESERVING A FLIGHT: {flight}; PLANE: {ticket.plane_id}; SEAT_NUMBER: {ticket.seat_number}"
     create_log(ticket_log_filename, username, request.method, message)
     return ticket

@@ -13,8 +13,8 @@ def get_airports(db: Session, skip: int = 0, limit: int = 10, country_id: int = 
     if country_id is not None:
         query = query.filter(City.country_id == country_id)
 
-    airports = query.offset(skip).limit(limit).all()
-    return airports
+    return query.offset(skip).limit(limit).all()
+
 
 def create_airport(db: Session, airport: AirportCreate):
     db_airport = Airport(**airport.dict())

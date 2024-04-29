@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from models import Ticket
+from sqlalchemy import func
+from models import Ticket, Plane
 import schemas
 
 def create_ticket(db: Session, ticket: schemas.TicketCreate):
@@ -15,8 +16,11 @@ def get_ticket(db: Session, ticket_id: int):
 def get_tickets(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Ticket).offset(skip).limit(limit).all()
 
-def get_tickets_available(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Ticket).filter(Ticket.is_reserved == False).offset(skip).limit(limit).all()
+def get_tickets_available(db: Session, skip: int = 0, limit: int = 10, plane_name: str = ""):
+    query = db.query(Ticket).join(Plane)
+    if plane_name is not None:
+        query = query.filter(func.lower(Plane.name).contains(plane_name.lower()))
+    return query.filter(Ticket.is_reserved == False).offset(skip).limit(limit).all()
 
 def reserve_ticket(db: Session, ticket_id: int):
     db_ticket = get_ticket(db, ticket_id)
