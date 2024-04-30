@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Paper</title>
+</head>
+<body>
+    <h1>Create New Paper</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Paper</button>
+    </form>
+</body>
+</html>
+

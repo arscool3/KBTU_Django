@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Template</title>
+</head>
+<body>
+    <h1>Person</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+   <h2>All</h2>
+    <ul>
+        {% for person in allPeople %}
+            <li>{{ person.name }} - {{ person.age }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+</body>
+</html>
+

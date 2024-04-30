@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .profile-info {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .profile-info p {
+            margin: 5px 0;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Profile</h1>
+        {% if user.is_authenticated %}
+        <div class="profile-info">
+            <p>Username: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+            <!-- Add more profile information here as needed -->
+        </div>
+        <div class="button-container">
+            <a href="{% url 'accounts:logout' %}">
+                <button>Logout</button>
+            </a>
+            <a href="{% url 'accounts:paper_shelf' %}">
+                <button>Visit PaperShelf</button>
+            </a>
+            <a href="{% url 'home' %}">
+                <button>HOME</button>
+            </a>
+            <a href="{% url 'create_paper' %}">
+                <button>Create paper</button>
+            </a>
+
+        </div>
+        {% else %}
+        <div class="button-container">
+            <a href="{% url 'accounts:login' %}">
+                <button>Login</button>
+            </a>
+            <a href="{% url 'accounts:register' %}">
+                <button>Register</button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

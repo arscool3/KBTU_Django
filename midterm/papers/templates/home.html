@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .category-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .category-button-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .category-button-container button:hover {
+            background-color: #0056b3;
+        }
+        .profile-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .profile-button-container button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .profile-button-container button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Home</h1>
+        <ul>
+            {% for category in categories %}
+            <li><a href="{% url 'papers_by_category' category.id %}">{{ category.name|upper }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <div class="profile-button-container">
+            <button onclick="location.href='{% url 'accounts:profile' %}'">User Profile</button>
+        </div>
+        <div class="profile-button-container">
+            <button onclick="location.href='{% url 'search_by_tags' %}'">Search by tags</button>
+        </div>
+    </div>
+</body>
+</html>
+
