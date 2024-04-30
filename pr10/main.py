@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy import create_engine, Integer, Column, String, Boolean, ForeignKey
+from sqlalchemy import create_engine, Integer, Column, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Mapped, relationship, Session
 
@@ -73,7 +73,7 @@ def create_task(task: ToDoItem, db: Session = Depends(get_db)):
     return todo
 
 
-@app.post("/todolists/")
+@app.post("/todolist/")
 def create_todolist(todo_list: ToDoList, db: Session = Depends(get_db)):
     db_todolist = ToDoList(**todo_list.dict())
     db.add(db_todolist)
