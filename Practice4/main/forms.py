@@ -9,7 +9,6 @@ class UserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        # Additional customizations if needed
         if commit:
             user.save()
         return user
