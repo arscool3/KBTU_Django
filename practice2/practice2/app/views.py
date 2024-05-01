@@ -3,5 +3,5 @@ from django.shortcuts import render
 # Create your views here.
 
 def book_list_view(request):
-    students = ['Dauren', 'Daulet', 'Adam', 'Eva']  # Sample student data
-    return render(request, 'student_list.html', {'students': students})
+    books = ['Abai', 'Adam', 'Eva']  # Sample books data
+    return render(request, 'index.html', {'books': books})
