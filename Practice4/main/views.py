@@ -1,32 +1,34 @@
-import dataclasses
+from django.shortcuts import render, HttpResponse, redirect
+from .models import Client, Manager, Request
+from .forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout, forms
 
-from django.http import HttpResponse
-from django.shortcuts import render
-from .forms import StudentForm
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            print(form.errors)
+    return render(request, 'log_reg.html', {'form': UserCreationForm})
 
-@dataclasses.dataclass
-class Student:
-    name: str
-    age: int
-    course: int
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
+def login_view(request):
+    if request.method == 'POST':
+        form = forms.AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            try:
+                user = authenticate(**form.cleaned_data)
+                login(request, user)
+                return redirect('application_page')
+            except Exception:
+                pass
+        else:
+            return render(request, 'log_reg.html', {'form': forms.AuthenticationForm(), 'comment': 'Wrong credentials, or you still do not have access to enter the Web page'})
+    elif request.method == "GET":
+        return render(request, 'log_reg.html', {'form': forms.AuthenticationForm()})
 
-students = [
-    Student(name='Anar', age=18, course=2),
-    Student(name='Dauren', age=19, course=2),
-    Student(name='Daniyar', age=20, course=3),
-]
-
-
-def view(request):
-    return render(request, 'index.html', {'students': students})
-
-def view2(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        age = request.POST.get("age")
-        course = request.POST.get("course")
-        students.append(Student(name = name, age = age, course = course))
-        print('i am here')
-    studentform = StudentForm()
-    return render(request, 'index2.html', {'form': studentform})

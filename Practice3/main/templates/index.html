@@ -10,7 +10,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>Students</h3>
+    <h3>Enrolled Students</h3>
     <ul>
         {% for student in students %}
             <li>{{student.name | capitalize}} - {{student.age}} years old, {{student.course}}{% if student.course == 1 %}'st{% elif student.course == 2 %}'nd{% elif student.course == 3 %}'rd{% else %}'th{% endif %} course student. </li>
