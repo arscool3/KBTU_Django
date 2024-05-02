@@ -3,9 +3,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 from core.models import *
 from core.forms import AssignmentForm
 
-
 @login_required(login_url='login')
-def get_student_assignements(request):
+def getStudentAssignements(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             student = Student.objects.get(user=request.user)
@@ -16,7 +15,7 @@ def get_student_assignements(request):
 
 @login_required(login_url='login')
 # @permission_required('can_add_courses')
-def instructor_assignment(request):
+def instructor_create_assignment(request):
     if request.method == 'POST':
         if request.user.is_authenticated:
             form = AssignmentForm(request.POST)
