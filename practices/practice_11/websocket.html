@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const ws = new WebSocket("ws://127.0.0.1:8000/ws");
+            ws.onmessage = function(event) {
+                const messageList = document.getElementById("messages");
+                const messageItem = document.createElement("li");
+                messageItem.textContent = event.data;
+                messageList.appendChild(messageItem);
+            };
+
+            document.getElementById("sendButton").onclick = () => {
+                const input = document.getElementById("messageText");
+                ws.send(input.value);
+                input.value = '';
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <input type="text" id="messageText">
+    <button id="sendButton">Send</button>
+    <ul id="messages"></ul>
+</body>
+</html>
