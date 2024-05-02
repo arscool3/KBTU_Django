@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome to My Bookstore</h1>
+    <ul>
+        <li><a href="/book-list">View All Book Lists</a></li>
+        <li><a href="/book-detail">Book Detail</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/create-book">Create New Book</a></li>
+    </ul>
+
+    <!-- Logout form -->
+    <form action="/logout/" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>

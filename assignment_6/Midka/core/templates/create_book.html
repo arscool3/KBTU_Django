@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookstore - Create Book</title>
+</head>
+<body>
+    <h1>Create a New Book</h1>
+    <form method="POST">
+        {% csrf_token %}  {{ form.as_p }}  <button type="submit">Create Book</button>
+    </form>
+</body>
+</html>
