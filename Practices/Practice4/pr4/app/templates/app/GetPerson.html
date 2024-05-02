@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for p in persons %}
+        <p> Имя Фамилия: {{p.name}} {{p.surname}}<br>
+            возраст: {{p.age}} <br>
+            семья: {{p.family}}</p>
+
+    {% endfor %}
+</body>
+</html>

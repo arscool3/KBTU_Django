@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for d in doctors %}
+        <p> Имя Фамилия: {{d.personality.name}} {{d.personality.surname}}<br>
+            возраст: {{d.personality.age}} <br>
+            семья: {{d.personality.family}}</p>
+        <p>больница: {{d.work_place}}</p>
+
+    {% endfor %}
+</body>
+</html>
