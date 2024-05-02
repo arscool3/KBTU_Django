@@ -1,0 +1,16 @@
+<!-- user_delete.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete User</title>
+</head>
+<body>
+    <h1>Delete User</h1>
+    <p>Are you sure you want to delete user "{{ user.username }}"?</p>
+    <form method="post" action="/users/{{ user.id }}/delete/">
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>
