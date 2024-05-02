@@ -1,7 +1,12 @@
-from django.contrib import admin
 from django.urls import path
+from rest_framework import routers
 
 from core.views import *
+
+# route = routers.SimpleRouter()
+# route.register
+
+# urlpatterns = route.urls
 
 urlpatterns = [
     path('logout/', logout_view, name='logout'),

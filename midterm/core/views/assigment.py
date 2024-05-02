@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from core.models import *
 from core.forms import AssignmentForm
 
+
 @login_required(login_url='login')
 def get_student_assignements(request):
     if request.method == 'GET':

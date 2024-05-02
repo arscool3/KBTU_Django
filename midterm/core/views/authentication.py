@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, decorators, logout, forms
+from django.http import JsonResponse
 from core.forms import StudentRegistrationForm, InstructorRegistrationForm
+import jwt
 
 def register_student_view(request):
     if request.method == 'POST':
@@ -44,7 +46,11 @@ def login_view(request):
             try:
                 user = authenticate(**form.cleaned_data)
                 login(request, user)
-                return redirect("/course/all")
+                payload = {
+                    'user_id': request.user.id
+                }
+                token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
+                return JsonResponse('token', token)
             except Exception:
                 return HttpResponse("something is not ok")
         else:

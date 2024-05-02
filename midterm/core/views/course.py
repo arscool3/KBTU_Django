@@ -5,6 +5,7 @@ from core.forms import *
 
 def get_all_courses(request):
     if request.method == 'GET':
+        print(request.token)
         courses = Course.objects.all()
         return render(request, 'index.html', {
             'iterable_name': 'Course',
@@ -35,7 +36,7 @@ def student_courses(request):
             form = AddCourseForm()
     return render(request, 'form_choice.html', {'form': AddCourseForm()})
 
-@login_required(login_url='login')
+
 def instructor_courses(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
