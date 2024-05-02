@@ -1,0 +1,42 @@
+# Use all topics in syllabus
+# Minimum 15 api handlters (post, get)
+# Use DI as class, as function
+# 6 Models, 4 relationships(user, book, bookreview, Author, bookshelf,)
+
+# Write min 10 tests
+
+goodreads:"https://www.goodreads.com/quotes/list?ref=nav_profile_quotes"
+
+alembic init alembic
+
+docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
+alembic revision -m 'initial_migration' --autogenerate
+alembic upgrade head
+uvicorn main:app --reload
+
+
+Lecture #3. FastApi Methodology
+    1. Views
+    2. Controllers
+    3. DI
+    4. MVC
+Lecture #4. SqlAlchemy & Alembic
+    1. SqlAlchemy vs Django ORM
+    2. DataMapper vs Active Record
+    3. Migrations Management System
+    4. Migrations Overview
+    5. Django Migrations vs Alembic
+Lecture #5 SqlAlchemy & Alembic
+    1. SqlAlchemy vs Django ORM
+    2. DataMapper vs Active Record
+    3. Migrations Management System
+    4. Migrations Overview
+    5. Django Migrations vs Alembic
+Lecture #6. Pydantic
+    1. Serialization
+    2. Deserialization
+    3. Work with SqlAlchemy
+
+bookborrower
+
+
