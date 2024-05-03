@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-    <form method="post" action="{% url 'add_likes' %}">
-        {% csrf_token %}
-        <input type="hidden" name="pk" value="{{article.pk}}">
-        <button type="submit">Like</button>
-    </form>
-{%endblock%}
