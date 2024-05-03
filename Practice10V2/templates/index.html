@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <h1>Orders</h1>
+    <ul id="orderList"></ul>
+
+    <script>
+        const orderList = document.getElementById('orderList');
+
+        function displayOrder(order) {
+            const orderItem = document.createElement('li');
+            orderItem.textContent = `Order ID: ${order.id}, User ID: ${order.user_id}, Item ID: ${order.item_id}, Quantity: ${order.quantity}`;
+            orderList.appendChild(orderItem);
+        }
+
+        const socket = new WebSocket('ws://127.0.0.1:8000/orders/ws');
+
+        socket.addEventListener('open', (event) => {
+            console.log('WebSocket connection established.');
+        });
+
+        socket.addEventListener('message', (event) => {
+            const order = JSON.parse(event.data);
+            displayOrder(order);
+        });
+
+        socket.addEventListener('close', (event) => {
+            console.log('WebSocket connection closed.');
+        });
+    </script>
+</body>
+</html>

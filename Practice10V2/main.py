@@ -1,5 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket
 from pydantic import BaseModel
+from typing import List
+import asyncio
+import random
 from typing import List
 
 app = FastAPI()
@@ -77,3 +80,17 @@ async def get_orders():
 async def create_order(order: Order):
     orders.append(order)
     return order
+
+
+@app.websocket("/orders/ws")
+async def orders_websocket(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            order = random.choice(orders)
+            await websocket.send_json(order.dict())
+            await asyncio.sleep(1)
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket.close()
