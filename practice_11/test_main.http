@@ -1,0 +1,11 @@
+# Test your FastAPI endpoints
+
+# GET request to the root endpoint
+GET http://127.0.0.1:8000/
+Accept: application/json
+###
+
+# WebSocket connection request
+#GET ws://127.0.0.1:8000/ws
+###
+
