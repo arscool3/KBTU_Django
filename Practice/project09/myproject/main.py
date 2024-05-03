@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket
 import database
 
 app = FastAPI()
@@ -38,3 +38,20 @@ def read_post(post_id: int):
     if post:
         return post[0]
     raise HTTPException(status_code=404, detail="Post not found")
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            if data == "ping":
+                await websocket.send_text("pong")
+            elif data == "update":
+                await websocket.send_text("New post update")
+            else:
+                await websocket.send_text(f"Received message: {data}")
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        await websocket.close()
