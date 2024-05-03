@@ -15,7 +15,11 @@ from core.models import (
 from django.views.generic import ListView
 from django.db import models
 from django.contrib import messages
-
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from core.serializers import ArticleSerializer, CommentSerializer,LikeSerializer,TopicSerializer,ReadingListSerializer,FollowSerializer,ProfileSerializer
 class HomeView(ListView):
     model = Article
     template_name = 'home.html'
@@ -76,182 +80,293 @@ def profile_list(request):
     return render(request, 'profile_list.html', {'profiles': profiles})
 
 
-# 6post
+# Article Views
+class ArticleListView(generics.ListAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-@decorators.permission_required('core.can_add_articles', login_url='login')
-def add_articles(request):
-    if request.method == 'POST':
-        form = ArticleForm(request.POST, user=request.user)  # Pass the current user to the form
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.author = request.user  # Assign the current user to the author field
-            article.save()
-            return redirect('articles')  # Redirect to the article list page
-    else:
-        form = ArticleForm(user=request.user)  # Pass the current user to the form
+class ArticleDetailView(generics.RetrieveAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-    return render(request, 'add_articles.html', {'form': form})
+class ArticleCreateView(generics.CreateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-@decorators.permission_required('core.can_upd_articles', login_url='login')
-def update_articles(request,pk):
-    article = Article.objects.get(pk=pk)
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-    if request.method == 'POST':
-        form = EditArticleForm(request.POST, instance=article)
-        if form.is_valid():
-            form.save()
-            return redirect('articles')
-    else:
-        form = EditArticleForm(instance=article)
-    return render(request, 'update_articles.html', {'form': form})
+class ArticleUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-@decorators.permission_required('core.can_del_articles', login_url='login')
-def delete_articles(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    if request.method == 'POST':
-        article.delete()
-        return redirect('articles')
-    return render(request, 'delete_articles.html', {'article': article})
+class ArticleDeleteView(generics.DestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
 
-@decorators.permission_required('core.can_add_comments', login_url='login')
-def add_comments(request):
-    return basic_form(request,CommentForm)
+# Comment Views
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
-@decorators.permission_required('core.can_add_topics', login_url='login')
-def add_topics(request):
-    return basic_form(request,TopicForm)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class CommentUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class CommentDeleteView(generics.DestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+# Profile Views
+@permission_classes([IsAuthenticated])
+class ProfileListView(generics.ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+@permission_classes([IsAuthenticated])
+class ProfileDetailView(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+class ProfileUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+# Follow Views
+class FollowCreateView(generics.CreateAPIView):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+
+class FollowDeleteView(generics.DestroyAPIView):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+
+# Like Views
+class LikeCreateView(generics.CreateAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+class LikeDeleteView(generics.DestroyAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+# Reading List Views
+class ReadingListView(generics.ListAPIView):
+    queryset = ReadingList.objects.all()
+    serializer_class = ReadingListSerializer
+
+class ReadingListCreateView(generics.CreateAPIView):
+    queryset = ReadingList.objects.all()
+    serializer_class = ReadingListSerializer
+
+class ReadingListUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = ReadingList.objects.all()
+    serializer_class = ReadingListSerializer
+
+class ReadingListDeleteView(generics.DestroyAPIView):
+    queryset = ReadingList.objects.all()
+    serializer_class = ReadingListSerializer
+
+# Topic Views
+class TopicListView(generics.ListAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class TopicDetailView(generics.RetrieveAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class TopicCreateView(generics.CreateAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class TopicUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+class TopicDeleteView(generics.DestroyAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+# # 6post
+
+# @decorators.permission_required('core.can_add_articles', login_url='login')
+# def add_articles(request):
+#     if request.method == 'POST':
+#         form = ArticleForm(request.POST, user=request.user)  # Pass the current user to the form
+#         if form.is_valid():
+#             article = form.save(commit=False)
+#             article.author = request.user  # Assign the current user to the author field
+#             article.save()
+#             return redirect('articles')  # Redirect to the article list page
+#     else:
+#         form = ArticleForm(user=request.user)  # Pass the current user to the form
+
+#     return render(request, 'add_articles.html', {'form': form})
+
+# @decorators.permission_required('core.can_upd_articles', login_url='login')
+# def update_articles(request,pk):
+#     article = Article.objects.get(pk=pk)
+
+#     if request.method == 'POST':
+#         form = EditArticleForm(request.POST, instance=article)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('articles')
+#     else:
+#         form = EditArticleForm(instance=article)
+#     return render(request, 'update_articles.html', {'form': form})
+
+# @decorators.permission_required('core.can_del_articles', login_url='login')
+# def delete_articles(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     if request.method == 'POST':
+#         article.delete()
+#         return redirect('articles')
+#     return render(request, 'delete_articles.html', {'article': article})
+
+# @decorators.permission_required('core.can_add_comments', login_url='login')
+# def add_comments(request):
+#     return basic_form(request,CommentForm)
+
+# @decorators.permission_required('core.can_add_topics', login_url='login')
+# def add_topics(request):
+#     return basic_form(request,TopicForm)
 
 
-@login_required
-def add_to_reading_list(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    reading_list, created = ReadingList.objects.get_or_create(profile=request.user.profile)
-    reading_list.articles.add(article)
-    messages.success(request, f'Article "{article.title}" added to your reading list.')
-    return redirect('article_detail', pk=pk)
+# @login_required
+# def add_to_reading_list(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     reading_list, created = ReadingList.objects.get_or_create(profile=request.user.profile)
+#     reading_list.articles.add(article)
+#     messages.success(request, f'Article "{article.title}" added to your reading list.')
+#     return redirect('article_detail', pk=pk)
 
-@login_required
-def edit_profile(request):
-    try:
-        profile = request.user.profile
-        creating_profile = False
-    except Profile.DoesNotExist:
-        profile = None
-        creating_profile = True
+# @login_required
+# def edit_profile(request):
+#     try:
+#         profile = request.user.profile
+#         creating_profile = False
+#     except Profile.DoesNotExist:
+#         profile = None
+#         creating_profile = True
 
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return redirect('profile')
-    else:
-        form = ProfileForm(instance=profile)
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST, instance=profile)
+#         if form.is_valid():
+#             profile = form.save(commit=False)
+#             profile.user = request.user
+#             profile.save()
+#             return redirect('profile')
+#     else:
+#         form = ProfileForm(instance=profile)
 
-    return render(request, 'edit_profile.html', {'form': form, 'creating_profile': creating_profile, 'profile': profile})
+#     return render(request, 'edit_profile.html', {'form': form, 'creating_profile': creating_profile, 'profile': profile})
 
-@login_required
-def add_likes(request,pk):
-    article = get_object_or_404(Article, id=pk)
-    already_liked = Like.objects.filter(user=request.user, article=article).exists()
+# @login_required
+# def add_likes(request,pk):
+#     article = get_object_or_404(Article, id=pk)
+#     already_liked = Like.objects.filter(user=request.user, article=article).exists()
 
-    if already_liked:
-        # User has already liked the article, so remove the like
-        Like.objects.filter(user=request.user, article=article).delete()
-        messages.success(request, 'You unliked the article.')
-    else:
-        # User hasn't liked the article yet, so add the like
-        like = Like.objects.create(user=request.user, article=article)
-        like.save()
-        messages.success(request, 'You liked the article.')
+#     if already_liked:
+#         # User has already liked the article, so remove the like
+#         Like.objects.filter(user=request.user, article=article).delete()
+#         messages.success(request, 'You unliked the article.')
+#     else:
+#         # User hasn't liked the article yet, so add the like
+#         like = Like.objects.create(user=request.user, article=article)
+#         like.save()
+#         messages.success(request, 'You liked the article.')
 
-    return redirect('article_detail', pk=pk)
-
-
-@login_required
-def add_comments(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    comments = Comment.objects.filter(article=article)
-
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.article = article
-            comment.user = request.user
-            comment.save()
-            messages.success(request, 'Your comment has been added successfully.')
-            return redirect('article_detail', pk=pk)
-    else:
-        form = CommentForm()
-
-    return render(request, 'add_comments.html', {'article': article, 'comments': comments, 'form': form})
-
-@login_required
-def add_follows(request, username):
-    # Get the user to follow
-    user_to_follow = User.objects.get(username=username)
-    # Create a Follow object if it doesn't exist
-    follow, created = Follow.objects.get_or_create(follower=request.user, followed_user=user_to_follow)
-    return redirect('follows')
+#     return redirect('article_detail', pk=pk)
 
 
+# @login_required
+# def add_comments(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     comments = Comment.objects.filter(article=article)
 
-def get_articles(request):
-    articles = Article.objects.all()
-    return render(request, 'articles.html', {'articles': articles})
+#     if request.method == 'POST':
+#         form = CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             comment.article = article
+#             comment.user = request.user
+#             comment.save()
+#             messages.success(request, 'Your comment has been added successfully.')
+#             return redirect('article_detail', pk=pk)
+#     else:
+#         form = CommentForm()
 
-def get_user_articles(request, username):
-    user_articles = Article.objects.filter(author__username=username)
-    return render(request, 'user_articles.html', {'user_articles': user_articles, 'username': username})
+#     return render(request, 'add_comments.html', {'article': article, 'comments': comments, 'form': form})
 
-def get_user_followers(request, username):
-    user = get_object_or_404(User, username=username)
-    user_followers = Follow.objects.filter(followed_user=user).select_related('follower__profile')
-    return render(request, 'user_followers.html', {'user_followers': user_followers, 'username': username})
-
-def article_detail(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    like_count = Like.objects.filter(article=article).count()
-    comment_count = Comment.objects.filter(article=article).count() 
-
-    return render(request, 'article_detail.html', {'article': article, 'like_count': like_count, 'comment_count': comment_count})
-
-def get_topics(request):
-    topics =Topic.objects.all()
-    return render(request, 'topics.html', {'topics': topics})
-
-
-def get_profiles(request):
-    profiles =Profile.objects.all()
-    return render(request, 'profiles.html', {'profiles': profiles})
+# @login_required
+# def add_follows(request, username):
+#     # Get the user to follow
+#     user_to_follow = User.objects.get(username=username)
+#     # Create a Follow object if it doesn't exist
+#     follow, created = Follow.objects.get_or_create(follower=request.user, followed_user=user_to_follow)
+#     return redirect('follows')
 
 
 
-def liked_users(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    liked_users = Like.objects.filter(article=article).values_list('user__username', flat=True)
-    return render(request, 'liked_users.html', {'article': article, 'liked_users': liked_users})
+# def get_articles(request):
+#     articles = Article.objects.all()
+#     return render(request, 'articles.html', {'articles': articles})
 
-def article_comments(request, pk):
-    article = get_object_or_404(Article, pk=pk)
-    comments = Comment.objects.filter(article=article)
-    return render(request, 'article_comments.html', {'article': article, 'comments': comments})
+# def get_user_articles(request, username):
+#     user_articles = Article.objects.filter(author__username=username)
+#     return render(request, 'user_articles.html', {'user_articles': user_articles, 'username': username})
 
-def get_readinglists(request):
+# def get_user_followers(request, username):
+#     user = get_object_or_404(User, username=username)
+#     user_followers = Follow.objects.filter(followed_user=user).select_related('follower__profile')
+#     return render(request, 'user_followers.html', {'user_followers': user_followers, 'username': username})
 
-    readinglists = ReadingList.objects.get(profile__user=request.user)
+# def article_detail(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     like_count = Like.objects.filter(article=article).count()
+#     comment_count = Comment.objects.filter(article=article).count() 
 
-    return render(request, 'readinglists.html', {'readinglists': readinglists})
+#     return render(request, 'article_detail.html', {'article': article, 'like_count': like_count, 'comment_count': comment_count})
 
-def articles_by_hot_topic(request):
+# def get_topics(request):
+#     topics =Topic.objects.all()
+#     return render(request, 'topics.html', {'topics': topics})
 
-    articles_by_hot_topic = Article.objects.by_topic('Feminism')
+
+# def get_profiles(request):
+#     profiles =Profile.objects.all()
+#     return render(request, 'profiles.html', {'profiles': profiles})
+
+
+
+# def liked_users(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     liked_users = Like.objects.filter(article=article).values_list('user__username', flat=True)
+#     return render(request, 'liked_users.html', {'article': article, 'liked_users': liked_users})
+
+# def article_comments(request, pk):
+#     article = get_object_or_404(Article, pk=pk)
+#     comments = Comment.objects.filter(article=article)
+#     return render(request, 'article_comments.html', {'article': article, 'comments': comments})
+
+# def get_readinglists(request):
+
+#     readinglists = ReadingList.objects.get(profile__user=request.user)
+
+#     return render(request, 'readinglists.html', {'readinglists': readinglists})
+
+# def articles_by_hot_topic(request):
+
+#     articles_by_hot_topic = Article.objects.by_topic('Feminism')
 
    
-    context = {
-        'articles_by_hot_topic': articles_by_hot_topic
-    }
+#     context = {
+#         'articles_by_hot_topic': articles_by_hot_topic
+#     }
 
-    return render(request, 'hot_topic.html', context)
+#     return render(request, 'hot_topic.html', context)

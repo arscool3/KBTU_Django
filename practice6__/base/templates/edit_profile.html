@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if creating_profile %}
+    <h1>Create Profile for {{ request.user.username }}</h1>
+    {% else %}
+        <h1>Edit {{ profile.user.username }}'s profile</h1>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    
+{%endblock%}    
