@@ -1,0 +1,13 @@
+{% extends 'base_template.html' %}
+{% load utils %}
+
+{% block title %}User Info{% endblock %}
+
+{% block content %}
+    <h1>User Profile</h1>
+    
+    <p>username: {{user.username}}</p>
+    <p>role: {{user.role|lower}}</p>
+    <p>first name: {{user.first_name}}</p>
+{% endblock %}
+
