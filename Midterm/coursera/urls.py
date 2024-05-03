@@ -1,9 +1,9 @@
 from django.urls import path
+
 from coursera.views import *
 
 urlpatterns = [
     path('courses/', get_courses,name='courses'),
-    path('courses/drf', CourseViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('course/create', create_course, name='create-course'),
     path('courses/<int:course_id>/', get_course_details, name='course_details'),
     path('enrollments/', get_enrollments, name='enrollments'),
