@@ -1,7 +1,27 @@
-import pydantic
+from pydantic import BaseModel
 
 
-class Product(pydantic.BaseModel):
-    id: int = pydantic.Field(ge=0)
-    name: str = pydantic.Field(max_length=255)
-    cost: int = pydantic.Field(ge=0)
+class Vacancy(BaseModel):
+    name: str
+    description: str
+
+    class Config:
+        from_attributes = True
+
+
+class Company(BaseModel):
+    name: str
+    phone_number: str
+    vacancy: list[Vacancy]
+
+    class Config:
+        from_attributes = True
+
+
+class Category(BaseModel):
+    name: str
+    vacancy: list[Vacancy]
+
+    class Config:
+        from_attributes = True
+
