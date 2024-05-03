@@ -1,11 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from enum import Enum
 # Create your models here.
 
 
-class Instructor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Role(Enum):
+    STUDENT = 'Student'
+    INSTRUCTOR = 'Instructor'
 
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = [(role.value, role.name) for role in Role]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES) 
+
+
+
+class Instructor(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='instructor_profile')
     class Meta:
         permissions = [
             ('can_add_courses', 'Can add course'),
@@ -27,7 +37,7 @@ class Course(models.Model):
         return self.name
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
     courses = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 
     def __str__(self) -> str:

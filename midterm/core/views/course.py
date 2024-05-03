@@ -6,9 +6,10 @@ from core.forms import *
 def get_all_courses(request):
     if request.method == 'GET':
         courses = Course.objects.all()
-        return render(request, 'index.html', {
+        return render(request, 'dashboard.html', {
             'iterable_name': 'Course',
-            'iterable': courses})
+            'iterable': courses
+        })
 
 
 @login_required(login_url='login')
@@ -43,7 +44,7 @@ def instructor_courses(request):
         if request.user.is_authenticated:
             instructor = Instructor.objects.get(user=request.user)
             courses = Course.objects.get_course_by_instructor(instructor=instructor)
-            return render(request, 'index.html', {
+            return render(request, 'instructor_courses.html', {
                 'iterable_name': 'Course',
                 'iterable': courses})
         else: 

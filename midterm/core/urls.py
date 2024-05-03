@@ -7,8 +7,9 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     #POST
     path('login/', login_view, name='login'),
-    path('register/student/', register_student_view, name='register_student'),
-    path('register/instructor/', register_instructor_view, name='register_instructor'),
+    path('signup/', sign_up_choice, name='sign_up'),
+    path('signup/student/', register_student_view, name='sign_up_student'),
+    path('signup/instructor/', register_instructor_view, name='sign_up_instructor'),
     path('student/courses/', student_courses, name='student_courses'),
     path('instructor/course/assignment/create', instructor_create_assignment, name='create_assignment'),
     #GET

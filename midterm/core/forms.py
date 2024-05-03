@@ -18,7 +18,7 @@ class AssignmentForm(forms.ModelForm):
 
 class StudentRegistrationForm(UserCreationForm):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
     
     def save(self, commit=True):
@@ -31,7 +31,7 @@ class StudentRegistrationForm(UserCreationForm):
 
 class InstructorRegistrationForm(UserCreationForm):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
     
     def save(self, commit=True):

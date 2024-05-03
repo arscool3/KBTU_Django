@@ -1,30 +1,38 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import authenticate, login, decorators, logout, forms
 from core.forms import StudentRegistrationForm, InstructorRegistrationForm
+from core.models import Role
 
 def register_student_view(request):
     if request.method == 'POST':
         form = StudentRegistrationForm(data=request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.role = Role.STUDENT.name
+            user.save()
             return redirect("/student/courses")
         else:
             raise Exception(f"some erros {form.errors}")
-    return render(request, 'form.html', {
+    return render(request, 'authorization.html', {
         'form_name': 'Register Student',
         'form': StudentRegistrationForm()
         })
+
+def sign_up_choice(request):
+    return render(request, 'sign_up.html')
 
 
 def register_instructor_view(request):
     if request.method == 'POST':
         form = InstructorRegistrationForm(data=request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponse("OK")
+            user = form.save(commit=False)
+            user.role = Role.INSTRUCTOR.name
+            user.save()
+            return redirect("/instructor/courses")
         else:
             raise Exception(f"some erros {form.errors}")
-    return render(request, 'form.html', {
+    return render(request, 'authorization.html', {
         'form_name': 'Register Instructor',
         'form': InstructorRegistrationForm()
         })
@@ -49,7 +57,7 @@ def login_view(request):
                 return HttpResponse("something is not ok")
         else:
             raise Exception(f"some erros {form.errors}")
-    return render(request, 'form.html', {
+    return render(request, 'authorization.html', {
         'form_name': 'Authentication',
         'form': forms.AuthenticationForm()})
 
