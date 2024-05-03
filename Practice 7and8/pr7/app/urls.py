@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from app.drm_views import *
 
 urlpatterns = [
     path('register/', views.register_view, name='register'),
@@ -40,10 +41,16 @@ urlpatterns = [
     path('api/workouts/<int:id>/', views.get_workout_details, name='get_workout_details'),
     path('api/workouts/add/', views.add_workout, name='add_workout'),
 
-
-
     # Membership plans endpoints
     path('api/memberships/', views.get_all_membership_plans, name='get_all_membership_plans'),
     path('api/memberships/<int:id>/', views.get_membership_plan_details, name='get_membership_plan_details'),
     path('api/memberships/add/', views.add_membership_plan, name='add_membership_plan'),
+
+
+    #pr8 
+    path('add_to_cart/', add_to_cart ,name = 'add_to_cart'),
+    path('make_order/', make_order ,name = 'make_order'),
+    path('remove_from_cart/<int:id>/',remove_from_cart,name = 'remove_from_cart'),
+    path('cart_detail/',cart_detail_drf,name = 'cart_detail'),
+
 ]
