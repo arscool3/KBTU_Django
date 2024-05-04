@@ -1,0 +1,12 @@
+{% extends 'dashboard.html '%}
+
+{%block content %}
+
+<h2>Add Course</h2>
+    <form action="/instructor/courses/" method="post">
+        {% csrf_token %}
+        <label for="course_name">Course Name:</label><br>
+        <input type="text" id="course_name" name="course_name"><br>
+        <button type="submit">Add Course</button>
+    </form>
+{% endblock %}  
