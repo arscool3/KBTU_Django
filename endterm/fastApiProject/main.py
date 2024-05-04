@@ -123,6 +123,7 @@ async def register(request: Request, user: schemas.UserCreate, db: Session = Dep
 async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = user_crud.authenticate_user(db, form_data.username, form_data.password)
     message = f"{user.username} IS TRYING TO LOG IN"
+    print(user_crud.get_tickets(db=db, username=user.username))
     create_log(user_log_filename, user.username, request.method, message)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
@@ -427,4 +428,5 @@ def reserve_ticket(request: Request, ticket_id: int, db: Session = Depends(get_d
     flight = f"FLIGHT ID: {ticket.flight_id} | DEPARTURE: {airport_crud.get_airport(db, departure_airport_id).name} | DESTINATION: {airport_crud.get_airport(db, destination_airport_id).name}"
     message = f"{username} RESERVED A FLIGHT: {flight}; PLANE: {ticket.plane_id}; SEAT_NUMBER: {ticket.seat_number}; TICKET: {ticket.id}"
     create_log(ticket_log_filename, username, request.method, message)
+    reserve_ticket(ticket)
     return ticket

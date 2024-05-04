@@ -74,6 +74,7 @@ class Plane(PlaneBase):
 class FlightBase(BaseModel):
     departure_airport_id: int
     destination_airport_id: int
+    plane_id: int
     departure_time: datetime
     arrival_time: datetime
 
@@ -91,7 +92,8 @@ class Flight(FlightBase):
 
 class TicketBase(BaseModel):
     flight_id: int
-    plane_id: int
+    user_id: int
+    # plane_id: int
     seat_number: str
 
 class TicketCreate(TicketBase):

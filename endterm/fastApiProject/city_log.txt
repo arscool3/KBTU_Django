@@ -1,8 +1,3 @@
-LOG_ID: 77a9216a-2e59-499e-880a-ae1cccbca01b ---- TIME: 2024-04-29 00:28:25.919351 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Almaty' city_code='ALA' country_id=1
-LOG_ID: e96d46fa-a76e-49f8-b869-010cb73715ff ---- TIME: 2024-04-29 00:28:32.873224 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Astana' city_code='TSE' country_id=1
-LOG_ID: 7d10642f-5ea0-4ef4-b64a-4ac3cb9d1d23 ---- TIME: 2024-04-29 00:28:50.564800 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES
-LOG_ID: 32a9f053-bc76-4d54-87ec-0ae82ad55657 ---- TIME: 2024-04-29 00:29:13.525598 ---- USER: string ---- OPERATION: PUT ---- MESSAGE: string IS UPDATING A CITY WITH ID: 2 -> name='Aktau' city_code='AKT' country_id=1
-LOG_ID: b127c5c7-c470-48a8-b9d7-3a662e3a373e ---- TIME: 2024-04-29 00:30:35.332408 ---- USER: string ---- OPERATION: DELETE ---- MESSAGE: string IS DELETING A CITY WITH ID: 2
-LOG_ID: 22612aee-1767-487e-849b-7ecf07d80113 ---- TIME: 2024-04-29 00:30:44.456864 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Astana' city_code='TSE' country_id=1
-LOG_ID: 1b7c07c0-7b7f-4621-93a0-04b0c33d3ce7 ---- TIME: 2024-04-29 00:35:42.187429 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='string' city_code='string' country_id=1
-LOG_ID: 12ba478b-281a-4b08-9b2e-28a3e26b7514 ---- TIME: 2024-04-29 18:49:23.585567 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES
+LOG_ID: 02ecb7a2-fe27-438c-b0ee-641d112e8062 ---- TIME: 2024-05-04 13:20:43.510998 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Almaty' city_code='ALA' country_id=1
+LOG_ID: 3919e715-78e8-40fd-8c66-09e113664698 ---- TIME: 2024-05-04 13:20:56.301036 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Astana' city_code='TSE' country_id=1
+LOG_ID: 6545b180-2b8d-4b3d-bb04-47070e6a4ca8 ---- TIME: 2024-05-04 15:18:14.717009 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Almaty' city_code='ALA' country_id=1

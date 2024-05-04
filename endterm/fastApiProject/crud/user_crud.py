@@ -75,17 +75,13 @@ def get_current_user(token: str):
         return None
     return token_data
 
+def get_tickets(db: Session, username: str):
+    user = db.query(models.User).filter_by(username=username).first()
 
-def create_city(db: Session, city: schemas.CityCreate):
-    db_city = models.City(name=city.name, country_id=city.country_id)
-    db.add(db_city)
-    db.commit()
-    db.refresh(db_city)
-    return db_city
+    if user:
+        user_tickets = user.tickets
 
-def create_airport(db: Session, airport: schemas.AirportCreate):
-    db_airport = models.Airport(name=airport.name, city_id=airport.city_id)
-    db.add(db_airport)
-    db.commit()
-    db.refresh(db_airport)
-    return db_airport
+        # Return the tickets
+        return user_tickets
+    else:
+        return None
