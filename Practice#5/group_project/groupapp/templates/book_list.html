@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Books</h1>
+    <ul>
+        {% for book in books %}
+            <li>
+                <h2>{{ book.name }}</h2>
+                <p>By {{ book.author }}</p>
+                <p>Published: {{ book.publication_date }}</p>
+                <p>Description: {{ book.description }}</p>
+                {% if book.review_set.all %}
+                    <h3>Reviews:</h3>
+                    <ul>
+                        {% for review in book.review_set.all %}
+                            <li>
+                                {{ review.content }} - Rating: {{ review.rating }} (by {% if review.author %}{{ review.author.user.username }}{% else %}Anonymous{% endif %})
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

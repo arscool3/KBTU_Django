@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Trip to {{ trip.destination.name }}</h1>
+    <p>From {{ trip.start_date }} to {{ trip.end_date }}</p>
+    <!-- Display details of transportation, accommodation, and activities -->
+{% endblock %}
