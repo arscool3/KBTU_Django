@@ -1,85 +1,169 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Instructor, Member, Gym, Membership, Equipment, Workout
 from .forms import InstructorForm, MemberForm, GymForm, MembershipForm, EquipmentForm, WorkoutForm, InstructorFilterForm, GymFilterForm
-from .models import Instructor, Gym
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-
+from django.urls import reverse
+from .serializers import GymSerializer,WorkoutSerializer,InstructorSerializer, MemberSerializer,MembershipSerializer
 
 # Create your views here.
 
-
+# Rendered views
 def index(request):
     return render(request, 'main/index.html')
 
 def about(request):
     return render(request, 'main/about.html')
 
-# views.py
-
-
-
+@login_required
 def add_instructor(request):
     if request.method == 'POST':
         form = InstructorForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('instructorpage')  # Replace 'instructor_list' with the URL name for listing instructors
+            return redirect('instructorpage')
     else:
         form = InstructorForm()
     return render(request, 'main/add_instructor.html', {'form': form})
 
+@login_required
 def add_member(request):
     if request.method == 'POST':
         form = MemberForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('memberpage')  # Replace 'member_list' with the URL name for listing members
+            return redirect('memberpage')
     else:
         form = MemberForm()
     return render(request, 'main/add_member.html', {'form': form})
 
+@login_required
 def add_gym(request):
     if request.method == 'POST':
         form = GymForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('gym_list')  # Replace 'gym_list' with the URL name for listing gyms
+            return redirect('gympage')
     else:
         form = GymForm()
     return render(request, 'main/add_gym.html', {'form': form})
 
+@login_required
 def add_membership(request):
     if request.method == 'POST':
         form = MembershipForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('membership_list')  # Replace 'membership_list' with the URL name for listing memberships
+            return redirect('membershippage')
     else:
         form = MembershipForm()
     return render(request, 'main/add_membership.html', {'form': form})
 
+@login_required
 def add_equipment(request):
     if request.method == 'POST':
         form = EquipmentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('equipment_list')  # Replace 'equipment_list' with the URL name for listing equipment
+            return redirect('equipmentpage')
     else:
         form = EquipmentForm()
     return render(request, 'main/add_equipment.html', {'form': form})
 
+@login_required
 def add_workout(request):
     if request.method == 'POST':
         form = WorkoutForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('workout_list')  # Replace 'workout_list' with the URL name for listing workouts
+            return redirect('workoutpage')
     else:
         form = WorkoutForm()
     return render(request, 'main/add_workout.html', {'form': form})
 
+# API views
+@api_view(['GET', 'POST'])
+def instructor_list(request):
+    if request.method == 'GET':
+        instructors = Instructor.objects.all()
+        serializer = InstructorSerializer(instructors, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = InstructorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def member_list(request):
+    if request.method == 'GET':
+        members = Member.objects.all()
+        serializer = MemberSerializer(members, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = MemberSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def gym_list(request):
+    if request.method == 'GET':
+        gyms = Gym.objects.all()
+        serializer = GymSerializer(gyms, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = GymSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def membership_list(request):
+    if request.method == 'GET':
+        memberships = Membership.objects.all()
+        serializer = MembershipSerializer(memberships, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = MembershipSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def equipment_list(request):
+    if request.method == 'GET':
+        equipment = Equipment.objects.all()
+        serializer = EquipmentSerializer(equipment, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = EquipmentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def workout_list(request):
+    if request.method == 'GET':
+        workouts = Workout.objects.all()
+        serializer = WorkoutSerializer(workouts, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = WorkoutSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def filter_instructors(request):
     if request.method == 'GET':
@@ -136,15 +220,6 @@ def custom_logout(request):
     return redirect('')
 
 
-from django.http import JsonResponse
-from .models import Instructor, Member, Gym, Membership, Equipment, Workout
-
-def get_instructors(request):
-    instructors = Instructor.objects.all()
-    data = [{'instructor_id': instructor.instructor_id, 'instructor_name': instructor.instructor_name,
-             'specialization': instructor.specialization, 'gender': instructor.gender} for instructor in instructors]
-    return JsonResponse(data, safe=False)
-
 def get_members(request):
     members = Member.objects.all()
     data = [{'member_id': member.member_id, 'name': member.name,
@@ -176,10 +251,6 @@ def get_workouts(request):
     return JsonResponse(data, safe=False)
 
 
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from .models import Instructor
-
 def show_instructor(request, instructor_id):
     instructor = get_object_or_404(Instructor, pk=instructor_id)
     data = {
@@ -190,9 +261,6 @@ def show_instructor(request, instructor_id):
     }
     return JsonResponse(data)
 
-from django.http import JsonResponse
-from .models import Instructor
-
 def delete_instructor(request, instructor_id):
     instructor = Instructor.objects.filter(pk=instructor_id)
     if instructor.exists():
@@ -200,6 +268,4 @@ def delete_instructor(request, instructor_id):
         return JsonResponse({'message': 'Instructor deleted successfully'})
     else:
         return JsonResponse({'message': 'Instructor not found'}, status=404)
-
-
 
