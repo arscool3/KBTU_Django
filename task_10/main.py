@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from pydantic import BaseModel
 from typing import List  
+from fastapi import WebSocket
 
 app = FastAPI()
 
@@ -102,3 +103,10 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
 @app.get("/users/{user_id}", response_model=User)
 async def read_user(user_id: int, db: Session = Depends(get_db)):
     return db.query(User).filter(User.id == user_id).first()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        data = await websocket.receive_text()
+        await websocket.send_text(f"Message text was: {data}")
