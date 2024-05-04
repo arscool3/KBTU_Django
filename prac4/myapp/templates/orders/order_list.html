@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Detail{% endblock %}
+
+{% block content %}
+
+    <div style="margin:20px">
+        <ol>
+            {% for order in orders %}
+                <h3><li> User : {{order.customer.username}} <br/> Bought : {{order.product.name}} <br/> Date: {{order.order_date}} </li></h3>
+            {% endfor %}
+        </ol>
+    </div>
+
+{% endblock %}

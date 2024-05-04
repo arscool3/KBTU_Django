@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer List{% endblock %}
+
+{% block content %}
+
+    <div style="margin:20px">
+        <ol>
+            {% for customer in customers %}
+                <h3>
+                    <li> Customer username: {{customer.username}}
+                        <br/>
+                        Password : {{customer.password}}
+                        <br/>
+                        Shipping address: {{customer.shipping_address}}
+                        <br/>
+                        Billing address: {{customer.billing_address}}
+                    </li>
+                </h3>
+            {% endfor %}
+        </ol>
+    </div>
+
+{% endblock %}

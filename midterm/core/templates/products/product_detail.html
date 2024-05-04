@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+    <h1>Product Detail</h1>
+    Name: {{ product.name }} <br />
+    Price: {{ product.price }} <br/>
+    Description: {{product.description}} <br/>
+    Category: {{product.category}} <br/>
+    Quantity: {{product.quantity}}
+<!-- Additional content specific to the home page --> 
+{% endblock %}
+
