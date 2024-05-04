@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Book detail{% endblock %}
+
+{% block content %}
+    <h1>{{ book.title }}</h1>
+    <p>Author: {{ book.author }}</p>
+    <p>Published Date: {{ book.published_date|custom_date_format:"Y-m-d" }}</p>
+    <p>Description: {{ book.description|custom_truncate_chars:200 }}</p>
+{% endblock %}
