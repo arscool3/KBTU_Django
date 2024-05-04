@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Product, Order, Category, Customer, Cart, CartItem
+from myapp.models import Product, Order, Category, Customer, Cart, CartItem
 # Register your models here.
 
 admin.site.register(Product)

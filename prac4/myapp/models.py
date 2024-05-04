@@ -16,13 +16,13 @@ class Product(models.Model):
     image = models.ImageField()
     quantity = models.IntegerField(default = 0)
 
-    class Meta:
-        permissions = [
-            ('can_create_product', 'Can create product'),
-            ('can_change_product', 'Can change product'),
-            ('can_delete_product', 'Can delete product'),
-            ('can_view_product', 'Can view product')
-        ]
+    # class Meta:
+    #     permissions = [
+    #         ('can_create_product', 'Can create product'),
+    #         ('can_change_product', 'Can change product'),
+    #         ('can_delete_product', 'Can delete product'),
+    #         ('can_view_product', 'Can view product')
+    #     ]
 
 class Customer(models.Model):
     username = models.CharField(max_length=50)

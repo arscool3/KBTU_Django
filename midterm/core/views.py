@@ -248,7 +248,7 @@ class UpdateOrderView(View):
             return render(request, 'orders/update_order.html', {'form': form, 'order_id': order_id})
 
 class OrderListView(View):
-    @method_decorator(login_required(login_url='login'))
+    # @method_decorator(login_required(login_url='login'))
     def get(self, request):
         orders = Order.objects.all()
         return render(request, 'orders/order_list.html', {'orders': orders})
