@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h4>{{ author.first_name }} {{ author.last_name }}</h4>
+    <p>{{ author.email }}</p>
+
+    <hr />
+
+    <h4>Books: {{ books.count }}</h4>
+
+    <ul class="list-group">
+        {% for book in books %}
+            <li class="list-group-item">
+                <h5>ID: {{ book.id }}</h5>
+                <p>Title: {{ book.title }}</p>
+                <p>Number of pages: {{ book.num_pages }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

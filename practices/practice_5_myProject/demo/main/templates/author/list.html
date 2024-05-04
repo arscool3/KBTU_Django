@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <a href="{% url 'author_new' %}" class="btn btn-primary">Add new</a>
+
+    <hr />
+
+    <ul class="list-group">
+        {% for author in authors %}
+
+            <li class="list-group-item">
+                <a href="{% url 'author_detail' author.id %}">
+                    <h4>{{ author.first_name }} {{ author.last_name }}</h4>
+                    <p>{{ author.email }}</p>
+                </a>
+            </li>
+
+        {% endfor %}
+    </ul>
+
+{% endblock %}

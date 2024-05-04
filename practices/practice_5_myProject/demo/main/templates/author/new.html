@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>New author</h1>
+
+    <form action="{% url 'author_new' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="first_name">First name:</label>
+            <input type="text" name="first_name" class="form-control" id="id_first_name">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last name:</label>
+            <input type="text" name="last_name" class="form-control" id="id_last_name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address:</label>
+            <input type="email" name="email" class="form-control" id="id_email">
+        </div>
+        <div class="form-group">
+            <label for="bday">B'Day:</label>
+            <input type="datetime-local" name="bday" class="form-control" id="id_bday">
+        </div>
+        <input type="submit" class="btn btn-default" value="Submit">
+    </form>
+
+{% endblock %}
