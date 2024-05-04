@@ -4,9 +4,9 @@ from dramatiq.results.errors import ResultMissing
 from tasks import load_assignment_task, result_backend
 
 app = FastAPI()
-@app.post("/load-assignment/")
-async def load_assignment(assignment_id: int, background_tasks: BackgroundTasks):
-    background_tasks.add_task(load_assignment_task.send, assignment_id)
+@app.post("/load_assignment/")
+async def load_assignment(assignment_id: int):
+    load_assignment_task.send()
     return {"message": "Assignment loading started"}
 
 # FastAPI endpoint to retrieve the progress
