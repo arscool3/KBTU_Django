@@ -1,3 +1,5 @@
+import random
+import asyncio
 from fastapi import FastAPI, HTTPException, Depends, WebSocket
 from sqlalchemy.orm import Session
 import models
@@ -14,6 +16,8 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         data = await websocket.receive_text()
         await websocket.send_text(f"Message text was: {data}")
+        # await websocket.send_text(f"Message text was: {random.randint(1, 10)} ")
+        # await asyncio.sleep(2)
 
 
 def get_db():
