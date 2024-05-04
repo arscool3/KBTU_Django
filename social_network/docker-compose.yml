@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  rabbitmq:
+    image: my-rabbit-image
+    build:
+      context: ./rabbitMQ
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+
+volumes:
+  redis_data:
+

@@ -1,0 +1,6 @@
+
+ pip3 freeze > requirements.txt
+
+ celery -A celery worker --loglevel=info
+
+  LRANGE celery 0 -1 stop
