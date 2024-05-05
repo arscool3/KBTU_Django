@@ -107,7 +107,7 @@ def create_log(filename: str, username: str, method, message: str):
                                                  f"MESSAGE: {message}")
 # User registration endpoint
 @app.post("/register", response_model=schemas.User, tags=["users"])
-async def register(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
+def register(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
     message = f"SOME USER TRYING TO REGISTER. REGISTRATION DATA: {user.__str__()}"
     create_log(user_log_filename, user.username, request.method, message)
     db_user = user_crud.get_user_by_email(db, email=user.email)
@@ -120,7 +120,7 @@ async def register(request: Request, user: schemas.UserCreate, db: Session = Dep
 
 # Login endpoint
 @app.post("/token", response_model=Token, tags=["users"])
-async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = user_crud.authenticate_user(db, form_data.username, form_data.password)
     message = f"{user.username} IS TRYING TO LOG IN"
     print(user_crud.get_tickets(db=db, username=user.username))
