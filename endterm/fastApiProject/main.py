@@ -108,7 +108,7 @@ def create_log(filename: str, username: str, method, message: str):
 # User registration endpoint
 @app.post("/register", response_model=schemas.User, tags=["users"])
 def register(request: Request, user: schemas.UserCreate, db: Session = Depends(get_db)):
-    message = f"SOME USER TRYING TO REGISTER. REGISTRATION DATA: {user.__str__()}"
+    message = f"SOME USER TRYING TO REGISTER. REGISTRATION DATA: {str(user)}"
     create_log(user_log_filename, user.username, request.method, message)
     db_user = user_crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -166,7 +166,7 @@ def create_country(request: Request, country: schemas.CountryCreate, db: Session
 
 @app.put("/countries/{country_id}", response_model=schemas.Country, tags=["country"])
 def update_country(request: Request, country_id: int, country: schemas.CountryCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING THE COUNTRY WITH ID: {country_crud.get_country(db, country_id).name} -> {country.__str__()}"
+    message = f"{username} IS UPDATING THE COUNTRY WITH ID: {country_crud.get_country(db, country_id).name} -> {str(country)}"
     method = request.method
     create_log(country_log_filename, username, method, message)
     return country_crud.update_country(db=db, country_id=country_id, country=country)
@@ -198,13 +198,13 @@ def read_city(request: Request, city_id: int, db: Session = Depends(get_db), use
 
 @app.post("/cities/", response_model=schemas.City, tags=["city"])
 def create_city(request: Request, city: schemas.CityCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS CREATING A CITY: {city.__str__()}"
+    message = f"{username} IS CREATING A CITY: {str(city)}"
     create_log(city_log_filename, username, request.method, message)
     return city_crud.create_city(db=db, city=city)
 
 @app.put("/cities/{city_id}", response_model=schemas.City, tags=["city"])
 def update_city(request: Request, city_id: int, city: schemas.CityCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING A CITY WITH ID: {city_crud.get_city(db, city_id).name} -> {city.__str__()}"
+    message = f"{username} IS UPDATING A CITY WITH ID: {city_crud.get_city(db, city_id).name} -> {str(city)}"
     create_log(city_log_filename, username, request.method, message)
     return city_crud.update_city(db=db, city_id=city_id, city=city)
 
@@ -244,13 +244,13 @@ def read_airports_by_country(request: Request, skip: int = 0, limit: int = 10, c
 
 @app.post("/airports/", response_model=schemas.Airport, tags=["airport"])
 def create_airport(request: Request, airport: schemas.AirportCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS CREATING AN AIRPORT: {airport.__str__()}"
+    message = f"{username} IS CREATING AN AIRPORT: {str(airport)}"
     create_log(airport_log_filename, username, request.method, message)
     return airport_crud.create_airport(db=db, airport=airport)
 
 @app.put("/airports/{airport_id}", response_model=schemas.Airport, tags=["airport"])
 def update_airport(request: Request, airport_id: int, airport: schemas.AirportCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING AN AIRPORT WITH ID: {airport_id} -> {airport.__str__()}"
+    message = f"{username} IS UPDATING AN AIRPORT WITH ID: {airport_id} -> {str(airport)}"
     create_log(airport_log_filename, username, request.method, message)
     return airport_crud.update_airport(db=db, airport_id=airport_id, airport=airport)
 
@@ -281,19 +281,19 @@ def read_planes(request: Request, skip: int = 0, limit: int = 10, db: Session = 
 # Endpoint to create a new plane
 @app.post("/planes/", response_model=schemas.Plane, tags=["plane"])
 def create_plane(request: Request, plane: schemas.PlaneCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS CREATING A PLANE: {plane.__str__()}"
+    message = f"{username} IS CREATING A PLANE: {str(plane)}"
     create_log(plane_log_filename, username, request.method, message)
     return plane_crud.create_plane(db=db, plane=plane)
 
 # Endpoint to update an existing plane
 @app.put("/planes/{plane_id}", response_model=schemas.Plane, tags=["plane"])
 def update_plane(request: Request, plane_id: int, plane: schemas.PlaneUpdate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING A PLANE WITH ID: {plane_id} -> {plane.__str__()}"
+    message = f"{username} IS UPDATING A PLANE WITH ID: {plane_id} -> {str(plane)}"
     create_log(plane_log_filename, username, request.method, message)
     updated_plane = plane_crud.update_plane(db=db, plane_id=plane_id, plane=plane)
     if updated_plane is None:
         raise HTTPException(status_code=404, detail="PLANE NOT FOUND")
-    message = f"{username} UPDATED A PLANE WITH ID: {plane_id} -> {plane.__str__()}"
+    message = f"{username} UPDATED A PLANE WITH ID: {plane_id} -> {str(plane)}"
     create_log(plane_log_filename, username, request.method, message)
     return updated_plane
 
@@ -329,18 +329,18 @@ def read_flight(request: Request, flight_id: int, db: Session = Depends(get_db),
 
 @app.post("/flights/", response_model=schemas.Flight, tags=["flight"])
 def create_flight(request: Request, flight: schemas.FlightCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS CREATING A FLIGHT: {flight.__str__()}"
+    message = f"{username} IS CREATING A FLIGHT: {str(flight)}"
     create_log(flight_log_filename, username, request.method, message)
     return flight_crud.create_flight(db=db, flight=flight)
 
 @app.put("/flights/{flight_id}", response_model=schemas.Flight, tags=["flight"])
 def update_flight(request: Request, flight_id: int, flight: schemas.FlightUpdate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING A FLIGHT WITH ID: {flight_id} -> {flight.__str__()}"
+    message = f"{username} IS UPDATING A FLIGHT WITH ID: {flight_id} -> {str(flight)}"
     create_log(flight_log_filename, username, request.method, message)
     updated_flight = flight_crud.update_flight(db=db, flight_id=flight_id, flight=flight)
     if updated_flight is None:
         raise HTTPException(status_code=404, detail="FLIGHT NOT FOUND")
-    message = f"{username} UPDATED A FLIGHT WITH ID: {flight_id} -> {flight.__str__()}"
+    message = f"{username} UPDATED A FLIGHT WITH ID: {flight_id} -> {str(flight)}"
     create_log(flight_log_filename, username, request.method, message)
     return updated_flight
 
@@ -376,19 +376,19 @@ def read_tickets(request: Request, skip: int = 0, limit: int = 10, db: Session =
 
 @app.post("/tickets/", response_model=schemas.Ticket, tags=["ticket"])
 def create_ticket(request: Request, ticket: schemas.TicketCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS CREATING A TICKET: {ticket.__str__()}"
+    message = f"{username} IS CREATING A TICKET: {str(ticket)}"
     create_log(ticket_log_filename, username, request.method, message)
     return ticket_crud.create_ticket(db=db, ticket=ticket)
 
 # Update a ticket
 @app.put("/tickets/{ticket_id}", response_model=schemas.Ticket, tags=["ticket"])
 def update_ticket(request: Request, ticket_id: int, ticket: schemas.TicketCreate, db: Session = Depends(get_db), username: str = Depends(TokenVerifier.verify_token)):
-    message = f"{username} IS UPDATING A TICKET: {ticket_id} -> {ticket.__str__()}"
+    message = f"{username} IS UPDATING A TICKET: {ticket_id} -> {str(ticket)}"
     create_log(ticket_log_filename, username, request.method, message)
     updated_ticket = ticket_crud.update_ticket(db=db, ticket_id=ticket_id, ticket=ticket)
     if updated_ticket is None:
         raise HTTPException(status_code=404, detail="Ticket not found")
-    message = f"{username} UPDATED A TICKET: {ticket_id} -> {ticket.__str__()}"
+    message = f"{username} UPDATED A TICKET: {ticket_id} -> {str(ticket)}"
     create_log(ticket_log_filename, username, request.method, message)
     return updated_ticket
 
