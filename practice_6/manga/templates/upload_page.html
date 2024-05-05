@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Upload Pages for {{ chapter.manga.title }} - Chapter {{ chapter.number }}</h2>
+    <form id="pagesForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div id="pagesContainer">
+            <p><input type="file" name="images" required></p>
+            <p><input type="number" name="page_number" placeholder="Page number" required></p>
+        </div>
+        <button type="button" onclick="addPage()">New Page</button>
+        <button type="submit">Upload Pages</button>
+    </form>
+</div>
+
+<script>
+function addPage() {
+    const container = document.getElementById('pagesContainer');
+    const newFileInput = document.createElement('p');
+    newFileInput.innerHTML = '<input type="file" name="images" required><br><input type="number" name="page_number" placeholder="Page number" required>';
+    container.appendChild(newFileInput);
+}
+</script>
+{% endblock %}
