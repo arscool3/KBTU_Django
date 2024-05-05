@@ -31,5 +31,5 @@ def add_teacher(request):
 # Create Views with Forms
 # 1) Create a simple django view function
 # 2) Create django form
-# 3) Create django template
+# 3) Create django templates
 # 4) Save instances

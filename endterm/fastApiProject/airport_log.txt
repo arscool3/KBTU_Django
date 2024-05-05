@@ -1,0 +1,4 @@
+LOG_ID: a0944d2b-5533-4dc3-bf57-bd590e4e9718 ---- TIME: 2024-05-04 15:19:00.906312 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='airport 1' city_id=1
+LOG_ID: 557a70b0-9a4d-4aab-ba63-7ec50bc9fa0e ---- TIME: 2024-05-04 15:19:05.202493 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING AN AIRPORT: name='airport 2' city_id=1
+LOG_ID: ada6268a-f02b-4b55-8e4c-6ae7e5f9bde3 ---- TIME: 2024-05-04 15:19:11.752571 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING AIRPORTS
+LOG_ID: e1597802-2330-451a-9dde-c7e03bb3fecc ---- TIME: 2024-05-04 15:19:24.643878 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING AIRPORTS IN COUNTRY: 1
