@@ -1,5 +1,5 @@
 # crud.py
-
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from models import Country
 from schemas import CountryCreate
@@ -20,8 +20,12 @@ def create_country(db: Session, country: CountryCreate):
 def update_country(db: Session, country_id: int, country: CountryCreate):
     db_country = db.query(Country).filter(Country.id == country_id).first()
     if db_country:
-        for key, value in country.dict().items():
-            setattr(db_country, key, value)
+        stmt = (
+            update(Country).
+            where(Country.id == country_id).
+            values(**country.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_country)
     return db_country

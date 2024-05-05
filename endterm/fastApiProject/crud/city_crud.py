@@ -1,5 +1,5 @@
 # crud.py
-
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from models import City
 from schemas import CityCreate
@@ -20,8 +20,12 @@ def create_city(db: Session, city: CityCreate):
 def update_city(db: Session, city_id: int, city: CityCreate):
     db_city = db.query(City).filter(City.id == city_id).first()
     if db_city:
-        for key, value in city.dict().items():
-            setattr(db_city, key, value)
+        stmt = (
+            update(City).
+            where(City.id == city_id).
+            values(**city.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_city)
     return db_city

@@ -1,5 +1,5 @@
 # crud.py
-
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from models import Airport, City, Country
 from schemas import AirportCreate
@@ -26,8 +26,12 @@ def create_airport(db: Session, airport: AirportCreate):
 def update_airport(db: Session, airport_id: int, airport: AirportCreate):
     db_airport = db.query(Airport).filter(Airport.id == airport_id).first()
     if db_airport:
-        for key, value in airport.dict().items():
-            setattr(db_airport, key, value)
+        stmt = (
+            update(Airport).
+            where(Airport.id == airport_id).
+            values(**airport.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_airport)
     return db_airport

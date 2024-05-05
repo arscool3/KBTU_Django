@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import update
 from models import Flight
 from schemas import FlightCreate, FlightUpdate
 
@@ -22,8 +23,12 @@ def create_flight(db: Session, flight: FlightCreate):
 def update_flight(db: Session, flight_id: int, flight: FlightUpdate):
     db_flight = db.query(Flight).filter(Flight.id == flight_id).first()
     if db_flight:
-        for key, value in flight.dict().items():
-            setattr(db_flight, key, value)
+        stmt = (
+            update(Flight)
+            .where(Flight.id == flight_id)
+            .values(**flight.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_flight)
     return db_flight

@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from models import Plane
 from schemas import PlaneCreate, PlaneUpdate
@@ -22,8 +23,12 @@ def create_plane(db: Session, plane: PlaneCreate):
 def update_plane(db: Session, plane_id: int, plane: PlaneUpdate):
     db_plane = db.query(Plane).filter(Plane.id == plane_id).first()
     if db_plane:
-        for key, value in plane.dict().items():
-            setattr(db_plane, key, value)
+        stmt = (
+            update(Plane).
+            where(Plane.id == plane_id).
+            values(**plane.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_plane)
     return db_plane

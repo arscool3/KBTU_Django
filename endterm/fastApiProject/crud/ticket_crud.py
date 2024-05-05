@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import func
-from models import Ticket, Plane
+from sqlalchemy import func, update
+from models import Ticket, Plane, Flight
 import schemas
 
 def create_ticket(db: Session, ticket: schemas.TicketCreate):
@@ -17,9 +17,10 @@ def get_tickets(db: Session, skip: int = 0, limit: int = 10):
     return db.query(Ticket).offset(skip).limit(limit).all()
 
 def get_tickets_available(db: Session, skip: int = 0, limit: int = 10, plane_name: str = ""):
-    query = db.query(Ticket).join(Plane)
+    query = db.query(Ticket).join(Flight).join(Plane)
     if plane_name is not None:
-        query = query.filter(func.lower(Plane.name).contains(plane_name.lower()))
+        query = query.filter(Ticket.flight_id == Flight.id)
+        query = query.filter(Plane.name.contains(plane_name.lower()))
     return query.filter(Ticket.is_reserved == False).offset(skip).limit(limit).all()
 
 def reserve_ticket(db: Session, ticket_id: int):
@@ -35,8 +36,12 @@ def reserve_ticket(db: Session, ticket_id: int):
 def update_ticket(db: Session, ticket_id: int, ticket: schemas.TicketCreate):
     db_ticket = db.query(Ticket).filter(Ticket.id == ticket_id).first()
     if db_ticket:
-        for var, value in ticket:
-            setattr(db_ticket, var, value)
+        stmt = (
+            update(Ticket)
+            .where(Ticket.id == ticket_id)
+            .values(**ticket.dict())
+        )
+        db.execute(stmt)
         db.commit()
         db.refresh(db_ticket)
         return db_ticket
