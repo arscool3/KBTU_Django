@@ -1,8 +1,0 @@
-LOG_ID: 02ecb7a2-fe27-438c-b0ee-641d112e8062 ---- TIME: 2024-05-04 13:20:43.510998 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Almaty' city_code='ALA' country_id=1
-LOG_ID: 3919e715-78e8-40fd-8c66-09e113664698 ---- TIME: 2024-05-04 13:20:56.301036 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Astana' city_code='TSE' country_id=1
-LOG_ID: 6545b180-2b8d-4b3d-bb04-47070e6a4ca8 ---- TIME: 2024-05-04 15:18:14.717009 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A CITY: name='Almaty' city_code='ALA' country_id=1
-LOG_ID: e30f7b05-4c78-4c83-b610-c5d55d5154be ---- TIME: 2024-05-06 00:14:27.563734 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES
-LOG_ID: 7ee5f00d-8731-48e4-b4fe-d1fc459ecc9c ---- TIME: 2024-05-06 00:14:46.525455 ---- USER: string ---- OPERATION: PUT ---- MESSAGE: string IS UPDATING A CITY WITH ID: Almaty -> name='Almaty' city_code='Ala' country_id=1
-LOG_ID: 7068f34a-6523-4610-a3e1-0284719268e7 ---- TIME: 2024-05-06 00:25:52.053287 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES
-LOG_ID: 457c677f-53fe-4c72-b72c-e6608a1d4852 ---- TIME: 2024-05-06 00:26:06.354887 ---- USER: string ---- OPERATION: PUT ---- MESSAGE: string IS UPDATING A CITY WITH ID: Almaty -> name='Almaty' city_code='Ala' country_id=1
-LOG_ID: bb8b32e1-28e4-43f2-936f-5210d5dc971a ---- TIME: 2024-05-06 00:26:09.922085 ---- USER: string ---- OPERATION: GET ---- MESSAGE: string IS READING CITIES

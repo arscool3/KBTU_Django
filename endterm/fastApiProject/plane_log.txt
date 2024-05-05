@@ -1,1 +1,0 @@
-LOG_ID: a5618bcd-50d7-405d-a2aa-c5cf159fb5f1 ---- TIME: 2024-05-04 15:18:33.286799 ---- USER: string ---- OPERATION: POST ---- MESSAGE: string IS CREATING A PLANE: name='PLANE 1' capacity=100

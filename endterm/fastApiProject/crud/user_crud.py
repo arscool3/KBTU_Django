@@ -5,12 +5,14 @@ import jwt
 
 import schemas, models
 from dto import Token, TokenData
+from config import settings
+
 # Security settings
-SECRET_KEY = "3kaXiIR5IC520hkhBTAVxx59PIENu2zyvX4xV0M8XQciCwIS1TClGcpyXRGgjouDrh3DhviakR+qZhGYra9AHA=="
-REFRESH_SECRET_KEY = "u2zyvX4xV0M8XQciCwIS1TClhv3kaXiIR5IC520hkhBTAVxx59PIENiakR+qZhGYra9AHA=="
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 20
-REFRESH_TOKEN_EXPIRE_MINUTES = 60
+SECRET_KEY = settings.SECRET_KEY
+REFRESH_SECRET_KEY = settings.REFRESH_SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+REFRESH_TOKEN_EXPIRE_MINUTES = settings.REFRESH_TOKEN_EXPIRE_MINUTES
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
