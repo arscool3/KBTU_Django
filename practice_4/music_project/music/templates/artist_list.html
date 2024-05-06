@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist List</title>
+</head>
+
+<body>
+    <h1>Artists</h1>
+    <ul>
+        {% for artist in artists %}
+        <li>{{ artist.name }}</li>
+        {% empty %}
+        <li>No artists found.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
