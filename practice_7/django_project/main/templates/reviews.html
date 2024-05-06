@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Reviews</h1>
+{% if request.user.is_staff %}
+<form method="post" action="{% url 'reviews' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Review</button>
+</form>
+{% endif %}
+<div style="display: flex; align-items: center">
+  <form action="{% url 'reviews' %}" method="get">
+    <button
+      type="submit"
+      name="sort_by"
+      value="book"
+      style="
+        text-decoration: none;
+        color: black;
+        background-color: #2fe6d4;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.3s ease;
+        border: none;
+      "
+    >
+      Sort by Book Name
+    </button>
+  </form>
+  <form action="{% url 'reviews' %}" method="get">
+    <button
+      type="submit"
+      name="sort_by"
+      value="user"
+      style="
+        text-decoration: none;
+        color: black;
+        background-color: #2fe6d4;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.3s ease;
+        border: none;
+      "
+    >
+      Sort by User
+    </button>
+  </form>
+</div>
+
+<ul>
+  {% for review in reviews %}
+  <li>
+    <i> "{{ review.text }}" </i> by <strong> {{ review.user }} </strong>
+    for "{{ review.book.title }}"
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'index' %}">Go to homepage</a>
+{% endblock %}

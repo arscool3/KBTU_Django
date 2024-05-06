@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authorization</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      h2 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      p {
+        margin-bottom: 10px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="{{request.get_full_path}}" method="post">
+      {% csrf_token %} {{form.as_p}}
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
