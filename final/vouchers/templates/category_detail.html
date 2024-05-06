@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vouchers in Category</title>
+</head>
+<body>
+    <h1>Vouchers in {{ category.name }}</h1>
+    <ul>
+        {% for voucher in vouchers %}
+            <li>
+                <a href="{% url 'vouchers_detail' voucher.id %}">{{ voucher.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Details</title>
+</head>
+<body>
+    <h1>Voucher Details</h1>
+    <p><strong>Name:</strong> {{ voucher_data.name }}</p>
+    <p><strong>Description:</strong> {{ voucher_data.description }}</p>
+    <p><strong>Rate:</strong> {{ voucher_data.rate }}</p>
+    <p><strong>Image:</strong> <img src="../images/{{voucher_data.img }}" alt="{{ voucher_data.name }}"></p>
+    <p><strong>Likes:</strong> {{ voucher_data.like }}</p>
+    <p><strong>Price:</strong> ${{ voucher_data.price }}</p>
+    <p><strong>Category:</strong> {{ voucher_data.category.name }}</p>
+
+
+    
+    <form action="{% url 'comments-list' voucher_id=voucher_data.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="voucher" value="{{ voucher_data.id }}">
+        <label for="comment">Comment:</label><br>
+        <textarea id="comment" name="description" rows="4" cols="50"></textarea><br>
+        <button type="submit">Submit Comment</button>
+    </form>
+
+    <!-- Display existing comments -->
+    <h2>Comments:</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>{{ comment.description }}</li>
+        {% endfor %}
+    </ul>
+    
+</body>
+</html>
