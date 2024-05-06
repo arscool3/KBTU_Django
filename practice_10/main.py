@@ -1,110 +1,128 @@
-from boto3 import Session
-from fastapi import FastAPI, HTTPException, Depends
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from pydantic import BaseModel
-from datetime import datetime
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session, relationship
 
-from models import Base, Player, Team, Match
-
-# Database setup
-SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-Base.metadata.create_all(bind=engine)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# FastAPI setup
 app = FastAPI()
 
+DATABASE_URL = "sqlite:///./test.db"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Pydantic models
-class PlayerBase(BaseModel):
-    name: str
-
-
-class PlayerCreate(PlayerBase):
-    pass
+Base = declarative_base()
 
 
-class PlayerInDB(PlayerBase):
-    id: int
+class Author(Base):
+    __tablename__ = "authors"
 
-    class Config:
-        orm_mode = True
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
 
-
-class TeamBase(BaseModel):
-    name: str
+    books = relationship("Book", back_populates="author")
 
 
-class TeamCreate(TeamBase):
-    pass
+class Publisher(Base):
+    __tablename__ = "publishers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+    books = relationship("Book", back_populates="publisher")
 
 
-class TeamInDB(TeamBase):
-    id: int
+class Book(Base):
+    __tablename__ = "books"
 
-    class Config:
-        orm_mode = True
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    author_id = Column(Integer, ForeignKey("authors.id"))
+    publisher_id = Column(Integer, ForeignKey("publishers.id"))
 
+    author = relationship("Author", back_populates="books")
 
-class MatchBase(BaseModel):
-    team_id: int
-    player_id: int
-    date: datetime
-
-
-class MatchCreate(MatchBase):
-    pass
+    publisher = relationship("Publisher", back_populates="books")
 
 
-class MatchInDB(MatchBase):
-    id: int
-
-    class Config:
-        orm_mode = True
+Base.metadata.create_all(bind=engine)
 
 
-# Routes
-@app.post("/players/", response_model=PlayerInDB)
-def create_player(player: PlayerCreate, db: Session = Depends(SessionLocal)):
-    db_player = Player(**player.dict())
-    db.add(db_player)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+def get_author(db: Session, author_id: int):
+    return db.query(Author).filter(Author.id == author_id).first()
+
+
+def create_author(db: Session, name: str):
+    db_author = Author(name=name)
+    db.add(db_author)
     db.commit()
-    db.refresh(db_player)
-    return db_player
+    db.refresh(db_author)
+    return db_author
 
 
-@app.get("/players/{player_id}", response_model=PlayerInDB)
-def get_player(player_id: int, db: Session = Depends(SessionLocal)):
-    player = db.query(Player).filter(Player.id == player_id).first()
-    if player is None:
-        raise HTTPException(status_code=404, detail="Player not found")
-    return player
+def get_publisher(db: Session, publisher_id: int):
+    return db.query(Publisher).filter(Publisher.id == publisher_id).first()
 
 
-@app.post("/teams/", response_model=TeamInDB)
-def create_team(team: TeamCreate, db: Session = Depends(SessionLocal)):
-    print(team)
-    db_team = Team(**team.dict())
-    db.add(db_team)
+def create_publisher(db: Session, name: str):
+    db_publisher = Publisher(name=name)
+    db.add(db_publisher)
     db.commit()
-    db.refresh(db_team)
-    return db_team
+    db.refresh(db_publisher)
+    return db_publisher
+
+def get_book(db: Session, book_id: int):
+    return db.query(Book).filter(Book.id == book_id).first()
 
 
-@app.get("/teams/{team_id}", response_model=TeamInDB)
-def get_team(team_id: int, db: Session = Depends(SessionLocal)):
-    team = db.query(Team).filter(Team.id == team_id).first()
-    if team is None:
-        raise HTTPException(status_code=404, detail="Team not found")
-    return team
-
-
-@app.post("/matches/", response_model=MatchInDB)
-def create_match(match: MatchCreate, db: Session = Depends(SessionLocal)):
-    db_match = Match(**match.dict())
-    db.add(db_match)
+def create_book(db: Session, title: str, author_id: int, publisher_id: int):
+    db_book = Book(title=title, author_id=author_id, publisher_id=publisher_id)
+    db.add(db_book)
     db.commit()
-    db.refresh(db_match)
-    return db_match
+    db.refresh(db_book)
+    return db_book
+
+
+@app.post("/authors/")
+def create_author_route(name: str, db: Session = Depends(get_db)):
+    return create_author(db, name)
+
+
+@app.get("/authors/{author_id}")
+def read_author(author_id: int, db: Session = Depends(get_db)):
+    author = get_author(db, author_id)
+    if author is None:
+        raise HTTPException(status_code=404, detail="Author not found")
+    return author
+
+
+@app.post("/publishers/")
+def create_publisher_route(name: str, db: Session = Depends(get_db)):
+    return create_publisher(db, name)
+
+
+@app.get("/publishers/{publisher_id}")
+def read_publisher(publisher_id: int, db: Session = Depends(get_db)):
+    publisher = get_publisher(db, publisher_id)
+    if publisher is None:
+        raise HTTPException(status_code=404, detail="Publisher not found")
+    return publisher
+
+
+@app.post("/books/")
+def create_book_route(title: str, author_id: int, publisher_id: int, db: Session = Depends(get_db)):
+    return create_book(db, title, author_id, publisher_id)
+
+
+@app.get("/books/{book_id}")
+def read_book(book_id: int, db: Session = Depends(get_db)):
+    book = get_book(db, book_id)
+    if book is None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return book
