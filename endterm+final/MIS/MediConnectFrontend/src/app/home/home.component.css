@@ -1,0 +1,41 @@
+/* src/app/home/home.component.css */
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+  }
+
+  .buttons button{
+    cursor: pointer;
+  }
+  
+  .menu {
+    margin-top: 20px;
+  }
+  
+  .menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .menu li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  .menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .menu a:hover {
+    color: #555;
+  }
+  

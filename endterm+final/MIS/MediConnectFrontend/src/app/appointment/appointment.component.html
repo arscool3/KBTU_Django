@@ -1,0 +1,34 @@
+<div class="container">
+  <h2 *ngIf="isEditMode; else newAppointmentHeader">Change Appointment Date</h2>
+  <ng-template #newAppointmentHeader>
+    <h2>Schedule an Appointment</h2>
+  </ng-template>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th></th>
+        <th *ngFor="let day of days">{{ day }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let hour of hours">
+        <td>{{ hour }}</td>
+        <td *ngFor="let day of days"
+            [ngClass]="{'available': isSlotAvailable(day, hour), 'selected-slot': isSelectedSlot(day, hour)}"
+            (click)="selectSlot(day, hour)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="scheduleAppointment()">
+      {{ isEditMode ? 'Update Appointment' : 'Schedule Appointment' }}
+    </button>
+    <button class="btn btn-secondary" (click)="goHome()">Go Home</button>
+  </div>
+</div>

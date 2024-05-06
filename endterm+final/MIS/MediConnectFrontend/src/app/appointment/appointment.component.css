@@ -1,0 +1,8 @@
+.available {
+  background-color: #5acc5a; 
+  cursor: pointer;
+}
+
+.selected-slot {
+  background-color: rgb(230, 230, 55);
+}

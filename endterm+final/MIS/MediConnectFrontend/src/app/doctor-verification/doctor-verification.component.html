@@ -1,0 +1,19 @@
+<h1>License Verification</h1>
+<div *ngIf="doctorProfile">
+  <form (ngSubmit)="submitLicenseInfo()">
+    <label for="iin_bin">ИИН/БИН:</label>
+    <input type="text" id="iin_bin" [(ngModel)]="doctorProfile.iin_bin" name="iin_bin" placeholder="Enter your IIN/BIN" required>
+
+    <label for="license_number">License Number (Номер НИКАД/УИНРД):</label>
+    <input type="text" id="license_number" [(ngModel)]="doctorProfile.license_number" name="license_number" placeholder="Enter your license number" required>
+
+    <label for="license_issued_date">Date of Issue (Дата выдачи):</label>
+    <input type="date" id="license_issued_date" [(ngModel)]="doctorProfile.license_issued_date" name="license_issued_date" required>
+
+    <button type="submit">Submit for Verification</button>
+  </form>
+  
+  <div *ngIf="doctorProfile.license_status">
+    <span>Status of License Verification: {{ doctorProfile.license_status }}</span>
+  </div>
+</div>

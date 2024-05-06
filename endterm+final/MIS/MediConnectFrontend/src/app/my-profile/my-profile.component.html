@@ -1,0 +1,31 @@
+<h1>My Profile</h1>
+<div *ngIf="profile">
+  <label for="first_name">First Name:</label>
+  <input type="text" id="first_name" [(ngModel)]="profile.first_name">
+  <label for="last_name">Last Name:</label>
+  <input type="text" id="last_name" [(ngModel)]="profile.last_name">
+  <label for="email">Email:</label>
+  <input type="email" id="email" [(ngModel)]="profile.email">
+
+  <div *ngIf="profile.is_doctor">
+    <label for="specialty">Specialty:</label>
+    <select id="specialty" [(ngModel)]="profile.specialty">
+      <option *ngFor="let specialty of specialties" [value]="specialty.id">{{ specialty.name }}</option>
+    </select>
+    <label for="clinicLocation">Clinic Location:</label>
+    <input type="text" id="clinicLocation" [(ngModel)]="profile.clinic_location">
+    <div>
+      <label>License Status:</label>
+      <span>{{ profile.license_status || 'Not Verified' }}</span>
+    </div>
+    <button *ngIf="profile.license_status === 'Not Verified' || profile.license_status === 'Rejected'" (click)="goToVerification()">Verify License</button>
+  </div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+<button (click)="updateProfile()">Save</button>
+</div>
+<div *ngIf="isAuth">
+<button (click)="onLogoutClick()">Log out</button>
+</div>
+<div>
+  <button (click)="goHome()">Home</button>
+</div>

@@ -1,0 +1,14 @@
+<h2>Service Details</h2>
+
+<div *ngIf="service">
+  <div>
+    <strong>Name:</strong> {{ service.name }}
+  </div>
+  <div>
+    <strong>Specialty:</strong> {{ service.specialty_name }}
+  </div>
+  <app-doctors [specialty]="service.specialty_name"></app-doctors>
+</div>
+<div>
+  <button (click)="goBack()">Back</button>
+</div>
