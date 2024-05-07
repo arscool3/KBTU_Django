@@ -12,6 +12,9 @@ from app.forms import *
 from app.serializers import *
 
 
+from tasks import send_email, generate_report
+
+
 class FacultyModelViewSet(viewsets.ModelViewSet):
     queryset = Faculty.objects.all()
     serializer_class = FacultySerializer
@@ -58,15 +61,15 @@ def basic_view(request):
     return superuser
 
 
-def basic_form(request, given_form):
-    if request.method == 'POST':
-        form = given_form(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-        else:
-            raise Exception(f"some errors {form.errors}")
-    return render(request, 'login.html', {'form': given_form()})
+# def basic_form(request, given_form):
+#     if request.method == 'POST':
+#         form = given_form(data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('login')
+#         else:
+#             raise Exception(f"some errors {form.errors}")
+#     return render(request, 'login.html', {'form': given_form()})
 
 
 def crud(request, myForm):
@@ -81,7 +84,26 @@ def crud(request, myForm):
 
 
 def register_view(request):
-    return basic_form(request, UserCreationForm)
+    if request.method == 'POST':
+        form = UserCreationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Отправляем электронное письмо о успешной регистрации
+            recipient = user.email
+            subject = "Регистрация успешна"
+            message = "Вы успешно зарегистрировались на нашем сайте. Спасибо!"
+            send_email.send(recipient, subject, message)
+            return render(request, 'registration_success.html')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+def report_generation_view(request):
+    # Логика генерации отчета
+    # Генерация отчета
+    report_data = {...}  # Данные для отчета
+    generate_report.send(report_data)
+    return render(request, 'report_generation_success.html')
 
 
 @decorators.login_required(login_url='login')
@@ -222,3 +244,16 @@ class SpecialityListCreateAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# def register_view(request):
+#     # Логика регистрации пользователя
+#
+#     # Отправка электронного письма о успешной регистрации
+#     recipient = user.email
+#     subject = "Регистрация успешна"
+#     message = "Вы успешно зарегистрировались на нашем сайте. Спасибо!"
+#     send_email.send(recipient, subject, message)
+#
+#     return render(request, 'registration_success.html')
