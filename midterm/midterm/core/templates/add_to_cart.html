@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add to Cart</title>
+</head>
+<body style="background-color: white;">
+    <h2>Add to Cart</h2>
+    <form method="post" action="{% url 'add_to_cart' product_id=product.id %}">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+    </form>
+</body>
+</html>

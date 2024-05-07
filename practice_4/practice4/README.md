@@ -1,0 +1,4 @@
+-  2 Django Managers with 2 method each
+-  4 Django Models with 2-3 relationship
+-  Views for GET this objects+
+-  Django form for creating this instances
