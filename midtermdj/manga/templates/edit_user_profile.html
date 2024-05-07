@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .form-container {
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f9f9f9;
+    }
+    .form-container h1 {
+        margin: 0 0 20px 0;
+        padding: 10px;
+        background-color: #eee;
+        width: 100%;
+        text-align: center;
+        border-radius: 4px;
+    }
+    .form-container form {
+        width: 100%;
+    }
+    .form-container input, .form-container textarea {
+        width: calc(100% - 20px);
+        margin: 5px 0;
+        padding: 10px;
+    }
+    .form-container button {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+    }
+    .form-container button:hover {
+        background-color: #0056b3;
+    }
+</style>
+<div class="form-container">
+    <h1>Edit Profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save changes</button>
+    </form>
+</div>
+{% endblock %}

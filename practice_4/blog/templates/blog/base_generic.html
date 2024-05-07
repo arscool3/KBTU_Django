@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our Blog!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'posts_list' %}">Posts</a></li>
+            <li><a href="{% url 'comments_list' %}">Comments</a></li>
+        </ul>
+    </nav>
+    <div>
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+        <p>© 2024 Blog.</p>
+    </footer>
+</body>
+</html>
