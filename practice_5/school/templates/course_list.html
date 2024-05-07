@@ -1,0 +1,6 @@
+<h1>Courses</h1>
+<ul>
+{% for course in courses %}
+    <li>{{ course.name }} - Teacher: {{ course.teacher.last_name }}</li>
+{% endfor %}
+</ul>

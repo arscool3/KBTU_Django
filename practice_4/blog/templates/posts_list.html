@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Posts</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Post</button>
+  </form>
+  <ul>
+    {% for post in posts %}
+      <li>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content|linebreaks }}</p>
+        <p>Posted by: {{ post.user.name }}</p>
+        <p>Category: {{ post.category.name }}</p>
+      </li>
+    {% empty %}
+      <li>No posts available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

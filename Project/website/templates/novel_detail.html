@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>{{ novel.title }}</title>
+    <style>
+  :root {
+
+        --background-color: #ffffff;
+        --text-color: #333;
+        --secondary-background-color: #f8f8f8;
+        --border-color: #ddd;
+        --box-shadow-color: rgba(0, 0, 0, 0.1);
+        --link-color: #007bff;
+        --hover-bg-color: #555;
+        --hover-text-color: #ffffff;
+    }
+
+    [data-theme="dark"] {
+
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --secondary-background-color: #242424;
+        --border-color: #444;
+        --box-shadow-color: rgba(255, 255, 255, 0.1);
+        --link-color: #1e90ff;
+        --hover-bg-color: #333;
+        --hover-text-color: #dddddd;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin-top: 100px;
+        padding: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+        h1, .novel-info p {
+            text-align: center;
+            padding: 0 10px;
+             background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border-color: var(--border-color);
+        box-shadow: 0 2px 4px var(--box-shadow-color);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+
+        }
+
+        .novel-info {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: var(--secondary-background-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+            box-shadow: 0 2px 4px var(--box-shadow-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+
+        }
+
+        .image-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .img-responsive {
+            max-width: 250px;
+            height: auto;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .chapter-listing, .review, .back-to-home {
+           background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border-color: var(--border-color);
+        box-shadow: 0 2px 4px var(--box-shadow-color);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        h1 {
+            color: #333;
+            background-color: #f8f8f8;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: var(--secondary-background-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+            box-shadow: 0 2px 4px var(--box-shadow-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        h2 {
+
+            margin-top: 40px;
+            text-align: left;
+            padding-left: 20px;
+            background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border-color: var(--border-color);
+        box-shadow: 0 2px 4px var(--box-shadow-color);
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        p, li {
+            font-size: 1em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 10px auto;
+            padding: 0 20px;
+        }
+
+        .chapter-listing {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-listing li {
+            background: #f8f8f8;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-left: 4px solid #1e90ff;
+            transition: background-color 0.3s, transform 0.3s;
+            text-align: left;
+            background-color: var(--secondary-background-color);
+            color: var(--text-color);
+            border-color: var(--border-color);
+            box-shadow: 0 2px 4px var(--box-shadow-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .chapter-listing li:hover {
+            background-color: #e9e9e9;
+            transform: translateX(10px);
+}
+    .chapter-listing a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+    }
+
+    .review {
+        background: #f8f8f8;
+        margin: 20px 0;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+         background-color: var(--secondary-background-color);
+        color: var(--text-color);
+    }
+
+    .review p {
+        color: #666;
+        margin: 5px 0;
+    }
+
+    .back-to-home {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px 15px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 20px;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .back-to-home:hover {
+        background-color: #555;
+        transform: translateY(-3px);
+    }
+
+    .navbar {
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        box-shadow: 0 2px 5px var(--box-shadow-color);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    .nav-item {
+        margin-right: 20px;
+        color: var(--link-color);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .nav-item:hover {
+        color: var(--hover-text-color);
+    }
+
+    .theme-toggle {
+
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+        background-color: var(--hover-bg-color);
+        color: var(--hover-text-color);
+    }
+    form {
+            max-width: 800px;
+            margin: 20px ;
+            background-color: var(--secondary-background-color);
+            border-radius: 5px;
+            box-shadow: var(--box-shadow-color) 0px 2px 4px;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            {#width: 50%;#}
+            {#border-radius: 4px;#}
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--link-color);
+            box-shadow: 0 0 0 3px rgba(100, 149, 237, 0.5);
+        }
+
+        input[type="submit"] {
+            padding: 10px 15px;
+            background-color: var(--link-color);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            display: block;
+            width: 50%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--hover-bg-color);
+            color: var(--hover-text-color);
+            transform: translateY(-2px);
+        }
+
+
+        .add-chapter-button{
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: inline-block;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+    </style>
+</head>
+<body data-theme="light">
+ <nav class="navbar">
+    <a href="{% url 'home' %}" class="nav-item">Home</a>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'user_profile' user_id=request.user.id %}" class="nav-item">Profile</a>
+        <a href="{% url 'logout' %}" class="nav-item">Logout</a>
+    {% else %}
+        <a href="{% url 'login' %}" class="nav-item">Login</a>
+    {% endif %}
+    <form action="{% url 'search_results' %}" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Search novels...">
+        <button type="submit">Search</button>
+    </form>
+    <button class="theme-toggle">Toggle Theme</button>
+</nav>
+    <h1>{{ novel.title }}</h1>
+    <div class="novel-info">
+    <div class="image-wrapper">
+        <img src="{{ novel.cover_image.url }}" alt="{{ novel.title }} Cover" class="img-responsive">
+    </div>
+
+    <p>Author: {{ novel.author }}</p>
+    <p>Summary: {{ novel.summary }}</p>
+    <p>Published on: {{ novel.publish_date }}</p>
+</div>
+
+<h2>Chapters</h2>
+<ul class="chapter-listing">
+    {% for chapter in novel.chapters.all %}
+        <li>
+            <a href="{% url 'chapter_reading' novel.id chapter.id %}">
+                Chapter {{ chapter.chapter_number }}: {{ chapter.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% if request.user.is_authenticated %}
+    <a href="{% url 'add_chapter' novel.id %}" class="add-chapter-button">Add Chapter to This Novel</a>
+{% endif %}
+<h2>Reviews</h2>
+{% for review in reviews %}
+    <div class="review">
+        <p>Rating: {{ review.rating }} stars</p>
+        <p>{{ review.comment }}</p>
+        <p>Reviewed by: {{ review.user.username }}</p>
+        <p>Posted on: {{ review.date_posted|date:"Y-m-d" }}</p>
+    </div>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
+<h2>Add Review</h2>
+<form method="post" action="{% url 'add_review' novel.id %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_rating">Rating:</label>
+        <input type="number" id="id_rating" name="rating" min="1" max="5" required>
+    </div>
+    <div class="form-group">
+        <label for="id_comment">Comment:</label>
+        <textarea id="id_comment" name="comment" rows="4" required></textarea>
+    </div>
+    <input type="submit"  class = "submit" value="Submit Review">
+</form>
+
+ <script>
+
+        const themeToggleButton = document.querySelector('.theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeToggleButton.textContent = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+        themeToggleButton.addEventListener('click', () => {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggleButton.textContent = newTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        });
+    </script>
+</body>
+</html>

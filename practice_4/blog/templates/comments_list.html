@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Comments</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Comment</button>
+  </form>
+  <ul>
+    {% for comment in comments %}
+      <li>
+        <p>{{ comment.content|linebreaks }}</p>
+        <p>Comment by: {{ comment.user.name }}</p>
+        <p>On post: {{ comment.post.title }}</p>
+      </li>
+    {% empty %}
+      <li>No comments available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
