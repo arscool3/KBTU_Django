@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import check_password
-
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -21,19 +21,6 @@ class Voucher(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class User(models.Model):
-    name = models.CharField(max_length=300)
-    surname = models.CharField(max_length=300)
-    username = models.CharField(max_length=300)
-    email = models.CharField(max_length=300)
-    password = models.CharField(max_length=300)
-    img = models.CharField(max_length=300, default='')
-
-    def __str__(self):
-        return f"{self.id} - {self.name}"
-
 
 
 class Comment(models.Model):

@@ -7,8 +7,10 @@ from rest_framework import viewsets
 from django.db.models import Max
 from rest_framework.decorators import action
 from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth import authenticate, login, logout, decorators, forms
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+
 
 from django.views import View
 from django.contrib import messages
@@ -17,9 +19,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 from django.shortcuts import render, get_object_or_404
 from .forms import CommentForm
-from .models import Voucher, Category, Comment, User, Favorite, Order
+from .models import Voucher, Category, Comment, Favorite, Order
 from .serializers import VoucherSerializer, CategorySerializer, CommentSerializer, UserSerializer, FavoritesSerializer, FavoritesSerializer, OrderSerializer
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -135,9 +138,23 @@ class UsersDetailAPIView(APIView):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-
+@login_required
+def create_comment(request, voucher_id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            # Устанавливаем текущего пользователя как автора комментария
+            comment.user = request.user
+            comment.voucher_id = voucher_id
+            comment.save()
+            return redirect('vouchers_detail', voucher_id=voucher_id)
+    else:
+        form = CommentForm()
+    return render(request, 'comment_form.html', {'form': form})
 
 class CommentsListAPIView(APIView):
+
     def get_objects(self, voucher_id):
         try:
             return Comment.objects.filter(voucher=voucher_id)
@@ -148,7 +165,7 @@ class CommentsListAPIView(APIView):
         comments = self.get_objects(voucher_id)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
-
+    
     def post(self, request, voucher_id):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -183,6 +200,9 @@ class CommentDetailAPIView(APIView):
         return Response({'message': 'deleted'}, status=status.HTTP_204_NO_CONTENT)
     
 
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {'user': request.user})
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -235,40 +255,75 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 
-class RegisterView(View):
-    def get(self, request):
-        form = UserCreationForm()
-        return render(request, 'register.html', {'form': form})
+# class RegisterView(View):
+#     def get(self, request):
+#         form = UserCreationForm()
+#         return render(request, 'register.html', {'form': form})
 
-    def post(self, request):
-        form = UserCreationForm(request.POST)
+#     def post(self, request):
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.success(request, f'Account created for {username}!')
+#             return redirect('login')
+#         else:
+#             for field, errors in form.errors.items():
+#                 for error in errors:
+#                     messages.error(request, f'{field}: {error}')
+#         return render(request, 'register.html', {'form': form})
+    
+# class LoginView(View):
+#     def get(self, request):
+#         return render(request, 'login.html')
+
+#     def post(self, request):
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(username=username, password=password)
+#         if user:
+#             login(request, user)
+#             return redirect('home')
+#         else:
+#             messages.error(request, 'Invalid username or password.')
+#             return render(request, 'login.html')
+
+# class LogoutView(View):
+#     def get(self, request):
+#         logout(request)
+#         return redirect('login')
+
+
+def basic_form(request, given_form):
+    if request.method == 'POST':
+        form = given_form(data=request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
             return redirect('login')
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f'{field}: {error}')
-        return render(request, 'register.html', {'form': form})
-    
-class LoginView(View):
-    def get(self, request):
-        return render(request, 'login.html')
+            raise Exception(f"some erros {form.errors}")
+    return render(request, 'index.html', {'form': given_form()})
 
-    def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            login(request, user)
-            return redirect('home')
+def register_view(request):
+    return basic_form(request, forms.UserCreationForm)
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = forms.AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            try:
+                user = authenticate(**form.cleaned_data)
+                login(request, user)
+                if next := request.GET.get("next"):
+                    return redirect(next)
+                return redirect('home')
+            except Exception:
+                return HttpResponse("something is not ok")
         else:
-            messages.error(request, 'Invalid username or password.')
-            return render(request, 'login.html')
-
-class LogoutView(View):
-    def get(self, request):
-        logout(request)
-        return redirect('login')
+            raise Exception(f"some erros {form.errors}")
+    return render(request, 'index.html', {'form': forms.AuthenticationForm()})
