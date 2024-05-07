@@ -1,6 +1,17 @@
 from django.urls import path
 from app.views import *
 
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'faculties-modelviews', FacultyModelViewSet)
+router.register(r'specialities-modelviews', SpecialityModelViewSet)
+router.register(r'disciplines-modelviews', DisciplineModelViewSet)
+router.register(r'students-modelviews', StudentModelViewSet)
+router.register(r'professors-modelviews', ProfessorModelViewSet)
+router.register(r'schedules-modelviews', ScheduleModelViewSet)
+router.register(r'news-modelviews', NewsModelViewSet)
+
 urlpatterns = [
 
     # get endpoints
@@ -28,5 +39,4 @@ urlpatterns = [
 
 ]
 
-
-
+urlpatterns += router.urls

@@ -1,15 +1,61 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import forms, authenticate, login, decorators, logout
+from django.contrib.auth import authenticate, login, decorators, logout
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from rest_framework import viewsets
 from app.forms import *
-from app.models import *
-from app.serializers import SpecialitySerializer, FacultySerializer
+from app.serializers import *
+
+
+class FacultyModelViewSet(viewsets.ModelViewSet):
+    queryset = Faculty.objects.all()
+    serializer_class = FacultySerializer
+
+
+class SpecialityModelViewSet(viewsets.ModelViewSet):
+    queryset = Speciality.objects.all()
+    serializer_class = SpecialitySerializer
+
+
+class DisciplineModelViewSet(viewsets.ModelViewSet):
+    queryset = Discipline.objects.all()
+    serializer_class = DisciplineSerializer
+
+
+class StudentModelViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class ProfessorModelViewSet(viewsets.ModelViewSet):
+    queryset = Professor.objects.all()
+    serializer_class = ProfessorSerializer
+
+
+class ScheduleModelViewSet(viewsets.ModelViewSet):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer
+
+
+class NewsModelViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all()
+    serializer_class = NewsSerializer
+
+
+def basic_view(request):
+    superuser = None
+    if request.user.is_authenticated:
+        superuser = request.user
+        student = Student.objects.filter(login=superuser).first()
+        professor = Professor.objects.filter(login=superuser).first()
+        if student or professor:
+            superuser = None
+    return superuser
 
 
 def basic_form(request, given_form):
@@ -21,6 +67,17 @@ def basic_form(request, given_form):
         else:
             raise Exception(f"some errors {form.errors}")
     return render(request, 'login.html', {'form': given_form()})
+
+
+def crud(request, myForm):
+    if request.method == 'POST':
+        form = myForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+    else:
+        form = myForm()
+    return render(request, 'login.html', {'form': form})
 
 
 def register_view(request):
@@ -51,16 +108,6 @@ def login_view(request):
     return render(request, 'login.html', {'form': AuthenticationForm()})
 
 
-def basic_view(request):
-    superuser = None
-    if request.user.is_authenticated:
-        superuser = request.user
-        student = Student.objects.filter(login=superuser).first()
-        professor = Professor.objects.filter(login=superuser).first()
-        if student or professor: superuser = None
-    return superuser
-
-
 def about_view(request):
     return render(request, 'about.html')
 
@@ -72,7 +119,6 @@ def profile_view(request):
         user = request.user
         student = Student.objects.filter(login=user).first()
         professor = Professor.objects.filter(login=user).first()
-
         if student:
             return render(request, 'profile.html', {'object': student, 'type': 'Student'})
         if professor:
@@ -88,7 +134,6 @@ def schedule_view(request):
     for hour in hours:
         time_slot = f"{hour}:00 - {hour + 1}:00"
         schedule[time_slot] = ['' for _ in range(7)]
-
     for entry in schedule_entries:
         hour = entry.time.hour
         time_slot = f"{hour}:00 - {hour + 1}:00"
@@ -123,17 +168,6 @@ def settings_view(request):
     return render(request, 'settings.html', {'admin': superuser})
 
 
-def crud(request, myForm):
-    if request.method == 'POST':
-        form = myForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('news')
-    else:
-        form = myForm()
-    return render(request, 'login.html', {'form': form})
-
-
 def crud_news(request):
     return crud(request, NewsForm)
 
@@ -162,12 +196,11 @@ def crud_speciality(request):
     return crud(request, SpecialityForm)
 
 
-
 class FacultyListCreateAPIView(APIView):
     def get(self, request):
         faculties = Faculty.objects.all()
         serializer = FacultySerializer(faculties, many=True)
-        return Response(serializer.data)
+        return render(request, 'faculty_list.html', {'faculties': serializer.data})
 
     def post(self, request):
         serializer = FacultySerializer(data=request.data)
