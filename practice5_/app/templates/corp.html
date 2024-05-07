@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporations and Departments</title>
+</head>
+<body>
+
+    <h2>List of Corporations</h2>
+    <ul>
+        {% for corporation in corporations %}
+            <li>{{ corporation.name }},{{corporation.field}}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Corporation</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ corp_form.as_p }}
+        <button type="submit">Add Corporation</button>
+    </form>
+    <hr>
+
+    <h2>List of Departments</h2>
+    <ul>
+        {% for department in departments %}
+            <li>{{ department.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Department</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ dep_form.as_p }}
+        <button type="submit">Add Department</button>
+    </form>
+    <hr>
+
+
+           
+    <h2>List of Employees</h2>
+    <ul>
+        {% for employee in employees %}
+            <li>{{ employee.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Employee</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ emp_form.as_p }}
+        <button type="submit">Add employee</button>
+    </form>
+    <hr>
+
+    <h2>List of Projects</h2>
+    <ul>
+        {% for project in projects%}
+            <li>{{ project.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Project</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ pro_form.as_p }}
+        <button type="submit">Add Project</button>
+    </form>
+     
+
+</body>
+</html>

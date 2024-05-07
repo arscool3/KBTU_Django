@@ -1,0 +1,29 @@
+
+Endterm + Final
+
+на endterm и final будет один проект
+дедлайн - 16 неделя, защита файнала
+вы можете использовать один из фреймворков DRF или FastAPI
+
+По требованиям, самое главное это понимать для чего вы используете тот или иной подход. Почему fastapi, почему Django ? Все эти вопросы я буду задавать во время защиты проекта
+
+Вот минимальные требования в зависимости от фреймворка
+
+DRF
+1) 6 Models
+2) 4 Relationships
+3) 1 Template
+4) 2 Filters for templates
+6) Authorization
+7) DRF serializers for all models
+8) Viewsets for all models
+9) 2 DRF Actions 
+10) Background Tasks (Dramatiq / Celery)
+
+FastApi
+1) 6 models
+2) 4 Relationships
+3) Authorization
+4) Background Tasks (Dramatiq / Celery)
+5) Postgres DB
+6) 3 DI (2 func, 1 class)

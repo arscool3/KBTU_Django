@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <p>User: {{ profile.user.username }}</p>
+
+    <p>Bio: {{ profile.bio }}</p>
+
+    <p>Number of Followers:{{ follower_count }}<p>
+    </br>
+    <a href="{% url 'user_followers' username=profile.user.username %}">Check all followers here</a>
+    </br>
+    <a href="{% url 'user_articles' username=profile.user.username %}">Check all articles  written by {{ profile.user.username }}</a>
+    </br>
+    <a href="{% url 'readinglists' %}">Check {{profile.user.username}}'s reading list</a>
+    </br>
+    {% if request.user.is_authenticated and request.user == profile.user %}
+        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+    {% endif %}
+{%endblock%}

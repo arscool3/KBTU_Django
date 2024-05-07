@@ -1,0 +1,55 @@
+# MIDTERM
+
+# DEADLINE - BEFORE 9th lecture (12th March)
+# You choose topic (feel free to choose)
+# You have to use all topics that we have learned (check syllabus)
+# 25 points (25 баллов)
+
+ # MIn requirements
+ # 6 Models
+ # 3 Relationships (1 Many to One, 2 One to One)
+ # 1 Templates
+ # 2 Filters for templates: formated the date, truncated the body
+ # 12 Endpoints (6 get, 6 post)
+(validating user input, customizing form appearance, more CRUD, Managers,querysets,Class-Base views)
+
+
+
+
+
+
+Lecture #3. Django Templates
+    1. Template system in Django
+    2. Filters
+    3. Jinja
+    4. Using templates to generate dynamic 
+    html conten
+
+Lecture #4. Django Forms and User Input
+    1. Working with Django Forms
+    2. Validating and processing user input
+    3. Customizing form appearance and 
+    behavior
+    4. Implementing CRUD Operations
+    5. Integration forms with CRUD 
+    functional
+    6. Connecting Templates with Forms
+(validating user input, customizing form appearance, more CRUD, Managers,querysets,Class-Base views)
+Lecture #5 Django Models and Databases
+    1. Understanding models in Django
+    2. Database setup and migrations
+    3. Defining models and understanding
+    ORM
+    4. Admin interface basics
+Lecture #6. Advanced Models and 
+Relationship
+    1. Advanced models features
+    2. Relationships
+    3. Using models managers
+    4. MTV
+    5. Class-Based Views
+Lecture #7. User Authentication and 
+Authorization
+    1. User authentication system in Django
+    2. Managing users and permissions
+    3. Creating superusers & users

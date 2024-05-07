@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <form method="post" action="{% url 'follow_user' %}">
+        {% csrf_token %}
+        <input type="hidden" name="user_id" value="{{ user.id }}">
+        <button type="submit">Follow</button>
+    </form>
+{%endblock%}
