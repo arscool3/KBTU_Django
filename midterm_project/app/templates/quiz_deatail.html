@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+</head>
+<body>
+    <h1>Quiz</h1>
+    <h2>{{ quiz.title }}</h2>
+    <p>{{ quiz.description }}</p>
+    <form action="{% url 'take_quiz' quiz_id %}" method="post">
+        {% csrf_token %}
+        {% for question in quiz.questions.all %}
+            <h3>{{ question.question_text }}</h3>
+            <input type="text" name="answer{{ forloop.counter }}"><br>
+        {% endfor %}
+        <button type="submit">Submit Quiz</button>
+    </form>
+</body>
+</html>

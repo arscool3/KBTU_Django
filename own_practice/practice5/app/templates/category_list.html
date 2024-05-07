@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category List</title>
+</head>
+<body>
+    <h1>Popular Categories</h1>
+    <ul>
+        {% for category in popular_categories %}
+            <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+    <h1>Ordered Categories</h1>
+    <ul>
+        {% for category in ordered_categories %}
+            <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Update Category Description</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="category_id">Category ID:</label>
+        <input type="text" id="category_id" name="category_id">
+        <label for="new_description">New Description:</label>
+        <input type="text" id="new_description" name="new_description">
+        <button type="submit">Update Description</button>
+    </form>
+</body>
+</html>
