@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+</head>
+<body>
+
+    <h2>Authors</h2>
+    <ul>
+        {% for author in authors %}
+            <li>{{ author.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add an Author</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ author_form.as_p }}
+        <button type="submit">Add</button>
+    </form>
+    <hr>
+
+    <h2>Books</h2>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.name }}:{{ book.author }},{{ book.price}}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Book</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ book_form.as_p }}
+        <button type="submit">Add</button>
+    </form>
+    <hr>
+
+
+
+    <h2>Publishers</h2>
+    <ul>
+        {% for publisher in publishers %}
+            <li>{{publisher.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Publisher</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ publisher_form.as_p }}
+        <button type="submit">Add</button>
+    </form>
+    <hr>
+
+    <h2>Magazines</h2>
+    <ul>
+        {% for magazine in magazines%}
+            <li>{{ magazine.name }}:{{ magazine.publisher }},{{magazine.price}}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a New Magazine</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ magazine_form.as_p }}
+        <button type="submit">Add</button>
+    </form>
+    <hr>
+    <h2>Queryset results</h2>
+
+    <h2>Expensive Books:</h2>
+    <ul>
+    {% for book in expensive_books %}
+        <li>{{ book.name }} - Price: ${{ book.price }}</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Fiction Books:</h2>
+    <ul>
+    {% for book in fiction_books %}
+        <li>{{ book.name }} - Genre: {{ book.genre }}</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Alphabetically Sorted Books:</h2>
+    <ul>
+    {% for book in alphabetically_books %}
+        <li>{{ book.name }}</li>
+    {% endfor %}
+    </ul>
+
+    <h2>Non-Fiction Books:</h2>
+    <ul>
+    {% for book in non_fiction_books %}
+        <li>{{ book.name }} - Genre: {{ book.genre }}</li>
+    {% endfor %}
+    </ul>
+
+</body>
+</html>
