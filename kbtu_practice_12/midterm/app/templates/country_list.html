@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Country List</title>
+</head>
+<body>
+    <h1>Country List</h1>
+    <ul>
+        {% for country in countries %}
+            <li>{{ country.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
