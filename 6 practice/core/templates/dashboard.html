@@ -1,0 +1,14 @@
+{% extends 'base_template.html' %}
+{% load utils %}
+
+{% block title %}Dashboard{% endblock %}
+
+
+{% block content %}
+    <h1>{{iterable_name|add_list|upper}}</h1>
+    <OL>
+        {% for it in iterable %}
+            <li> {{it|lower}} </li>
+        {% endfor %}
+    </OL>
+{% endblock %}
