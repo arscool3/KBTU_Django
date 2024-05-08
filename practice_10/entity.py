@@ -8,16 +8,19 @@ class Chocolate(BaseModel):
     class Config:
         from_attributes  = True
 
+class Biscuit(BaseModel):
+    name: str
+    class Config:
+        from_attributes = True
+
 
 class Box(BaseModel):
     brand: str
    
     volume: int
     chocolates: list[Chocolate]
+    biscuits: list[Biscuit]
 
     class Config:
         from_attributes = True
 
-
-# class PersonWithCarId(Chocolate):
-#     car_id: int

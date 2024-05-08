@@ -4,7 +4,7 @@ from typing import Optional, Annotated
 from sqlalchemy import select
 from fastapi import FastAPI, HTTPException, Depends
 
-from entity import Box, Chocolate #ChocolateWithBoxId
+from entity import Box, Chocolate, Biscuit #ChocolateWithBoxId
 import models as db
 
 app = FastAPI()
@@ -43,7 +43,7 @@ def boxes() -> list[Box]:
 class AddDependency:
 
     @staticmethod
-    def _add_model(db_model: type[db.Box] | type[db.Chocolate], pydantic_model: Box | Chocolate) -> None:
+    def _add_model(db_model: type[db.Box] | type[db.Chocolate] | type[db.Biscuit], pydantic_model: Box | Chocolate | Biscuit) -> None:
         with get_db() as session:
             session.add(db_model(**pydantic_model.model_dump()))
 
@@ -56,6 +56,10 @@ class AddDependency:
     def add_chocolate(cls, chocolate: Chocolate) -> str:
         cls._add_model(db.Chocolate, chocolate)
         return "chocolate was added"
+    @classmethod
+    def add_biscuit(cls, biscuit: Biscuit ) -> str:
+        cls._add_model(db.Biscuit, biscuit)
+        return "biscuit was added"
 
 
 @app.post("/box")
@@ -66,4 +70,8 @@ def add_box(box_di: Annotated[str, Depends(AddDependency.add_box)]) -> str:
 @app.post("/chocolate")
 def add_chocolate(chocolate_di: Annotated[str, Depends(AddDependency.add_chocolate)]) -> str:
     return chocolate_di
+
+@app.post("/biscuit")
+def add_chocolate(biscuit_di: Annotated[str, Depends(AddDependency.add_biscuit)]) -> str:
+    return biscuit_di
 
