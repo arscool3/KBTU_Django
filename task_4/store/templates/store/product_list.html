@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <ul>
+        {% for product in object_list %}
+            <li>{{ product.name }} - {{ product.price }}</li>
+            <button><a href="{% url 'add_to_cart' product.id %}">add to cart</a>
+
+        {% endfor %}
+    </ul>
+</body>
+</html>
