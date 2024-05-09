@@ -179,6 +179,7 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
+
 class CatViewSet(ModelViewSet):
     serializer_class = CatSerializer
     queryset = Category.objects.all()
