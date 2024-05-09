@@ -81,7 +81,7 @@ class FavoritesSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'user', 'voucher', 'quantity', 'total_price']  # Указываем поле total_price
+        fields = ['id', 'user', 'voucher', 'quantity', 'total_price']  
         read_only_fields = ['total_price']
 
     def create(self, validated_data):

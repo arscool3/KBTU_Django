@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from pathlib import Path
 import os
+from dramatiq.brokers.redis import RedisBroker
+from dramatiq.results.backends.redis import RedisBackend
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-np#e0y$^oycs8v4ciw56l3q9+)7^t&b#&$h0^)&awh3gg5qus3
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+ 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
@@ -40,8 +43,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_dramatiq',
     'vouchers',
     'rest_framework.authtoken',
+    
 ]
 
 MIDDLEWARE = [
@@ -145,3 +150,45 @@ CORS_ALLOW_CREDENTIALS = True
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'vouchers', 'images'),
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'  
+EMAIL_PORT = 587 
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'o_ten@kbtu.kz'  
+EMAIL_HOST_PASSWORD = 'T10O10.10'  
+DEFAULT_FROM_EMAIL = 'o_ten@kbtu.kz' 
+
+
+
+#broker settings
+REDIS_BROKER = RedisBroker(host="localhost", port=6379, db=0)
+
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.redis.RedisBroker",
+    "OPTIONS": {
+        "url": "redis://localhost:6379",
+    },
+    "MIDDLEWARE": [
+        "dramatiq.middleware.Prometheus",
+        "dramatiq.middleware.AgeLimit",
+        "dramatiq.middleware.TimeLimit",
+        "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Retries",
+        "django_dramatiq.middleware.DbConnectionsMiddleware",
+        "django_dramatiq.middleware.AdminMiddleware",
+    ]
+}
+
+DRAMATIQ_TASKS_DATABASE = "default"
+
+DRAMATIQ_RESULT_BACKEND = {
+    "BACKEND": "dramatiq.results.backends.redis.RedisBackend",
+    "BACKEND_OPTIONS": {
+        "url": "redis://localhost:6379",
+    },
+    "MIDDLEWARE_OPTIONS": {
+        "result_ttl": 1000 * 60 * 10
+    }
+}
+

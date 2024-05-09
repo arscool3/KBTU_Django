@@ -10,6 +10,12 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, decorators, forms
 from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from .forms import ProfileEditForm
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from .tasks import send_registration_email
+from .forms import RegistrationForm
+
 
 
 from django.views import View
@@ -51,7 +57,6 @@ def vouchers_detail(request, voucher_id):
             comment = form.save(commit=False)
             comment.voucher = voucher
             comment.save()
-            # Redirect to avoid form resubmission on refresh
             return redirect('vouchers_detail', voucher_id=voucher_id)
     else:
         form = CommentForm()
@@ -144,7 +149,6 @@ def create_comment(request, voucher_id):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            # Устанавливаем текущего пользователя как автора комментария
             comment.user = request.user
             comment.voucher_id = voucher_id
             comment.save()
@@ -198,11 +202,29 @@ class CommentDetailAPIView(APIView):
         comment = self.get_object(pk)
         comment.delete()
         return Response({'message': 'deleted'}, status=status.HTTP_204_NO_CONTENT)
-    
+
 
 @login_required
 def profile(request):
-    return render(request, 'profile.html', {'user': request.user})
+    user = request.user
+
+    if request.method == 'POST':
+        profile_form = ProfileEditForm(request.POST, instance=user)
+        password_form = PasswordChangeForm(user, request.POST)
+
+        if 'profile-form' in request.POST and profile_form.is_valid():
+            profile_form.save()
+            return redirect('profile')
+        elif 'password-form' in request.POST and password_form.is_valid():
+            password_form.save()
+            update_session_auth_hash(request, user)  # Обновление сессии после изменения пароля
+            return redirect('profile')
+    else:
+        profile_form = ProfileEditForm(instance=user)
+        password_form = PasswordChangeForm(user)
+
+    return render(request, 'profile.html', {'user': user, 'profile_form': profile_form, 'password_form': password_form})
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -214,7 +236,6 @@ class VoucherViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def most_liked_voucher(self, request):
-        # Находим ваучер с наибольшим количеством лайков
         most_liked_voucher = Voucher.objects.annotate(max_likes=Max('like')).order_by('-max_likes').first()
 
         if most_liked_voucher:
@@ -225,11 +246,9 @@ class VoucherViewSet(viewsets.ModelViewSet):
         
     @action(detail=False, methods=['get'])
     def by_category(self, request):
-        # Получаем идентификатор категории из параметра запроса
         category_id = request.query_params.get('category_id')
 
         if category_id:
-            # Фильтруем ваучеры по указанной категории
             vouchers = Voucher.objects.filter(category_id=category_id)
             serializer = self.get_serializer(vouchers, many=True)
             return Response(serializer.data)
@@ -255,57 +274,20 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 
-# class RegisterView(View):
-#     def get(self, request):
-#         form = UserCreationForm()
-#         return render(request, 'register.html', {'form': form})
-
-#     def post(self, request):
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             messages.success(request, f'Account created for {username}!')
-#             return redirect('login')
-#         else:
-#             for field, errors in form.errors.items():
-#                 for error in errors:
-#                     messages.error(request, f'{field}: {error}')
-#         return render(request, 'register.html', {'form': form})
-    
-# class LoginView(View):
-#     def get(self, request):
-#         return render(request, 'login.html')
-
-#     def post(self, request):
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(username=username, password=password)
-#         if user:
-#             login(request, user)
-#             return redirect('home')
-#         else:
-#             messages.error(request, 'Invalid username or password.')
-#             return render(request, 'login.html')
-
-# class LogoutView(View):
-#     def get(self, request):
-#         logout(request)
-#         return redirect('login')
-
 
 def basic_form(request, given_form):
     if request.method == 'POST':
         form = given_form(data=request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            send_registration_email.send(user.id)  
             return redirect('login')
         else:
-            raise Exception(f"some erros {form.errors}")
+            raise Exception(f"some errors {form.errors}")
     return render(request, 'index.html', {'form': given_form()})
 
 def register_view(request):
-    return basic_form(request, forms.UserCreationForm)
+    return basic_form(request, RegistrationForm)
 
 def logout_view(request):
     logout(request)
@@ -321,7 +303,7 @@ def login_view(request):
                 login(request, user)
                 if next := request.GET.get("next"):
                     return redirect(next)
-                return redirect('home')
+                return redirect('profile')
             except Exception:
                 return HttpResponse("something is not ok")
         else:
