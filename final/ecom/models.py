@@ -79,12 +79,34 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
 
+
 class Product(models.Model):
+    seller = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     price = models.IntegerField(default=100)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
     photoUrl = models.TextField()
-    objects = ProductManager()
     def __str__(self):
         return f'Product name: {self.name}, category: {self.category} '
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'ecom_comment'
+
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.post}"
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'product']
