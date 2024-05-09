@@ -57,6 +57,7 @@ class Application(Base):
     manager_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=True)
     status = Column(String(12), nullable=False, default='Создано')
     created_at = Column(DateTime, nullable=False, default=func.now())
+    updated_at = Column(DateTime, nullable=True)
     closed_at = Column(DateTime, nullable=True)
 
     user = relationship("User", foreign_keys=[user_id], backref="user_applications")
@@ -74,7 +75,7 @@ class ProfileUpdateApplication(Base):
     old_value = Column(String(256), nullable=True)
     new_value = Column(String(256), nullable=True)
 
-    application = relationship("Application", backref="profile_update_application")
+    application = relationship("Application", backref="application_details")
 
     def __init__(self, application_id, key, old_value=None, new_value=None):
         self.application_id = application_id

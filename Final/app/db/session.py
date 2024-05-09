@@ -1,8 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
+from dotenv import load_dotenv
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:%211Qwerty1974%402@35.205.69.113:5432/egov-db"
+load_dotenv()
+
+SQLALCHEMY_DATABASE_URL = os.getenv('DB_URL')
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -10,6 +13,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def get_db():
     db = SessionLocal()
     try:
-        yield db
+        return db
+    except Exception as e:
+        print(f'Error accessing database: {e}')
+        db.close()
+        raise
     finally:
         db.close()

@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from app.utils.tokens import create_token, revoked_tokens, verify_token
 from app.db.session import get_db
 from app.utils.utils import get_century_and_gender
-from app.models.models import User
-from worker.tasks import create_application
+from app.models.models import User, Application, ProfileUpdateApplication
+from worker.tasks import create_application, change_status
 
 router = APIRouter()
 
@@ -68,7 +68,7 @@ async def login(request: Request, db: Session = Depends(get_db)):
 
         role = "manager" if user.is_manager else "client"
 
-        token_data = {"sub": iinbin}
+        token_data = {"sub": str(user.id)}
         access_token = create_token(token_data)
         if iinbin in revoked_tokens:
             revoked_tokens.discard(iinbin)
@@ -88,9 +88,9 @@ async def logout(token: str = Depends(verify_token)):
 @router.get("/profile", response_model=dict)
 async def profile(token: str = Depends(verify_token), db: Session = Depends(get_db)):
     try:
-        iinbin = token["sub"]
+        user_id = token["sub"]
 
-        user = db.query(User).filter(User.iinbin == iinbin).first()
+        user = db.query(User).filter(User.id == user_id).first()
         user_data = {
             'iinbin': user.iinbin,
             'fullname': user.fullname,
@@ -115,15 +115,45 @@ async def profile(token: str = Depends(verify_token), db: Session = Depends(get_
 
 
 @router.post("/update_profile")
-async def update_profile(request: Request, token: str = Depends(verify_token), db: Session = Depends(get_db)):
+async def update_profile(request: Request, token: str = Depends(verify_token)):
     try:
         data = await request.json()
-        iinbin = token["sub"]
+        user_id = token["sub"]
 
-        user = db.query(User).filter(User.iinbin == iinbin).first()
-        user_id = user.id
-        print('update_profile:', data, 'user_id:', user_id)
         create_application.delay(user_id, data)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=401)
+
+
+@router.get("/applications")
+async def get_applications(token: str = Depends(verify_token), db: Session = Depends(get_db)):
+    try:
+        user_id = token["sub"]
+        user = db.query(User).filter(User.id == user_id).first()
+
+        if user.is_manager:
+            all_applications = db.query(Application).filter(Application.status == 'Создано')
+
+            all_applications = [{'id': app.id,
+                                 'iinbin': app.user.iinbin,
+                                 'created_at': app.created_at}
+                                for app in all_applications]
+
+            return {'data': all_applications}
+        else:
+            user_applications = user.user_applications
+
+            if not user_applications:
+                raise HTTPException(status_code=401, detail="Profile not found")
+
+            user_applications = [{'id': app.id,
+                                  'created_at': app.created_at,
+                                  'updated_at': app.updated_at,
+                                  'closed_at': app.closed_at,
+                                  'status': app.status}
+                                 for app in user_applications]
+
+            return {'data': user_applications}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)
     finally:
@@ -131,3 +161,42 @@ async def update_profile(request: Request, token: str = Depends(verify_token), d
             db.close()
         except:
             print('Connection already closed')
+
+
+@router.post("/application_detail")
+async def get_application_detail(request: Request, token: str = Depends(verify_token), db: Session = Depends(get_db)):
+    try:
+        data = await request.json()
+        application_id = data.get("id_app")
+        print('application_id:', application_id)
+
+        application_detail = db.query(ProfileUpdateApplication).filter(ProfileUpdateApplication.application_id == application_id)
+        application_detail = [{'column': row.key,
+                              'old_value': row.old_value or 'Нет Данных',
+                              'new_value': row.new_value}
+                             for row in application_detail]
+
+        return {'data': application_detail}
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=401)
+    finally:
+        try:
+            db.close()
+        except:
+            print('Connection already closed')
+
+
+@router.post("/update_application_status")
+async def update_application_status(request: Request, token: str = Depends(verify_token)):
+    try:
+        data = await request.json()
+        print('data inside:', data)
+        manager_id = token["sub"]
+        application_id = data.get("id_app")
+        is_approved = data.get("is_approved")
+
+        print('manager_id:', manager_id)
+        change_status.delay(manager_id, application_id, is_approved)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=401)
+
