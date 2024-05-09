@@ -21,7 +21,7 @@ class RegistrationAPIView(APIView):
     renderer_classes = (UserJSONRenderer,)
     permission_classes = (AllowAny,)
     serializer_class = RegistrationSerializer
-
+    serializer_celery = CeleryTaskSerializer
     def post(self, request):
         user = request.data.get('user', {})
 
@@ -29,7 +29,7 @@ class RegistrationAPIView(APIView):
         # стандартный, и его можно часто увидеть в реальных проектах.
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
 
         # Получите адрес электронной почты нового пользователя
         email = serializer.data.get('email')
@@ -37,8 +37,15 @@ class RegistrationAPIView(APIView):
         # если они нужны для формирования письма.
 
         # Отправьте задачу Celery для отправки электронного письма
-        send_email.delay(email, 'Welcome!', 'Thank you for registering!')
-
+        result = send_email.delay(email, 'Welcome!', 'Thank you for registering!')
+        celery_task_data = {
+            'id': result.id,
+            'user': user.pk,
+            'task_name': 'Registration Email'
+        }
+        celery_serializer = self.serializer_celery(data=celery_task_data)
+        celery_serializer.is_valid(raise_exception=True)
+        celery_serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

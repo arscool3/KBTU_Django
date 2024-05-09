@@ -16,11 +16,11 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 # Определение задачи отправки электронной почты
-@app.task
+@app.task(name='social_network.celery.send_email')
 def send_email(to, subject, message):
     try:
         # Отправка электронного письма с помощью функции send_mail Django
-        send_mail(subject, message, 'your_email@example.com', [to])
+        # send_mail(subject, message, 'your_email@example.com', [to])
         print(f"Email sent successfully to {to}")
     except Exception as e:
         print(f"Failed to send email to {to}. Error: {e}")

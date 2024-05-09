@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from datetime import datetime, timedelta
 from django.conf import settings
@@ -171,3 +173,11 @@ class Follow(models.Model):
     class Meta:
         unique_together = ['follower', 'following']
 
+
+class CeleryTask(models.Model):
+    id = models.UUIDField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, default='PENDING')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

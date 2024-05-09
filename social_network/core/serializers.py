@@ -136,8 +136,6 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-
-
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -149,13 +147,14 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = '__all__'
 
+
 class PostSerializer(serializers.ModelSerializer):
     post_likes = LikeSerializer(many=True, read_only=True)  # Вложенное сериализирование для отношения с лайками
     likes = post_likes
+
     class Meta:
         model = Post
         fields = '__all__'
-
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -168,3 +167,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
+
+
+class CeleryTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CeleryTask
+        fields = ['id', 'user', 'task_name', 'status']

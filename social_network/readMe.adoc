@@ -3,4 +3,4 @@
 
  celery -A celery worker --loglevel=info
 
-  LRANGE celery 0 -1 stop
+ LRANGE celery 0 -1 stop
