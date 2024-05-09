@@ -79,7 +79,6 @@ def register_view(request):
 
 
 class ProjectViewSet(viewsets.ViewSet):
-
     def list(self, request):
         projects = Project.objects.all()
         serializer = ProjectSerializer(projects, many=True)
