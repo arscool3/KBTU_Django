@@ -15,12 +15,3 @@ class User(BaseModel):
 class UserLogin(BaseModel):
     phone_number: str
     iin: str
-
-    model_config = {
-        "json_schema_extra": {
-            "example": {
-                "phone_number": "+77077525167",
-                "iin": "000000000000",
-            }
-        }
-    }

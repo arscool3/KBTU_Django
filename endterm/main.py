@@ -3,13 +3,15 @@ import asyncio
 from fastapi import FastAPI
 from routes.user import router as UserRouter
 from routes.payment import router as PaymentRouter
+from routes.auth import router as AuthRouter
 
 from database import init_db
 
 app = FastAPI(debug=True)
 
 app.include_router(UserRouter, tags=["User"], prefix="/api/v1/users")
-app.include_router(PaymentRouter, tags=["Payment"], prefix="/api/v1/users")
+app.include_router(AuthRouter, tags=["Auth"], prefix="/api/v1/auth")
+app.include_router(PaymentRouter, tags=["Payment"], prefix="/api/v1/payment")
 
 
 @app.get("/", tags=["Root"])
