@@ -1,0 +1,26 @@
+{% load static %}
+{% load app_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+
+    <div style="background-color: gray; color: white; margin-top: 10px; padding: 10px; width: 200px">
+    {% ShowMenu2 %}
+    </div>
+
+    <div style="display: flex; flex-direction: column;
+    align-items: center; justify-content: center;">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

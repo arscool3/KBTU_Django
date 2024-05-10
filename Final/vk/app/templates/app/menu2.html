@@ -1,0 +1,9 @@
+{% load app_tags %}
+
+
+    {% for m in menu2 %}
+    <a href="{% url m.link %}" style="text-decoration: none; color: white">
+        <p style="background-color: #3a3b3c; padding: 10px">{{m.title}}</p>
+    </a>
+
+    {% endfor %}

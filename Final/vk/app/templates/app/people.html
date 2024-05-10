@@ -1,0 +1,14 @@
+{% extends 'app/base.html' %}
+{% load app_tags %}
+
+
+{% block content %}
+    <h1>Люди</h1>
+    {% for p in People %}
+        <div style="background-color: gray; padding-left:100px; padding-right:100px; margin: 20px">
+            <h1><img src="{{p | peopleimage}}" width="100px">
+            {{p | peoplename}}</h1>
+        </div>
+
+    {% endfor %}
+{% endblock %}
