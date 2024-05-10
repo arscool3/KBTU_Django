@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
-from fastapi.responses import JSONResponse
+from datetime import datetime
+from pytz import timezone
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi.responses import JSONResponse, HTMLResponse
 from psycopg2.extras import Json
 from sqlalchemy.orm import Session
 from app.utils.tokens import create_token, revoked_tokens, verify_token
@@ -132,7 +134,8 @@ async def get_applications(token: str = Depends(verify_token), db: Session = Dep
         user = db.query(User).filter(User.id == user_id).first()
 
         if user.is_manager:
-            all_applications = db.query(Application).filter(Application.status == 'Создано')
+            all_applications = (db.query(Application).filter(Application.status == 'Подтверждено').
+                                order_by(Application.updated_at).all())
 
             all_applications = [{'id': app.id,
                                  'iinbin': app.user.iinbin,
@@ -168,7 +171,6 @@ async def get_application_detail(request: Request, token: str = Depends(verify_t
     try:
         data = await request.json()
         application_id = data.get("id_app")
-        print('application_id:', application_id)
 
         application_detail = db.query(ProfileUpdateApplication).filter(ProfileUpdateApplication.application_id == application_id)
         application_detail = [{'column': row.key,
@@ -190,13 +192,32 @@ async def get_application_detail(request: Request, token: str = Depends(verify_t
 async def update_application_status(request: Request, token: str = Depends(verify_token)):
     try:
         data = await request.json()
-        print('data inside:', data)
         manager_id = token["sub"]
         application_id = data.get("id_app")
         is_approved = data.get("is_approved")
 
-        print('manager_id:', manager_id)
         change_status.delay(manager_id, application_id, is_approved)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)
+
+@router.post("/confirm_application")
+async def confirm_application(application_id: str = Form(...), db: Session = Depends(get_db)):
+    try:
+        application = db.query(Application).filter(Application.status == 'Создано', Application.id == application_id,
+                                                   Application.expires_at > datetime.now(timezone('UTC')).astimezone(timezone('Asia/Almaty'))).first()
+
+        if application:
+            application.status = 'Подтверждено'
+
+            db.commit()
+            return HTMLResponse(content='<html><body><h2>Application confirmed successfully.</h2></body></html>')
+        else:
+            return HTMLResponse(content='<html><body><h1>You have already confirmed or time was expired.</h1></body></html>')
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=401)
+    finally:
+        try:
+            db.close()
+        except:
+            print('Connection already closed')
 

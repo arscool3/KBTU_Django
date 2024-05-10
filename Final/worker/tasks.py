@@ -6,7 +6,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+from worker.assets.functions import get_expiration_timestamp
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,12 +31,21 @@ def create_application(user_id, data):
 
             application.updated_at = func.now()
         else:
-            new_application = Application(
-                user_id=user_id
-            )
+            new_application = None
+            if not user.email:
+                new_application = Application(
+                    user_id=user_id,
+                    status='Подтверждено'
+                )
+            else:
+                new_application = Application(
+                    user_id=user_id
+                )
+
             db.add(new_application)
             db.commit()
 
+            new_application.expires_at = get_expiration_timestamp(new_application.created_at.replace(second=0, microsecond=0))
             application_id = new_application.id
 
         for key, value in data.items():
@@ -53,6 +62,9 @@ def create_application(user_id, data):
                 print(f'{key} attribute does not exist in User Table')
 
         db.commit()
+
+        if user.email and not application:
+            send_email.delay(application_id, user.email)
     except Exception as e:
         print(f'{e}')
     finally:
@@ -67,7 +79,7 @@ def change_status(manager_id, application_id, is_approved):
     try:
         db = get_db()
 
-        application = db.query(Application).filter(Application.id == application_id, Application.status == 'Создано').first()
+        application = db.query(Application).filter(Application.id == application_id).first()
 
         if not application:
             return
@@ -85,9 +97,6 @@ def change_status(manager_id, application_id, is_approved):
                 setattr(user, detail.key, detail.new_value)
 
         db.commit()
-
-        if user.email:
-            send_email.delay('Hello', 'World', user.email)
     except Exception as e:
         print(f'{e}')
     finally:
@@ -98,13 +107,14 @@ def change_status(manager_id, application_id, is_approved):
 
 
 @celery_worker.task
-def send_email(subject, body, recipient_email):
-    message = MIMEMultipart()
-    message["To"] = 'To line here.'
-    message["From"] = 'From line here.'
-    message["Subject"] = subject
+def send_email(application_id, recipient_email):
+    with open('worker/assets/confirmation_mail.html', 'r') as file:
+        body = file.read()
 
-    message.attach(MIMEText(body, 'plain'))
+    message = MIMEMultipart()
+    message["Subject"] = 'Подтвердите заявку на изменение профиля Egov.kz'
+
+    message.attach(MIMEText(body.format(application_id), 'html'))
 
     email = os.getenv('GMAIL_EMAIL')
     password = os.getenv('GMAIL_PASSWORD')

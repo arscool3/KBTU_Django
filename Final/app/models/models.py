@@ -57,14 +57,16 @@ class Application(Base):
     manager_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=True)
     status = Column(String(12), nullable=False, default='Создано')
     created_at = Column(DateTime, nullable=False, default=func.now())
-    updated_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, nullable=True, default=func.now())
     closed_at = Column(DateTime, nullable=True)
+    expires_at = Column(DateTime, nullable=True)
 
     user = relationship("User", foreign_keys=[user_id], backref="user_applications")
     manager = relationship("User", foreign_keys=[manager_id], backref="manager_applications")
 
-    def __init__(self, user_id):
+    def __init__(self, user_id, status='Создано'):
         self.user_id = user_id
+        self.status = status
 
 class ProfileUpdateApplication(Base):
     __tablename__ = 'profile_update_application'
