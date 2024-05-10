@@ -1,6 +1,10 @@
 
  pip3 freeze > requirements.txt
 
- celery -A celery worker --loglevel=info
+
+ celery -A social_network worker --loglevel=info
+
 
  LRANGE celery 0 -1 stop
+
+ python manage.py migrate django_celery_results

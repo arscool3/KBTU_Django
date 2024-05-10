@@ -1,26 +1,15 @@
-from __future__ import absolute_import
-from celery import Celery
-from django.core.mail import send_mail
+from __future__ import absolute_import, unicode_literals
 import os
+from celery import Celery
+from django.conf import settings
 
-# Установка модуля настроек Django для приложения 'celery'.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celery_django.settings')
+# Set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'social_network.settings')
 
-# Создание экземпляра Celery
-app = Celery("celery_django")
+app = Celery('social_network')  # Replace 'your_project' with your project's name.
 
-# Получение настроек Django для Celery
+# Configure Celery using settings from Django settings.py.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Загрузка tasks.py в приложение Django
-app.autodiscover_tasks()
-
-# Определение задачи отправки электронной почты
-@app.task(name='social_network.celery.send_email')
-def send_email(to, subject, message):
-    try:
-        # Отправка электронного письма с помощью функции send_mail Django
-        # send_mail(subject, message, 'your_email@example.com', [to])
-        print(f"Email sent successfully to {to}")
-    except Exception as e:
-        print(f"Failed to send email to {to}. Error: {e}")
+# Load tasks from all registered Django app configs.
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)

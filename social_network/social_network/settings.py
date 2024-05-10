@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,11 @@ REST_FRAMEWORK = {
     ),
 }
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_CACHE_BACKEND = 'default'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nursturugeldiev@gmail.com'
+EMAIL_HOST_PASSWORD = 'cvpocpuzbewoxfzn'

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from .serializers import *
 from .models import *
-from social_network.celery import send_email
+from core.tasks import send_email_task
 
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -37,7 +37,7 @@ class RegistrationAPIView(APIView):
         # если они нужны для формирования письма.
 
         # Отправьте задачу Celery для отправки электронного письма
-        result = send_email.delay(email, 'Welcome!', 'Thank you for registering!')
+        result = send_email_task.delay('Subject', 'Message', ['recipient@example.com'])
         celery_task_data = {
             'id': result.id,
             'user': user.pk,
