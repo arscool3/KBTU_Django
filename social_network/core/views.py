@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from .serializers import *
 from .models import *
 from core.tasks import send_email_task
+from django.shortcuts import get_object_or_404
 
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -127,21 +128,6 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-
-
-class LikeViewSet(viewsets.ModelViewSet):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-
-
-class FollowViewSet(viewsets.ModelViewSet):
-    queryset = Follow.objects.all()
-    serializer_class = FollowSerializer
-
-
 class PostDetailViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = PostSerializer
@@ -212,3 +198,45 @@ class DislikePostAPIView(APIView):
             return Response({'message': 'Like removed successfully'}, status=status.HTTP_200_OK)
         except Like.DoesNotExist:
             return Response({'error': 'You have not liked this post yet'}, status=status.HTTP_400_BAD_REQUEST)
+
+class FollowUser(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FollowSerializer
+    def post(self, request, user_id):
+        current_user = request.user
+
+        # Получаем пользователя, на которого пользователь хочет подписаться
+        user_to_follow = get_object_or_404(User, pk=user_id)
+
+        # Проверяем, не подписан ли уже текущий пользователь на этого пользователя
+        if Follow.objects.filter(follower=current_user, following=user_to_follow).exists():
+            return Response({'message': 'You are already following this user'}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = {
+            "follower": current_user.pk,
+            "following": user_to_follow.pk
+        }
+        serializer = self.serializer_class(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class CreateComment(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def post(self, request, post_id):
+        # Получаем текущего пользователя
+        author = request.user
+        content = request.data.get('content')
+        # Получаем пост, к которому добавляется комментарий
+        post = get_object_or_404(Post, pk=post_id)
+        data = {
+            "author": author.pk,
+            "post": post.pk,
+            "content": content,
+        }
+        serializer = self.serializer_class(post, data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
