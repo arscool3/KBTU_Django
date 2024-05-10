@@ -48,6 +48,16 @@ class User(Base):
     def hash_password(self, password):
         return pwd_context.hash(password)
 
+
+class Status(Base):
+    __tablename__ = 'status'
+    __table_args__ = {'schema': 'public'}
+
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(24), nullable=False)
+    created_at = Column(DateTime, nullable=False, default=func.now())
+
+
 class Application(Base):
     __tablename__ = 'application'
     __table_args__ = {'schema': 'public'}
@@ -55,16 +65,17 @@ class Application(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=False)
     manager_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=True)
-    status = Column(String(12), nullable=False, default='Создано')
+    status_id = Column(Integer(), ForeignKey('public.status.id'), nullable=False)
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True, default=func.now())
     closed_at = Column(DateTime, nullable=True)
     expires_at = Column(DateTime, nullable=True)
 
+    status = relationship("Status", foreign_keys=[status_id], backref="status_info")
     user = relationship("User", foreign_keys=[user_id], backref="user_applications")
     manager = relationship("User", foreign_keys=[manager_id], backref="manager_applications")
 
-    def __init__(self, user_id, status='Создано'):
+    def __init__(self, user_id, status=1):
         self.user_id = user_id
         self.status = status
 

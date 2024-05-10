@@ -18,7 +18,7 @@ def create_application(user_id, data):
 
         # current user profile
         user = db.query(User).filter(User.id == user_id).first()
-        application = db.query(Application).filter(Application.user_id == user_id, Application.status == 'Создано').first()
+        application = db.query(Application).filter(Application.user_id == user_id, Application.status.id == 1).first()
 
         application_id = None
         if application:
@@ -35,7 +35,7 @@ def create_application(user_id, data):
             if not user.email:
                 new_application = Application(
                     user_id=user_id,
-                    status='Подтверждено'
+                    status_id=2
                 )
             else:
                 new_application = Application(
@@ -86,7 +86,7 @@ def change_status(manager_id, application_id, is_approved):
 
         #1
         application.manager_id = manager_id
-        application.status = 'Утверждено' if is_approved else 'Отклонено'
+        application.status_id = 3 if is_approved else 4
         application.closed_at = func.now()
 
         #2

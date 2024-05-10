@@ -134,8 +134,7 @@ async def get_applications(token: str = Depends(verify_token), db: Session = Dep
         user = db.query(User).filter(User.id == user_id).first()
 
         if user.is_manager:
-            all_applications = (db.query(Application).filter(Application.status == 'Подтверждено').
-                                order_by(Application.updated_at).all())
+            all_applications = (db.query(Application).filter(Application.status_id == 2).all())
 
             all_applications = [{'id': app.id,
                                  'iinbin': app.user.iinbin,
@@ -148,14 +147,14 @@ async def get_applications(token: str = Depends(verify_token), db: Session = Dep
 
             if not user_applications:
                 raise HTTPException(status_code=401, detail="Profile not found")
-
+            print('i am here')
             user_applications = [{'id': app.id,
                                   'created_at': app.created_at,
                                   'updated_at': app.updated_at,
                                   'closed_at': app.closed_at,
-                                  'status': app.status}
+                                  'status': app.status.name}
                                  for app in user_applications]
-
+            print('i am here 2')
             return {'data': user_applications}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)
@@ -203,16 +202,16 @@ async def update_application_status(request: Request, token: str = Depends(verif
 @router.post("/confirm_application")
 async def confirm_application(application_id: str = Form(...), db: Session = Depends(get_db)):
     try:
-        application = db.query(Application).filter(Application.status == 'Создано', Application.id == application_id,
+        application = db.query(Application).filter(Application.status_id == 1, Application.id == application_id,
                                                    Application.expires_at > datetime.now(timezone('UTC')).astimezone(timezone('Asia/Almaty'))).first()
 
         if application:
-            application.status = 'Подтверждено'
+            application.status_id = 2
 
             db.commit()
             return HTMLResponse(content='<html><body><h2>Application confirmed successfully.</h2></body></html>')
         else:
-            return HTMLResponse(content='<html><body><h1>You have already confirmed or time was expired.</h1></body></html>')
+            return HTMLResponse(content='<html><body><h2>You have already confirmed or time was expired.</h2></body></html>')
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)
     finally:
