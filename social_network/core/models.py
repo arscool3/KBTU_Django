@@ -143,7 +143,6 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
-
     def __str__(self):
         return f"Post by {self.author.username}"
 
@@ -151,7 +150,7 @@ class Post(models.Model):
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    content = models.TextField()
+    comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

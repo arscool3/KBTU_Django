@@ -18,6 +18,7 @@ urlpatterns = [
     path('users/login/', LoginAPIView.as_view()),
 
     path('users/<user_id>/follow/', FollowUser.as_view()),
+    path('users/followers/', FollowUser.as_view()),
 
     # Создание новой публикации / список публикаций
     path('posts/', PostViewSet.as_view({'post': 'create', 'get': 'list'})),
@@ -32,5 +33,4 @@ urlpatterns = [
     path('posts/<post_id>/dislike/', DislikePostAPIView.as_view()),
 
     path('posts/<post_id>/comment/', CreateComment.as_view()),
-
 ]

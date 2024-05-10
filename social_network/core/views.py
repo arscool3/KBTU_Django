@@ -202,6 +202,13 @@ class DislikePostAPIView(APIView):
 class FollowUser(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = FollowSerializer
+
+    def get(self, request):
+        current_user = request.user
+        followers = Follow.objects.filter(following=current_user)  # Заменяем user на current_user
+        serializer = self.serializer_class(followers, many=True)  # Заменяем comments на followers
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request, user_id):
         current_user = request.user
 
@@ -224,19 +231,22 @@ class FollowUser(APIView):
 class CreateComment(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CommentSerializer
-
+    def get(self, request, post_id):
+        comments = Comment.objects.filter(post=post_id)
+        serializer = self.serializer_class(comments, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request, post_id):
         # Получаем текущего пользователя
         author = request.user
-        content = request.data.get('content')
+        comment = request.data.get('content')
         # Получаем пост, к которому добавляется комментарий
         post = get_object_or_404(Post, pk=post_id)
         data = {
             "author": author.pk,
             "post": post.pk,
-            "content": content,
+            "comment": comment,
         }
-        serializer = self.serializer_class(post, data=data)
+        serializer = self.serializer_class(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
