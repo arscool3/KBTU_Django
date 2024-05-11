@@ -1,9 +1,9 @@
 from django.urls import path
 
 from rest_framework import routers
-from .views import CategoryViewSet, TripViewSet, UserViewSet, CommentViewSet, FavoriteViewSet, OrderViewSet
+from .views import CategoryViewSet, TripViewSet, UserViewSet, CommentViewSet, FavoriteViewSet, OrderViewSet, ProfileViewSet
 
-from .views import categories_list, CommentsListAPIView, CommentDetailAPIView, categories_trips, trips_list, \
+from .views import categories_list, categories_trips, trips_list, \
     trips_detail, favorite_list,home, \
     profile, register_view, logout_view, favorite_list, get_favorites, login_view, add_comment, get_comments, \
     delete_comment, edit_comment
@@ -18,7 +18,7 @@ router.register(r'users', UserViewSet)
 router.register(r'comments', CommentViewSet)
 router.register(r'favorites', FavoriteViewSet)
 router.register(r'orders', OrderViewSet)
-
+router.register(r'user_profile', ProfileViewSet)
 
 urlpatterns = [
     path('', home, name='home'),
@@ -26,8 +26,6 @@ urlpatterns = [
     path('categories/<int:category_id>/', categories_trips, name='category_detail'),
     path('trips_list/', trips_list, name="trips_list"),
     path('trips/<int:trip_id>/', trips_detail, name='trips_detail'),
-    path('trips/<int:trip_id>/comments/', CommentsListAPIView.as_view(), name='comments-list'),
-    path('trips/<int:trip_id>/comments/<int:pk>/', CommentDetailAPIView.as_view(), name='comment-detail'),
     path('api/register', register_view, name='register'),
     path('api/login', login_view, name='login'),
     path('api/logout', logout_view, name='logout'),

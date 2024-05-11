@@ -14,8 +14,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 from .forms import CommentForm, ProfileEditForm, RegistrationForm
-from .models import Trip, Category, Comment, Favorite, Order
-from .serializers import TripSerializer, CategorySerializer, CommentSerializer, UserSerializer, FavoritesSerializer, FavoritesSerializer, OrderSerializer
+from .models import Trip, Category, Comment, Favorite, Order, Profile
+from .serializers import TripSerializer, CategorySerializer, CommentSerializer, UserSerializer, FavoritesSerializer, FavoritesSerializer, OrderSerializer, ProfileSerializer
 from .tasks import send_registration_email
 
 
@@ -105,6 +105,10 @@ class FavoriteViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 
@@ -253,52 +257,6 @@ def delete_comment(request, comment_id):
         return Response({'message': 'Comment deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
-
-class CommentsListAPIView(APIView):
-
-    def get_objects(self, trip_id):
-        try:
-            return Comment.objects.filter(trip=trip_id)
-        except Comment.DoesNotExist as e:
-            raise Http404
-
-    def get(self, request, trip_id=None):
-        comments = self.get_objects(trip_id)
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
-    
-    def post(self, request, trip_id):
-        serializer = CommentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CommentDetailAPIView(APIView):
-    def get_object(self, pk):
-        try:
-            return Comment.objects.get(id=pk)
-        except Comment.DoesNotExist as e:
-            raise Http404
-
-    def get(self, request, trip_id=None, pk=None):
-        comment = self.get_object(pk)
-        serializer = CommentSerializer(comment)
-        return Response(serializer.data)
-
-    def put(self, request, trip_id=None, pk=None):
-        comment = self.get_object(pk)
-        serializer = CommentSerializer(instance=comment, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
-
-    def delete(self, request, trip_id=None, pk=None):
-        comment = self.get_object(pk)
-        comment.delete()
-        return Response({'message': 'deleted'}, status=status.HTTP_204_NO_CONTENT)
 
 #profile
 @login_required

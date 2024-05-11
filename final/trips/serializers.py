@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Trip, Category, User, Comment, Favorite, Order
+from .models import Trip, Category, User, Comment, Favorite, Order, Profile
     
 class CategorySerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -90,3 +90,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return super(OrderSerializer, self).create(validated_data)
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
