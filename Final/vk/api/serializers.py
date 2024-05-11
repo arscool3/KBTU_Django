@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from app.models import Post, UserInfo, Image, Comment, Like, Group, Subscription
@@ -11,7 +12,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = User
         fields = ['id', 'username']
 
 class UserInfoSerializer(serializers.ModelSerializer):

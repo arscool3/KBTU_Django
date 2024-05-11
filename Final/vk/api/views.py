@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from app.models import Post, UserInfo, Image, Comment, Like, Group, Subscription
+from django.contrib.auth.models import User
 from rest_framework.decorators import action
 from rest_framework.response import Response
 # Create your views here.
@@ -34,6 +35,19 @@ class PostViewSet(ModelViewSet):
 class UserInfoViewSet(ModelViewSet):
     serializer_class = UserInfoSerializer
     queryset = UserInfo.objects.all()
+
+
+class UserViewSet(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+    lookup_field = 'id'
+
+    @action(detail=True, methods=['get'])
+    def getUserInfo(self, request, id: int):
+        info = UserInfoSerializer(UserInfo.objects.getinfo(id))
+        return Response(info.data)
+
 
 
 class ImageViewSet(ModelViewSet):
