@@ -12,13 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 from dramatiq.brokers.redis import RedisBroker
-from dramatiq.results.backends.redis import RedisBackend
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_URL = 'vouchers/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'vouchers/images')
+MEDIA_URL = 'trips/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'trips/images')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -41,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt',
     'corsheaders',
     'django_dramatiq',
-    'vouchers',
+    'trips',
     'rest_framework.authtoken',
     
 ]
@@ -77,7 +74,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries':{
-                'utils': 'vouchers.templatetag.utils',
+                'utils': 'trips.templatetag.utils',
             }
         },
     },
@@ -91,7 +88,7 @@ WSGI_APPLICATION = 'journey_journal_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db1.sqlite3',
+        'NAME': BASE_DIR / 'db2.sqlite3',
     }
 
 }
@@ -130,13 +127,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-}
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -148,7 +138,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'vouchers', 'images'),
+    os.path.join(BASE_DIR, 'trips', 'images'),
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
