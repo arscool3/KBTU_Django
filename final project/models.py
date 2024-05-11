@@ -15,11 +15,13 @@ Base = declarative_base()
 
 class Ingredient(Base):
     id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
+    title: Mapped[str]
     description: Mapped[str]
     __tablename__= 'ingredients'
 
 class Comment(Base):
     id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
+    title: Mapped[str]
     description: Mapped[str]
     __tablename__= 'comments' 
 
@@ -28,6 +30,7 @@ class Recipe(Base):
     id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
     user_id: Mapped[int] = mapped_column(sa.ForeignKey("users.id"))
     comments: Mapped[list[Comment]] = relationship(back_populates='recipe')
+    ingredients: Mapped[list[Ingredient]] = relationship(back_populates='recipe')
     title: Mapped[str]
     description: Mapped[str]
     #ingredients: Mapped[list[Ingredient]] = relationship(back_populates='recipe')
