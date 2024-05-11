@@ -95,16 +95,6 @@ class CustomerViewSet(ReadOnlyModelViewSet):
         return Response(
             "Advertising is enough, we lacks another " + str(customer_areas - total_customers) + " customers")
 
-    @action(detail=False, methods=["get"])
-    def is_workers_enough(self, request):
-        stock_area_counter = 0
-        for stock in Stock.objects.all():
-            stock_area_counter += int(stock.area)
-
-        total_workers = Worker.objects.count()
-        if total_workers >= stock_area_counter / 20:
-            return Response("Workers is enough")
-
 
 class StockViewSet(ReadOnlyModelViewSet):
     serializer_class = StockSerializer
