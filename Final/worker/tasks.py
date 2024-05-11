@@ -18,7 +18,7 @@ def create_application(user_id, data):
 
         # current user profile
         user = db.query(User).filter(User.id == user_id).first()
-        application = db.query(Application).filter(Application.user_id == user_id, Application.status.id == 1).first()
+        application = db.query(Application).filter(Application.user_id == user_id, Application.status_id == 1).first()
 
         application_id = None
         if application:

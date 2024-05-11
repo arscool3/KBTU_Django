@@ -147,14 +147,14 @@ async def get_applications(token: str = Depends(verify_token), db: Session = Dep
 
             if not user_applications:
                 raise HTTPException(status_code=401, detail="Profile not found")
-            print('i am here')
+
             user_applications = [{'id': app.id,
                                   'created_at': app.created_at,
                                   'updated_at': app.updated_at,
                                   'closed_at': app.closed_at,
                                   'status': app.status.name}
                                  for app in user_applications]
-            print('i am here 2')
+
             return {'data': user_applications}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)

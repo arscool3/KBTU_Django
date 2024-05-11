@@ -75,9 +75,9 @@ class Application(Base):
     user = relationship("User", foreign_keys=[user_id], backref="user_applications")
     manager = relationship("User", foreign_keys=[manager_id], backref="manager_applications")
 
-    def __init__(self, user_id, status=1):
+    def __init__(self, user_id, status_id=1):
         self.user_id = user_id
-        self.status = status
+        self.status_id = status_id
 
 class ProfileUpdateApplication(Base):
     __tablename__ = 'profile_update_application'
