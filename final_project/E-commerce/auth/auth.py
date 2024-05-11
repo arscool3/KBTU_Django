@@ -30,7 +30,7 @@ def verify_token_access(token: str):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Error")
 
         token_data = entity.DataToken( user_id=payload.get("user_id"))
-        print(token_data)
+
 
     except JWTError as e:
         print(e)
