@@ -1,30 +1,22 @@
 from django.http import Http404, JsonResponse
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import viewsets
 from django.db.models import Max
-from rest_framework.decorators import action
-
-from django.shortcuts import render, redirect, HttpResponse
-from django.contrib.auth import authenticate, login, logout, forms
-from rest_framework.permissions import IsAuthenticated
-from .forms import ProfileEditForm
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.contrib.auth import authenticate, login, logout, forms, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
-from .tasks import send_registration_email
-from .forms import RegistrationForm
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-
-from django.shortcuts import render, get_object_or_404
-from .forms import CommentForm
-from .models import Trip, Category, Comment, Favorite, Order
-from .serializers import TripSerializer, CategorySerializer, CommentSerializer, UserSerializer, FavoritesSerializer, FavoritesSerializer, OrderSerializer
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, authentication_classes, permission_classes, action
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+from .forms import CommentForm, ProfileEditForm, RegistrationForm
+from .models import Trip, Category, Comment, Favorite, Order
+from .serializers import TripSerializer, CategorySerializer, CommentSerializer, UserSerializer, FavoritesSerializer, FavoritesSerializer, OrderSerializer
+from .tasks import send_registration_email
 
 
 def home(request):
@@ -116,13 +108,12 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 
-
+#trips
 @api_view(['GET'])
 def trips_list(request):
     vocuhers = Trip.objects.all()
     serializers = TripSerializer(vocuhers, many=True)
     return render(request, 'trips_list.html', {'trips_data': serializers.data})
-
 
 @api_view(['GET', 'POST'])
 def trips_detail(request, trip_id):
@@ -147,7 +138,7 @@ def trips_detail(request, trip_id):
     return render(request, 'trips_detail.html', {'trip_data': serializer.data, 'form': form, 'comments': comments})
 
 
-
+#categories
 @api_view(['GET'])
 def categories_list(request):
     categories = Category.objects.all()
@@ -161,7 +152,7 @@ def categories_trips(request, category_id):
     serializer = TripSerializer(trips, many=True)
     return render(request, 'category_detail.html', {'category': category, 'trips': serializer.data})
 
-
+#favorite
 @api_view(['GET', 'POST'])
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
@@ -182,33 +173,6 @@ def favorite_list(request):
         Favorite.objects.create(user=user, trip=trip)
         return Response({'message': 'Trip added to favorites successfully'})
     
-@login_required
-@api_view(['GET', 'DELETE'])
-def get_favorite_by_trip(request,id):
-    if request.method == 'GET':
-        trip_obj = Trip.objects.get(id=id)
-        favorites_obj = Favorite.objects.filter(trip=trip_obj)
-        favorites = FavoritesSerializer(favorites_obj,many=True)
-
-        return Response(favorites.data)
-    if request.method == 'DELETE':
-        try:
-            trip_obj = Trip.objects.get(id=id)
-            favorite = Favorite.objects.filter(trip=trip_obj)
-            favorite.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Favorite.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-@login_required
-@api_view(['GET'])
-def get_favorites_by_user(request, id):
-    if request.method == 'GET':
-        user = User.objects.get(id=id)
-        favorites = Favorite.objects.filter(user=user)
-        serializer = FavoritesSerializer(favorites, many=True)
-        return Response(serializer.data)
     
 @api_view(['GET', 'POST'])
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -220,38 +184,75 @@ def get_favorites(request):
         return render(request, 'favorites.html', {'favorites': favorites})
     
         
-class UsersListAPIView(APIView):
-    def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+#comments
+
+@api_view(['GET', 'POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def add_comment(request, trip_id):
+    if request.method == 'POST':
+        user = request.user
+        trip = Trip.objects.get(id=trip_id)
+        comment_text = request.data.get('comment')
+
+        Comment.objects.create(user=user, trip=trip, description=comment_text)
+        return Response({'message': 'Comment added successfully'})
 
 
-class UsersDetailAPIView(APIView):
-    def get_object(self, pk):
-        try:
-            return User.objects.get(id=pk)
-        except User.DoesNotExist as e:
-            raise Http404
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def get_comments(request, trip_id):
+    if request.method == 'GET':
+        comments = Comment.objects.filter(trip_id=trip_id)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
 
-    def get(self, request, pk=None):
-        user = self.get_object(pk)
-        serializer = UserSerializer(user)
+@api_view(['GET', 'PUT', 'DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def edit_comment(request, comment_id):
+    try:
+        comment = Comment.objects.get(pk=comment_id)
+    except Comment.DoesNotExist:
+        return Response({'message': 'Comment does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
-@login_required
-def create_comment(request, trip_id):
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.trip_id = trip_id
-            comment.save()
-            return redirect('trips_detail', trip_id=trip_id)
-    else:
-        form = CommentForm()
-    return render(request, 'comment_form.html', {'form': form})
+    if comment.user != request.user:
+        return Response({'message': 'You are not allowed to edit this comment'}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'PUT':
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        comment.delete()
+        return Response({'message': 'Comment deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_comment(request, comment_id):
+    try:
+        comment = Comment.objects.get(pk=comment_id)
+    except Comment.DoesNotExist:
+        return Response({'message': 'Comment does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        comment.delete()
+        return Response({'message': 'Comment deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+
 
 class CommentsListAPIView(APIView):
 
@@ -299,7 +300,7 @@ class CommentDetailAPIView(APIView):
         comment.delete()
         return Response({'message': 'deleted'}, status=status.HTTP_204_NO_CONTENT)
 
-
+#profile
 @login_required
 def profile(request):
     user = request.user

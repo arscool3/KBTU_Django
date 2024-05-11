@@ -4,8 +4,9 @@ from rest_framework import routers
 from .views import CategoryViewSet, TripViewSet, UserViewSet, CommentViewSet, FavoriteViewSet, OrderViewSet
 
 from .views import categories_list, CommentsListAPIView, CommentDetailAPIView, categories_trips, trips_list, \
-    trips_detail, get_favorites_by_user, favorite_list,get_favorite_by_trip,home, \
-    UsersListAPIView, UsersDetailAPIView, create_comment, profile, register_view, logout_view, get_favorites_by_user, favorite_list, get_favorites, login_view
+    trips_detail, favorite_list,home, \
+    profile, register_view, logout_view, favorite_list, get_favorites, login_view, add_comment, get_comments, \
+    delete_comment, edit_comment
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -30,10 +31,13 @@ urlpatterns = [
     path('api/register', register_view, name='register'),
     path('api/login', login_view, name='login'),
     path('api/logout', logout_view, name='logout'),
-    path('trips/<int:trip_id>/comments/', create_comment, name='create_comment'),
     path('profile/', profile, name='profile'),
     path('favorite_list/', favorite_list, name='favorite_list'),
     path('get_favorites/', get_favorites, name='get_favorites'),
+    path('trips/<int:trip_id>/add_comment/', add_comment, name='add_comment'),
+    path('get_comments/', get_comments, name='get_comments'),
+    path('comments/<int:comment_id>/edit/', edit_comment, name='edit_comment'),
+    path('comments/<int:comment_id>/delete/', delete_comment, name='delete_comment'),
 
 ]
 

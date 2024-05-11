@@ -76,16 +76,33 @@
             </div>
         </div>
 
-        <h2>Comments:</h2>
-        <div class="comments">
-            <ul>
-                {% for comment in comments %}
-                <li class="comment">
-                    <strong>{{ comment.username }}</strong>: {{ comment.description }}
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
+        <h2>Add Comment</h2>
+        <form action="{% url 'add_comment' trip_id=trip_data.id %}" method="post">
+            {% csrf_token %}
+            <textarea name="comment" rows="4" cols="50"></textarea><br>
+            <button type="submit">Add Comment</button>
+        </form>
+            
+        <h2>Comments</h2>
+        <ul>
+            {% for comment in comments %}
+            <li>
+                <strong>{{ comment.user.username }}</strong>: {{ comment.description }}
+                {% if comment.user == request.user %}
+                <form action="{% url 'edit_comment' comment_id=comment.id %}" method="get">
+                    {% csrf_token %}
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="{% url 'delete_comment' comment.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete Comment</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
     </div>
 </body>
 </html>

@@ -24,7 +24,7 @@ class Trip(models.Model):
 
 
 class Comment(models.Model):
-    username = models.CharField(max_length=300, default='Anonymous')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
