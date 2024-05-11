@@ -24,7 +24,7 @@ def create_application(user_id, data):
         if application:
             application_id = application.id
             for detail in application.application_details:
-                if detail.key in data.keys():
+                if detail.key in data.keys() and data.get(detail.key):
                     detail.new_value = data[detail.key]
 
                     del data[detail.key]
@@ -49,6 +49,9 @@ def create_application(user_id, data):
             application_id = new_application.id
 
         for key, value in data.items():
+            if not value:
+                continue
+
             try:
                 new_application_detail = ProfileUpdateApplication(
                     application_id=application_id,
