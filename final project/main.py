@@ -1,42 +1,27 @@
-from fastapi import FastAPI
-from contextlib import contextmanager
-from typing import Optional, Annotated
+from fastapi import FastAPI, HTTPException
+from typing import List
+from entity import Recipe, User
 
-from sqlalchemy import select
-from models import Recipe
-from fastapi import FastAPI, HTTPException, Depends
-import models as db
 app = FastAPI()
 
-@app.get("/")
-def test():
-    return("ok")
+# Mock data for demonstration
+users = [
+    User(id=1, username="user1"),
+    User(id=2, username="user2"),
+]
 
-@contextmanager
-def get_db():
-    try:
-        session = db.session
-        yield session
-        session.commit()
-        session.close()
-    except Exception:
-        print('some exception')
+recipes = [
+    Recipe(id=1, user_id=1, title="Recipe 1", description="Description 1", comments=[], ingredients=[]),
+    Recipe(id=2, user_id=2, title="Recipe 2", description="Description 2", comments=[], ingredients=[]),
+]
 
+@app.get("/recipes", response_model=List[Recipe])
+def get_recipes():
+    return recipes
 
-@app.get("/recipe")
-def recipe(id: int) -> db.Recipe:
-    with get_db() as session:
-        recipe = session.get(db.Recipe, id)
-        if recipe is None:
-            raise HTTPException(status_code=404)
-        return db.Recipe.model_validate(recipe)
-
-
-@app.get("/recipes")
-def recipes() -> list[Recipe]:
-    with get_db() as session:
-        db_recipes = session.execute(select(db.Recipe)).scalars().all()
-        recipes = []
-        for db_car in db_recipes:
-            recipes.append(Recipe.model_validate(db_car))
-        return recipes
+@app.get("/users/{user_id}/recipes", response_model=List[Recipe])
+def get_user_recipes(user_id: int):
+    user_recipes = [recipe for recipe in recipes if recipe.user_id == user_id]
+    if not user_recipes:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user_recipes
