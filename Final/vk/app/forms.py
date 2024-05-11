@@ -17,13 +17,10 @@ class RegisterUserForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
 
-class UserForm(forms.ModelForm):
-    username = forms.CharField(label='Юзернейм')
-    email = forms.EmailField(label='Email')
-    first_name = forms.CharField(label='Имя')
-    last_name = forms.CharField(label='Фамилия')
+class addCommentForm(forms.ModelForm):
+    text = forms.CharField(label='', widget=forms.Textarea(attrs={'rows': 4, 'cols': 40}))
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name']
+        model = Comment
+        fields = ['text']
 

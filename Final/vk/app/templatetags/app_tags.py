@@ -9,7 +9,7 @@ def ShowMenu(isLoged):
     if isLoged == 1:
         menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Войти', 'link': 'login'}, {'title':'Зарегистрироваться', 'link' : 'reg'}]
     else:
-        menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Мой профиль', 'link': 'me'}, {'title': 'Выйти', 'link': 'logout'}]
+        menu = [{'title': 'Главная', 'link': 'home'}, {'title': 'Мой профиль', 'link': 'mypage'}, {'title': 'Выйти', 'link': 'logout'}]
     return {'menu': menu}
 
 

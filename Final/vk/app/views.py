@@ -1,12 +1,13 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import get_user_model
 
 
-from .forms import RegisterUserForm
+from .forms import *
 from .models import *
 from django.contrib.auth import login, logout
 # Create your views here.
@@ -22,21 +23,55 @@ def postpage(request, p_id):
     Im = Image.objects.get(post=p_id).photo.url
     comments = Comment.objects.getPostComs(p_id)
 
-    return render(request, 'app/post.html', {'P': P, 'Im': Im, 'coms': comments})
+    if request.method == 'POST':
+        form = addCommentForm(request.POST)
+        if form.is_valid():
+            try:
+                form.instance.user = request.user
+                form.instance.post = Post.objects.get(id = p_id)
+                form.save()
+                return redirect('postpage', p_id)
+            except ValidationError as e:
+                form.add_error(None, e)
+    else:
+        form = addCommentForm()
+
+    return render(request, 'app/post.html', {'P': P, 'Im': Im, 'coms': comments, 'form1': form})
 
 
 def groups(request):
     Groups = Group.objects.all()
     return render(request, 'app/groups.html', {'Groups': Groups})
 
+
+def group(request, g_id):
+    posts = Post.objects.getGroupPosts(g_id)
+    g = Group.objects.get(id=g_id)
+
+    return render(request, 'app/group.html', {'Posts': posts, 'group': g})
+
 def people(request):
     User = get_user_model()
     people = User.objects.all()
     return render(request, 'app/people.html', {'People': people})
 
+def getUserPage(p_id):
+    posts = Post.objects.getPersonPosts(p_id)
+    user = UserInfo.objects.getinfo(p_id)
+
+    return {'Posts': posts, 'user': user}
+
+
+def person(request, p_id):
+    if(p_id == request.user.id):
+        return redirect('mypage')
+    else:
+        data = getUserPage(p_id)
+        return render(request, 'app/profil.html', data)
 
 def mypage(request):
-    return render(request, 'app/profil.html', {'Products': []})
+    data = getUserPage(request.user.id)
+    return render(request, 'app/profil.html', data)
 
 
 class LoginUser(LoginView):

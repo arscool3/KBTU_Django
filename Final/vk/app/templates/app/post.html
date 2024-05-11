@@ -13,6 +13,11 @@
         <button>Лайки:</button> {{P.id | likes}} <button>Комменты:</button> {{P.id | coms }}
     </div>
 
+    <form method="post" style="margin: 10px">
+        {% csrf_token %}
+        {{ form1.as_p }}
+    <button type="submit">Готово</button>
+
     {% for c in coms %}
         <div style="border: 2px solid; padding-left:100px; padding-right:100px; margin: 20px">
             <h3>{{ c.user | AuthorName}}</h3>
@@ -21,6 +26,8 @@
         </div>
 
     {% endfor %}
+
+
 
     
 {% endblock %}

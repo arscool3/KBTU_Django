@@ -30,6 +30,7 @@ class UserDescForm(forms.ModelForm):
         model = UserInfo
         fields = ['desc']
 
+
 class UserForm(forms.ModelForm):
     username = forms.CharField(label='Юзернейм')
     email = forms.EmailField(label='Email')

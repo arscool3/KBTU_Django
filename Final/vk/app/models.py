@@ -43,6 +43,12 @@ class PostQuerySets(models.QuerySet):
     def getPostImage(self, p):
         return self.get(post=p)
 
+    def getPersonPosts(self, u_id):
+        return self.filter(user=u_id)
+
+    def getGroupPosts(self, g_id):
+        return self.filter(group=g_id)
+
 
 class Post(models.Model):
     text = models.TextField(null=True)
@@ -55,15 +61,17 @@ class Post(models.Model):
     def __str__(self):
         return self.user.username + '_' + str(self.created_at)
 
+
 class ComQuerySets(models.QuerySet):
     def amount(self, p):
         return self.filter(post=p).count()
 
     def getPostComs(self, p):
-        return self.filter(post=p).order_by('created_at')
+        return self.filter(post=p).order_by('-created_at')
+
 
 class Comment(models.Model):
-    text = models.TextField(null=True)
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post = models.ForeignKey('Post', models.CASCADE)
@@ -89,6 +97,8 @@ class Like(models.Model):
 
     def __str__(self):
         return self.post.user.username + '_' + str(self.post.created_at) + '_' + self.user.username
+
+
 
 class Group(models.Model):
     photo = models.ImageField(upload_to="group_photos/%Y/%m/%d/")

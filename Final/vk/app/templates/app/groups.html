@@ -5,11 +5,13 @@
 {% block content %}
     <h1>Группы</h1>
     {% for g in Groups %}
-        <div style="background-color: gray; padding-left:100px; padding-right:100px">
-            <h1><img src="{{g.photo.url}}" width="100px">
+        <a href="{% url 'group' g.id %}" style="text-decoration: none;  color: inherit;">
+        <div style="background-color: gray; padding: 20px 200px">
+            <h1><img src="{{g.photo.url}}" width="200px">
             {{g.name}}</h1>
             Подписчиков: {{g.id | subs}}
         </div>
+        </a>
 
     {% endfor %}
 {% endblock %}
