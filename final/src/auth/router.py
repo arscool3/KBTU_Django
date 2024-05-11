@@ -1,10 +1,11 @@
 from fastapi import APIRouter
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from auth import schemas
 import models
+import instructor.models as instructor_models
+import student.models as student_models
 from typing import Annotated
-from fastapi import Depends, HTTPException,status
-from auth.dependecies import *
+from fastapi import Depends, HTTPException
+from auth.utils import *
 
 router = APIRouter(
     prefix='/auth',
@@ -19,13 +20,21 @@ def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_sessi
 
     encrypted_password = get_password_hash(user.password)
 
-    new_user = models.User(username=user.username, email=user.email, password=encrypted_password )
+    new_user = models.User(username=user.username, email=user.email, password=encrypted_password, role=user.role.value)
 
     session.add(new_user)
-    session.commit()
-    session.refresh(new_user)
+    session.flush()
+    if(new_user.role == models.RoleEnum.INSTRUCTOR.value):  
+        new_instructor = instructor_models.Instructor(user_id=new_user.id)
+        session.add(new_instructor)
+        
+    elif(new_user.role == models.RoleEnum.STUDENT.value):
+        new_student = student_models.Student(user_id=new_user.id)
+        session.add(new_student)
 
-    return {"message":"user created successfully"}
+    session.commit()
+
+    return {"message": "user successfully registered"}
 
 
 @router.post('/login')
