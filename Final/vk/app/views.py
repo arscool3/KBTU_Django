@@ -69,8 +69,29 @@ def person(request, p_id):
         data = getUserPage(p_id)
         return render(request, 'app/profil.html', data)
 
+
 def mypage(request):
     data = getUserPage(request.user.id)
+
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
+
+        if post_form.is_valid() and image_form.is_valid():
+            post_form.instance.user = request.user
+            post_instance = post_form.save()
+
+            image_form.instance.post = post_instance
+            image_form.save()
+            return redirect('admin:app_image_changelist')
+    else:
+        post_form = PostForm()
+        image_form = ImageForm()
+
+    data['post_form'] = post_form
+    data['image_form'] = image_form
+    data['is_me'] = True
+
     return render(request, 'app/profil.html', data)
 
 

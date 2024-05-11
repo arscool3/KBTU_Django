@@ -24,3 +24,19 @@ class addCommentForm(forms.ModelForm):
         model = Comment
         fields = ['text']
 
+
+class PostForm(forms.ModelForm):
+    text = forms.CharField(label='', widget=forms.Textarea(attrs={'rows': 4, 'cols': 40}))
+
+    class Meta:
+        model = Post
+        fields = ['text']
+
+
+class ImageForm(forms.ModelForm):
+    photo = forms.ImageField()
+
+    class Meta:
+        model = Image
+        fields = ['photo']
+

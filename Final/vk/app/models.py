@@ -26,9 +26,11 @@ class UserInfo(models.Model):
     def __str__(self):
         return self.user.username + 'info'
 
+
 class ImageQuerySets(models.QuerySet):
     def getPostImage(self, p):
         return self.get(post=p)
+
 
 class Image(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
@@ -44,10 +46,10 @@ class PostQuerySets(models.QuerySet):
         return self.get(post=p)
 
     def getPersonPosts(self, u_id):
-        return self.filter(user=u_id)
+        return self.filter(user=u_id).order_by('-created_at')
 
     def getGroupPosts(self, g_id):
-        return self.filter(group=g_id)
+        return self.filter(group=g_id).order_by('-created_at')
 
 
 class Post(models.Model):

@@ -13,6 +13,15 @@
 
     </div>
 
+    {% if is_me %}
+        <form method="post" enctype=”multipart/form-data”>
+            {% csrf_token %}
+            {{ post_form.as_p }}
+            {{ image_form.as_p }}
+        <button type="submit">готово</button>
+        </form>
+    {% endif %}
+
 
     {% for p in Posts %}
     <a href="{% url 'postpage' p.id %}" style="text-decoration: none;  color: inherit;">
