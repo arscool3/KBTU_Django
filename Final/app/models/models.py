@@ -9,13 +9,30 @@ from passlib.context import CryptContext
 Base = declarative_base()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class User(Base):
-    __tablename__ = 'user'
+class Authorization(Base):
+    __tablename__ = 'authorization'
     __table_args__ = {'schema': 'public'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     iinbin = Column(String(12), unique=True, nullable=False, index=True)
     password = Column(String, nullable=False)
+    is_manager = Column(Boolean(), default=False)
+
+    def __init__(self, iinbin, password):
+        self.iinbin = iinbin
+        self.password = self.hash_password(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password)
+
+    def hash_password(self, password):
+        return pwd_context.hash(password)
+
+class User(Base):
+    __tablename__ = 'user'
+    __table_args__ = {'schema': 'public'}
+
+    id = Column(UUID(as_uuid=True), ForeignKey('public.authorization.id'), primary_key=True, index=True)
     fullname = Column(String(64), nullable=False)
     birthdate = Column(Date(), nullable=False)
     birthplace = Column(String(256), nullable=False)
@@ -24,29 +41,18 @@ class User(Base):
     email = Column(String(64), nullable=True)
     phone_number = Column(String(12), nullable=True)
     address = Column(String(256), nullable=True)
-    is_manager = Column(Boolean())
     created_at = Column(DateTime, default=func.now())
-    updated_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, default=func.now())
 
-    def __init__(self, iinbin, password, fullname, birthdate, birthplace, nation, gender, email=None, phone_number=None,
-                 address=None, is_manager=False):
-        self.iinbin = iinbin
-        self.password = self.hash_password(password)
+    def __init__(self, id, fullname, birthdate, birthplace, nation, gender):
+        self.id = id
         self.fullname = fullname
         self.birthdate = birthdate
         self.birthplace = birthplace
         self.nation = nation
         self.gender = gender
-        self.email = email
-        self.phone_number = phone_number
-        self.address = address
-        self.is_manager = is_manager
 
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password)
-
-    def hash_password(self, password):
-        return pwd_context.hash(password)
+    auth = relationship("Authorization", foreign_keys=[id], backref="auth_info")
 
 
 class Status(Base):
@@ -58,22 +64,22 @@ class Status(Base):
     created_at = Column(DateTime, nullable=False, default=func.now())
 
 
+
 class Application(Base):
     __tablename__ = 'application'
     __table_args__ = {'schema': 'public'}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=False)
-    manager_id = Column(UUID(as_uuid=True), ForeignKey('public.user.id'), nullable=True)
+    manager_id = Column(UUID(as_uuid=True), ForeignKey('public.authorization.id'), nullable=True)
     status_id = Column(Integer(), ForeignKey('public.status.id'), nullable=False)
     created_at = Column(DateTime, nullable=False, default=func.now())
     updated_at = Column(DateTime, nullable=True, default=func.now())
     closed_at = Column(DateTime, nullable=True)
-    expires_at = Column(DateTime, nullable=True)
+    expires_at = Column(DateTime, nullable=True, index=True)
 
     status = relationship("Status", foreign_keys=[status_id], backref="status_info")
     user = relationship("User", foreign_keys=[user_id], backref="user_applications")
-    manager = relationship("User", foreign_keys=[manager_id], backref="manager_applications")
 
     def __init__(self, user_id, status_id=1):
         self.user_id = user_id
@@ -100,3 +106,17 @@ class ProfileUpdateApplication(Base):
         PrimaryKeyConstraint('application_id', 'key'),
         {'schema': 'public'}
     )
+
+
+class Session(Base):
+    __tablename__ = 'session'
+    __table_args__ = {'schema': 'service'}
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    auth_id = Column(UUID(as_uuid=True), ForeignKey('public.authorization.id'), index=True)
+    session_started_at = Column(DateTime, nullable=False, default=func.now())
+    session_finished_at = Column(DateTime, nullable=True)
+
+    def __init__(self, auth_id):
+        self.auth_id = auth_id
+

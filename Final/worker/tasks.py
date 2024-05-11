@@ -15,11 +15,11 @@ load_dotenv()
 def create_application(user_id, data):
     try:
         db = get_db()
-
+        print('i am here')
         # current user profile
         user = db.query(User).filter(User.id == user_id).first()
         application = db.query(Application).filter(Application.user_id == user_id, Application.status_id == 1).first()
-
+        print('i am here 2')
         application_id = None
         if application:
             application_id = application.id
@@ -32,7 +32,7 @@ def create_application(user_id, data):
             application.updated_at = func.now()
         else:
             new_application = None
-            if not user.email:
+            if not user.email and not data.get('email'):
                 new_application = Application(
                     user_id=user_id,
                     status_id=2
@@ -47,7 +47,7 @@ def create_application(user_id, data):
 
             new_application.expires_at = get_expiration_timestamp(new_application.created_at.replace(second=0, microsecond=0))
             application_id = new_application.id
-
+        print('i am here 3')
         for key, value in data.items():
             if not value:
                 continue
@@ -63,11 +63,13 @@ def create_application(user_id, data):
                 db.add(new_application_detail)
             except Exception as e:
                 print(f'{key} attribute does not exist in User Table')
-
+        print('i am here 4')
         db.commit()
-
+        print('i am here 5')
         if user.email and not application:
             send_email.delay(application_id, user.email)
+        elif not user.email and data.get('email'):
+            send_email.delay(application_id, data['email'])
     except Exception as e:
         print(f'{e}')
     finally:

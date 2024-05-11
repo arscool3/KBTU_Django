@@ -1,14 +1,15 @@
 from datetime import datetime
 from pytz import timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, Form
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, HTMLResponse, Response
 from psycopg2.extras import Json
 from sqlalchemy.orm import Session
 from app.utils.tokens import create_token, revoked_tokens, verify_token
 from app.db.session import get_db
 from app.utils.utils import get_century_and_gender
-from app.models.models import User, Application, ProfileUpdateApplication
+from app.models.models import Authorization, User, Application, ProfileUpdateApplication, Session
 from worker.tasks import create_application, change_status
+from sqlalchemy import desc
 
 router = APIRouter()
 
@@ -30,9 +31,16 @@ async def register(request: Request, db: Session = Depends(get_db)):
         birthplace = data.get("birthplace")
         nation = data.get("nation")
 
-        new_user = User(
+        new_authorization = Authorization(
             iinbin=iinbin,
-            password=password,
+            password=password
+        )
+
+        db.add(new_authorization)
+        db.commit()
+
+        new_user = User(
+            id=new_authorization.id,
             fullname=fullname,
             birthdate=birthdate,
             birthplace=birthplace,
@@ -60,31 +68,56 @@ async def login(request: Request, db: Session = Depends(get_db)):
         iinbin = data.get("iinbin")
         password = data.get("password")
 
-        user = db.query(User).filter(User.iinbin == iinbin).first()
-
-        if not user:
+        auth = db.query(Authorization).filter(Authorization.iinbin == iinbin).first()
+        auth_id = str(auth.id)
+        if not auth:
             raise HTTPException(status_code=404, detail="User not found")
 
-        if not user.verify_password(password):
+        if not auth.verify_password(password):
             raise HTTPException(status_code=401, detail="Incorrect password")
 
-        role = "manager" if user.is_manager else "client"
+        role = "manager" if auth.is_manager else "client"
 
-        token_data = {"sub": str(user.id)}
+        token_data = {"sub": auth_id}
         access_token = create_token(token_data)
-        if iinbin in revoked_tokens:
-            revoked_tokens.discard(iinbin)
-
+        if auth_id in revoked_tokens:
+            revoked_tokens.discard(auth_id)
         response_data = {"access_token": access_token, "token_type": "bearer", "role": role}
+
+        new_session = Session(
+            auth_id=auth.id
+        )
+        db.add(new_session)
+        db.commit()
+
         return JSONResponse(content=response_data, status_code=200)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=401)
+    finally:
+        try:
+            db.close()
+        except:
+            print('Connection already closed')
 
 
 @router.post("/logout")
-async def logout(token: str = Depends(verify_token)):
-    revoked_tokens.add(token["sub"])
-    return {"message": "Logout successful"}
+async def logout(token: str = Depends(verify_token), db: Session = Depends(get_db)):
+    try:
+        revoked_tokens.add(token["sub"])
+        session = db.query(Session).filter(Session.auth_id == token["sub"]).order_by(desc(Session.session_started_at)).first()
+
+        if session:
+            session.session_finished_at = datetime.now()
+            db.commit()
+
+        return Response(status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=401)
+    finally:
+        try:
+            db.close()
+        except:
+            print('Connection already closed')
 
 
 @router.get("/profile", response_model=dict)
@@ -94,7 +127,7 @@ async def profile(token: str = Depends(verify_token), db: Session = Depends(get_
 
         user = db.query(User).filter(User.id == user_id).first()
         user_data = {
-            'iinbin': user.iinbin,
+            'iinbin': user.auth.iinbin,
             'fullname': user.fullname,
             'birthdate': user.birthdate,
             'birthplace': user.birthplace,
@@ -131,18 +164,19 @@ async def update_profile(request: Request, token: str = Depends(verify_token)):
 async def get_applications(token: str = Depends(verify_token), db: Session = Depends(get_db)):
     try:
         user_id = token["sub"]
-        user = db.query(User).filter(User.id == user_id).first()
+        auth = db.query(Authorization).filter(Authorization.id == user_id).first()
 
-        if user.is_manager:
+        if auth.is_manager:
             all_applications = (db.query(Application).filter(Application.status_id == 2).all())
 
             all_applications = [{'id': app.id,
-                                 'iinbin': app.user.iinbin,
+                                 'iinbin': app.user.auth.iinbin,
                                  'created_at': app.created_at}
                                 for app in all_applications]
 
             return {'data': all_applications}
         else:
+            user = db.query(User).filter(User.id == user_id).first()
             user_applications = user.user_applications
 
             if not user_applications:
