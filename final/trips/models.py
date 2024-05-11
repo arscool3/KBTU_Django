@@ -48,3 +48,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - {self.user.username} - {self.trip.name}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"Profile of {self.user.username}"
