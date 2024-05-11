@@ -1,0 +1,34 @@
+{% load utils %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Check</title>
+</head>
+<body>
+    <h3>{{ data_name1| capitalize }}</h3>
+    <ul>
+        {% for item in data1 %}
+            <li>
+                {% with description=item|capitalize %}
+                {{description|add_dot}}
+                {% endwith %}
+            </li>
+        {% endfor %}
+    </ul>
+<h3>{{ data_name2| capitalize }}</h3>
+    <ul>
+        {% for item in data2 %}
+            <li>
+                {% with description=item|capitalize %}
+                {{description|add_dot}}
+                {% endwith %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

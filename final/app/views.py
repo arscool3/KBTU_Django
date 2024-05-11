@@ -10,6 +10,23 @@ from rest_framework.decorators import action
 from .models import Worker, Customer, Stock, Product, ProductsInStock, Order, Delivery
 from .serializers import *
 
+class StartPage(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'index.html'
+
+    def get(self, request):
+        stocks_queryset = Stock.objects.all()
+        stocks = []
+        for stock in stocks_queryset:
+            s_stock = StockSerializer(stock)
+            stocks.append(s_stock.data['name'] + " - " + s_stock.data['address'])
+        products_queryset = Product.objects.all()
+        products = []
+        for product in products_queryset:
+            s_product = ProductSerializer(product)
+            products.append(s_product.data['name'] + " - " + s_product.data['vendor'])
+        return Response({'data1': stocks, 'data_name1': 'stocks', 'data2': products, 'data_name2': 'products'})
+
 
 class CreateWorkerView(CreateAPIView):
     serializer_class = CreateWorkerSerializer
