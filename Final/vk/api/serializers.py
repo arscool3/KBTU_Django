@@ -11,9 +11,11 @@ class PostSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'password']
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
