@@ -1,0 +1,23 @@
+{% load filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Product List</h1>
+<ul>
+    {% for product in products %}
+        <li>
+            <strong>{{ product.name }}</strong> <br>
+            Is Active: {{ product.is_active }} <br>
+            Description: {{ product.description|truncate_description:100 }} <br>
+            Rating: {{ product.rating }} <br>
+            Rate cnt: {{ product.rate_cnt }} <br>
+            Created: {{ product.created_at|format_created_at:"Y-m-d" }}<br>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
