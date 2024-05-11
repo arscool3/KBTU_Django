@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework import permissions
 from rest_framework.generics import get_object_or_404, CreateAPIView
@@ -9,6 +10,8 @@ from rest_framework.decorators import action
 
 from .models import Worker, Customer, Stock, Product, ProductsInStock, Order, Delivery
 from .serializers import *
+from .tasks import check_product_availability
+
 
 class StartPage(APIView):
     renderer_classes = [TemplateHTMLRenderer]
@@ -58,6 +61,7 @@ class WorkerViewSet(ReadOnlyModelViewSet):
             return Response("Workers is enough")
         return Response("Workers isn't enough, we need another " + str(working_areas - total_workers))
 
+
 class CreateCustomerView(CreateAPIView):
     serializer_class = CreateCustomerSerializer
 
@@ -88,7 +92,8 @@ class CustomerViewSet(ReadOnlyModelViewSet):
         customer_areas = stock_area_counter // 5
         if total_customers >= customer_areas:
             return Response("Advertising is enough")
-        return Response("Advertising is enough, we lacks another " + str(customer_areas - total_customers) + " customers")
+        return Response(
+            "Advertising is enough, we lacks another " + str(customer_areas - total_customers) + " customers")
 
     @action(detail=False, methods=["get"])
     def is_workers_enough(self, request):
@@ -111,6 +116,11 @@ class ProductViewSet(ReadOnlyModelViewSet):
     queryset = Product.objects.all()
 
 
+def check_partners(request, pk=1):
+    task = check_product_availability(pk)
+    return HttpResponse(task)
+
+
 class ProductsInStockViewSet(ReadOnlyModelViewSet):
     serializer_class = ProductsInStockSerializer
     queryset = ProductsInStock.objects.all()
@@ -128,7 +138,8 @@ class OrderViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         result = super().create(request, *args, **kwargs)
-        obj = ProductsInStock.objects.filter(product__pk=request.data['products']).filter(stock__pk=request.data['stock']).all()[0]
+        obj = ProductsInStock.objects.filter(product__pk=request.data['products']).filter(
+            stock__pk=request.data['stock']).all()[0]
         obj.quantity -= int(request.data['quantity'])
         obj.save()
         return result
@@ -144,7 +155,8 @@ class DeliveryViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         result = super().create(request, *args, **kwargs)
-        obj = ProductsInStock.objects.filter(product__pk=request.data['products']).filter(stock__pk=request.data['stock']).all()[0]
+        obj = ProductsInStock.objects.filter(product__pk=request.data['products']).filter(
+            stock__pk=request.data['stock']).all()[0]
         obj.quantity += int(request.data['quantity'])
         obj.save()
         return result

@@ -18,6 +18,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('worker_create/', CreateWorkerView.as_view()),
     path('customer_create/', CreateCustomerView.as_view()),
-    path('', StartPage.as_view())
-    # path('', start_page, name='')
+    path('', StartPage.as_view()),
+    path('product/check_partners', check_partners, name='check_partners')
 ]
