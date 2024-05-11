@@ -1,0 +1,32 @@
+<h2>Edit Profile</h2>
+<form method="post">
+    {% csrf_token %}
+    <!-- Поля формы для редактирования профиля -->
+    <label for="id_first_name">First Name:</label>
+    <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}"><br>
+    
+    <label for="id_last_name">Last Name:</label>
+    <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}"><br>
+    
+    <label for="id_username">Username:</label>
+    <input type="text" name="username" id="id_username" value="{{ user.username }}"><br>
+    
+    <label for="id_email">Email:</label>
+    <input type="email" name="email" id="id_email" value="{{ user.email }}"><br>
+
+    <!-- Кнопка для отправки формы редактирования профиля -->
+    <button type="submit" name="profile-form">Save Changes</button>
+</form>
+
+<h2>Change Password</h2>
+<form method="post">
+    {% csrf_token %}
+    <!-- Поля формы для изменения пароля -->
+    {{ password_form.as_p }}
+
+    <!-- Кнопка для отправки формы изменения пароля -->
+    <button type="submit" name="password-form">Change Password</button>
+    <br><br>
+    <a href="{% url 'home' %}">Home</a>
+
+</form>
