@@ -13,6 +13,11 @@ class PostViewSet(ModelViewSet):
     lookup_field = 'id'
 
     @action(detail=True, methods=['get'])
+    def postImages(self, request, id: int):
+        imgs = ImageSerializer(Image.objects.getPostImage(id), many=True)
+        return Response(imgs.data)
+
+    @action(detail=True, methods=['get'])
     def likeAmount(self, request, id: int):
         return Response(Like.objects.filter(post=id).count())
 

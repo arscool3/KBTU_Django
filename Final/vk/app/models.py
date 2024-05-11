@@ -29,7 +29,7 @@ class UserInfo(models.Model):
 
 class ImageQuerySets(models.QuerySet):
     def getPostImage(self, p):
-        return self.get(post=p)
+        return self.filter(post=p)
 
 
 class Image(models.Model):
