@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for f in families %}
+        <p>Семья: {{f.name}} <br>
+        Лечащий врач: {{f.doctor.name}}</p>
+
+    {% endfor %}
+</body>
+</html>

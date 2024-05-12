@@ -1,0 +1,16 @@
+{% extends 'app/base.html' %}
+{% load app_tags %}
+
+
+{% block content %}
+    <h1>Люди</h1>
+    {% for p in People %}
+    <a href="{% url 'person' p.id %}" style="text-decoration: none;  color: inherit;">
+        <div style="background-color: gray; padding: 20px 200px; margin: 20px">
+                <h1><img src="{{p | peopleimage}}" width="100px">
+                {{p | peoplename}}</h1>
+        </div>
+    </a>
+
+    {% endfor %}
+{% endblock %}

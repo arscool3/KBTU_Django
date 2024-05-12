@@ -1,0 +1,29 @@
+{% load static %}
+{% load products_tag %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store</title>
+</head>
+<body>
+
+    {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+
+    <div style="position: relative; float: left; margin-right: 20px">
+        {% ShowCats %}
+    </div>
+
+    <div style="display: flex;  flex-direction: column;
+  justify-content: center;">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

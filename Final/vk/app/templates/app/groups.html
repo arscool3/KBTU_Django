@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+{% load app_tags %}
+
+
+{% block content %}
+    <h1>Группы</h1>
+    {% for g in Groups %}
+        <a href="{% url 'group' g.id %}" style="text-decoration: none;  color: inherit;">
+        <div style="background-color: gray; padding: 20px 200px">
+            <h1><img src="{{g.photo.url}}" width="200px">
+            {{g.name}}</h1>
+            Подписчиков: {{g.id | subs}}
+        </div>
+        </a>
+
+    {% endfor %}
+{% endblock %}

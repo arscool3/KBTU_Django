@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+{% load app_tags %}
+
+
+{% block content %}
+    <h1>Пост</h1>
+    <div style="border: 2px solid; padding: 20px">
+        <h1><img src="{{P.user | ava}}" width="30px">
+        {{P.user | AuthorName}}</h1>
+        <img src="{{Im}}" width="500px">
+        <p>{{P.text}}</p>
+        <h5>{{P.updated_at | dateTime}}</h5>
+        <button>Лайки:</button> {{P.id | likes}} <button>Комменты:</button> {{P.id | coms }}
+    </div>
+
+    <form method="post" style="margin: 10px">
+        {% csrf_token %}
+        {{ form1.as_p }}
+    <button type="submit">Готово</button>
+
+    {% for c in coms %}
+        <div style="border: 2px solid; padding-left:100px; padding-right:100px; margin: 20px">
+            <h3>{{ c.user | AuthorName}}</h3>
+            <h4>{{c.text}}</h4>
+            <h6>{{c.updated_at | dateTime}}</h6>
+        </div>
+
+    {% endfor %}
+
+
+
+    
+{% endblock %}

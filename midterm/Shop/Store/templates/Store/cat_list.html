@@ -1,0 +1,8 @@
+<div style="background-color: #90EE90; color: white; padding: 5px; width: 200px">
+    {% for c in cats %}
+    <a href="/category/{{c.pk}}/" style="text-decoration: none; color: white">
+        <p style="background-color: green; padding: 10px">{{c.name}}</p>
+    </a>
+
+    {% endfor %}
+</div>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+     {% for h in hospitals %}
+        <p>Название: {{h.name}} <br>
+        Адресс: {{h.adress}}<br>
+        Номер телефона: {{h.office_phone_number}}</p>
+
+    {% endfor %}
+</body>
+</html>

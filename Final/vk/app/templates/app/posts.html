@@ -1,0 +1,19 @@
+{% extends 'app/base.html' %}
+{% load app_tags %}
+
+
+{% block content %}
+    {% for p in Posts %}
+    <a href="{% url 'postpage' p.id %}" style="text-decoration: none;  color: inherit;">
+    <div style="background-color: gray; padding: 20px">
+    <h1><img src="{{p.user | ava}}" width="30px">
+    {{p.user | AuthorName}}</h1>
+        <p><img src="{{p.id | postimage}}" width="400px"></p>
+        {{p.text}}
+    <h5>{{p.updated_at | dateTime}}</h5>
+        <button>Лайки:</button> {{p.id | likes}} <button>Комменты:</button> {{p.id | coms }}
+    </div>
+        </a>
+    </br>
+    {% endfor %}
+{% endblock %}

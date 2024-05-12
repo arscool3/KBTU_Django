@@ -1,0 +1,33 @@
+{% load products_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+    <h1>Ваша Корзина</h1>
+
+    <button type="submit" onclick="location.href='{% url 'buyBysket' %}'">
+        Купить всё
+    </button>
+    Общая цена: {{total_cost}}
+    {% for b in busket %}
+        <p><img src="{{b.product.photo.url}}" width="200px"></p>
+        {{b.product.name}}
+        <br>цена: {{b.product.cost}}
+        <br>количество: {{b.amount}}
+        <br><button type="submit"
+                    onclick="location.href='{% url 'delBusket' id=b.pk%}'">
+                Удалить
+            </button>
+    {% endfor %}
+
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+{% load products_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        ids = ['ava', 'userdata', 'desc']
+
+        document.addEventListener("DOMContentLoaded", function() {
+        for (var i = 0; i < ids.length; i++) {
+            var element = document.getElementById(ids[i]);
+            element.style.display = 'none';
+        }
+        });
+
+
+        function toggleElement(a) {
+            var element = document.getElementById(a);
+            if (element.style.display === 'none') {
+                element.style.display = 'block';
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    </script>
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        {% ShowMenu 2 %}
+    {% else %}
+        {% ShowMenu 1 %}
+    {% endif %}
+
+    <h1>Профиль</h1>
+
+
+    {%if me.photo %}
+        <p><img src="{{me.photo.url}}" width="200px"></p>
+    {% endif%}
+
+    <button onclick="toggleElement('ava')">Изменить</button>
+    <form id="ava" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form3.as_p }}
+        <button type="submit">
+            готово
+        </button>
+    </form>
+
+    {%if user.first_name %}
+        <h3>Имя: {{user.first_name}}</h3>
+    {% else %}
+        <h3>Имя: Нет Фамилии</h3>
+    {% endif%}
+
+    {%if user.last_name %}
+        <h3>Фамилия: {{user.last_name}}</h3>
+    {% else %}
+         <h3>Фамилия: Нет Фамилии</h3>
+    {% endif%}
+
+    {%if user.email %}
+        <h3>Email: {{user.email}}</h3>
+    {% else %}
+        Email: Нету
+    {% endif%}
+
+    <h3>юзернейм: {{user.username}}</h3>
+
+    <button onclick="toggleElement('userdata')">Изменить</button>
+    <div id="userdata">
+        <form method="post">
+        {% csrf_token %}
+        {{ form2.as_p }}
+        <button type="submit">
+            готово
+        </button>
+    </form>
+    </div>
+
+
+    <h3>Описание:</h3>
+    {{me.desc}}
+
+    <button if=desc onclick="toggleElement('desc')">Изменить</button>
+    <div id="desc">
+        <form method="post">
+        {% csrf_token %}
+        {{ form1.as_p }}
+        <button onclick="toggleElement('desc')" type="submit">
+            готово
+        </button>
+    </form>
+    </div>
+
+
+    <h3>Адрес:</h3>
+     {%if me.default_address %}
+        {{me.default_address|adress2}}
+    {% else %}
+        Нет Адреса
+        <p>Без адресса, вы не сможете ничего купить</p>
+    {% endif%}
+
+    <a href="{% url 'addAdress' %}">
+        <button>Сменить Адрес</button>
+    </a>
+
+
+
+</body>
+</html>

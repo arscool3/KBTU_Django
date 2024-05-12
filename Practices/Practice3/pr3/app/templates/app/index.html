@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <form action="{% url 'addPost' %}" method="post">
+         {% csrf_token %}
+         {{form}}
+     <input type="submit" value="Submit">
+
+    {% for p in posts %}
+        <div style="background-color:gray">
+            <h1> {{p.username}} </h1>
+            <p> {{p.text}} </p>
+            <h4>{{p.time_update}}</h4>
+        </div>
+
+    {% endfor %}
+</body>
+</html>
