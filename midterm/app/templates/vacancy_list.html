@@ -108,6 +108,10 @@
     </header>
 
     <section>
+        <form method="get" action="{% url 'vacancy_list' %}">
+            <input type="text" name="q" placeholder="Search vacancies..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
         <form class="filter-form" method="get" action="{% url 'vacancy_list' %}">
             {{ vacancy_filter_form.as_p }}
             <button class="filter-btn" type="submit">Apply Filter</button>

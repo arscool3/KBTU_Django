@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from .models import Vacancy, Company, User, Resume
@@ -16,6 +16,10 @@ def home(request):
 def vacancy_list(request):
     vacancies = Vacancy.objects.all()
     vacancy_filter_form = VacancyFilterForm(request.GET)
+    search_query = request.GET.get('q')
+
+    if search_query:
+        vacancies = vacancies.filter(title__icontains=search_query)
 
     if vacancy_filter_form.is_valid():
         skills = vacancy_filter_form.cleaned_data.get('skills')
@@ -26,8 +30,8 @@ def vacancy_list(request):
     return render(
         request,
         'vacancy_list.html',
-        {'vacancies': vacancies, 'vacancy_filter_form': vacancy_filter_form})
-
+        {'vacancies': vacancies, 'vacancy_filter_form': vacancy_filter_form, 'search_query': search_query}
+    )
 
 def vacancy_detail(request, vacancy_id):
     vacancy = get_object_or_404(Vacancy.objects.prefetch_related('skills', 'company'), id=vacancy_id)
@@ -36,6 +40,7 @@ def vacancy_detail(request, vacancy_id):
 def company_list(request):
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     selected_letter = request.GET.get('letter', '')
+    search_query = request.GET.get('q')
 
     if selected_letter and selected_letter.upper() not in alphabet:
         messages.error(request, 'Invalid letter selected.')
@@ -43,12 +48,14 @@ def company_list(request):
 
     companies = Company.objects.all()
 
+    if search_query:
+        companies = companies.filter(name__icontains=search_query)
+
     if selected_letter:
         companies = companies.filter(name__istartswith=selected_letter)
 
     return render(request, 'company_list.html', {'companies': companies, 'alphabet': alphabet,
-                                                 'selected_letter': selected_letter})
-
+                                                 'selected_letter': selected_letter, 'search_query': search_query})
 
 def user_profile(request, user_id):
     user = User.objects.get(id=user_id)
@@ -196,7 +203,10 @@ def apply_for_vacancy(request, vacancy_id):
 
 
 def edit_resume(request, resume_id):
-    resume = get_object_or_404(Resume, id=resume_id)
+    try:
+        resume = Resume.objects.get(id=resume_id, user=request.user)
+    except Resume.DoesNotExist:
+        raise Http404("Resume does not exist or you don't have permission to edit it.")
 
     if request.method == 'POST':
         form = ResumeForm(request.POST, instance=resume)
