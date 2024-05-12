@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation</title>
+</head>
+<body>
+    <h1>Reservation Page</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="parking-lot">Select Parking Lot:</label>
+        <select name="parking-lot" id="parking-lot">
+            {% for lot in parking_lots %}
+            <option value="{{ lot.id }}">{{ lot.name }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="parking-space">Select Parking Space:</label>
+        <select name="parking-space" id="parking-space" disabled>
+            <option value="">Select Parking Space</option>
+        </select><br>
+        <button type="submit">Reserve Parking</button>
+    </form>
+
+    <script>
+        document.getElementById('parking-lot').addEventListener('change', function() {
+            var lotId = this.value;
+            var spaceSelect = document.getElementById('parking-space');
+            spaceSelect.innerHTML = '';
+            spaceSelect.disabled = true;
+
+            fetch('/api/parking-lots/' + lotId + '/spaces/')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(space => {
+                        var option = document.createElement('option');
+                        option.value = space.id;
+                        option.textContent = space.space_number;
+                        spaceSelect.appendChild(option);
+                    });
+                    spaceSelect.disabled = false;
+                })
+                .catch(error => console.error('Error fetching parking spaces:', error));
+        });
+    </script>
+</body>
+</html>

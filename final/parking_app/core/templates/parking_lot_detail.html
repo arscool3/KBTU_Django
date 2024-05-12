@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Lot Detail</title>
+</head>
+<body>
+    <h1>{{ parking_lot.name }}</h1>
+    <p>Address: {{ parking_lot.address }}</p>
+    <p>Total Spaces: {{ parking_lot.total_spaces }}</p>
+
+    <h2>Parking Spaces:</h2>
+    <ul>
+        {% for space in parking_lot.parkingspace_set.all %}
+            <li>Space Number: {{ space.space_number }} {% if space.is_occupied %}(Occupied){% else %}(Available){% endif %}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
