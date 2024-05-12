@@ -1,0 +1,10 @@
+DRF
+1) 6 Models
+2) 4 Relationships
+3) 1 Template
+4) 2 Filters for templates
+6) Authorization
+7) DRF serializers for all models
+8) Viewsets for all models
+9) 2 DRF Actions 
+10) Background Tasks (Dramatiq / Celery)
