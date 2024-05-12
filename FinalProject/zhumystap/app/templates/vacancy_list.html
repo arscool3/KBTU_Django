@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacancy List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: black;
+        }
+
+        header {
+            background-color: #ab3232;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 2rem;
+            color: white;
+        }
+
+        section {
+            margin: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #ab3232;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Add some additional styles for better appearance */
+        section {
+            overflow: auto; /* Add scrollbar when content overflows */
+        }
+
+        ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        li {
+            min-height: 200px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        /* Add styles for the filter form */
+        .filter-form {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Style the filter button */
+        .filter-btn {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vacancy List</h1>
+    </header>
+
+    <section>
+        <form method="get" action="{% url 'vacancy_list' %}">
+            <input type="text" name="q" placeholder="Search vacancies..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+        <form class="filter-form" method="get" action="{% url 'vacancy_list' %}">
+            {{ vacancy_filter_form.as_p }}
+            <button class="filter-btn" type="submit">Apply Filter</button>
+        </form>
+        <ul>
+            {% for vacancy in vacancies %}
+                <li>
+                    <a href="#">{{ vacancy.title }}</a>
+                    <p>Salary: {{ vacancy.salary_min }} - {{ vacancy.salary_max }}</p>
+                    <p>Skills:
+                        {% for skill in vacancy.skills.all %}
+                            {{ skill.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p>Company: <a href="{{ vacancy.company.website }}" target="_blank">{{ vacancy.company.name }}</a></p>
+                    <p>Description: {{ vacancy.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Vacancy List. All rights reserved.</p>
+    </footer>
+</body>
+</html>

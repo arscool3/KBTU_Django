@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeadHunter - Your Job Search Starts Here</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: black;
+        }
+
+        header {
+            background-color: #ab3232;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 2rem;
+            color: white;
+        }
+
+        section {
+            margin: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #ab3232;
+            color: #fff;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .grid-item {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .city {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .city img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .city:hover img {
+            transform: scale(1.1);
+        }
+
+        .city .city-name {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>HeadHunter</h1>
+        <p>Your Job Search Starts Here</p>
+    </header>
+
+    <section>
+        <h2>Welcome to the Home Page</h2>
+        <p>Find your dream job with HeadHunter. Explore thousands of job listings and take the next step in your career.</p>
+    </section>
+
+    <section>
+        <h2>Featured Jobs</h2>
+        <div class="grid">
+            <div class="grid-item">
+                <h3>Software Engineer</h3>
+                <p>Join top tech companies and work on cutting-edge projects.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Marketing Manager</h3>
+                <p>Lead innovative marketing campaigns for global brands.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Customer Support Representative</h3>
+                <p>Help customers solve problems and provide exceptional service.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Top Cities</h2>
+        <div class="grid">
+            <div class="grid-item">
+                <div class="city">
+                    <img src="https://via.placeholder.com/300" alt="New York">
+                    <div class="city-name">New York</div>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div class="city">
+                    <img src="https://via.placeholder.com/300" alt="San Francisco">
+                    <div class="city-name">San Francisco</div>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div class="city">
+                    <img src="https://via.placeholder.com/300" alt="London">
+                    <div class="city-name">London</div>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div class="city">
+                    <img src="https://via.placeholder.com/300" alt="Tokyo">
+                    <div class="city-name">Tokyo</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Latest News</h2>
+        <div class="grid">
+            <div class="grid-item">
+                <h3>Industry Trends</h3>
+                <p>Stay updated on the latest trends shaping your field.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Interview Tips</h3>
+                <p>Learn how to ace your job interviews with expert advice.</p>
+            </div>
+            <div class="grid-item">
+                <h3>Work-Life Balance</h3>
+                <p>Discover strategies for maintaining a healthy work-life balance.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 HeadHunter. All rights reserved.</p>
+    </footer>
+</body>
+</html>
