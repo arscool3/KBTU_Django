@@ -27,7 +27,8 @@ class Tour(models.Model):
 
 class Review(models.Model):
     text = models.TextField()
-    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.text
@@ -44,3 +45,19 @@ class Request(models.Model):
         return self.email
 
 
+class Booking(models.Model):
+    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    tour = models.ForeignKey('Tour', on_delete=models.PROTECT, null=True)
+    date_booked = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Booking for {self.tour.name} by {self.user.username}"
+
+
+class Rating(models.Model):
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name='User', on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+
+    def __str__(self):
+        return f"{self.user.username} rated {self.tour.name} {self.rating} stars"

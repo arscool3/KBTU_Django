@@ -9,7 +9,11 @@ from .views import (
     ReviewAPIDetailView,
     ReviewCreateAPIView,
     RequestAPICreate,
-    RegistrationAPICreate
+    RegistrationAPICreate,
+    RatingAPIView,
+    RatingAPIDetailView,
+    RatingCreateAPIView
+
 )
 
 from rest_framework_simplejwt.views import (
@@ -28,12 +32,15 @@ urlpatterns = [
     path('reviews/create/', ReviewCreateAPIView.as_view()),
     path('reviews/<int:pk>/', ReviewAPIDetailView.as_view()),
 
+    path('ratings/', RatingAPIView.as_view()),
+    path('ratings/create/', RatingCreateAPIView.as_view()),
+    path('ratings/<int:pk>/', RatingAPIDetailView.as_view()),
+
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     path('request/', RequestAPICreate.as_view()),
     path('registration/', RegistrationAPICreate.as_view())
-
 
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Location, Tour, Review, Request
+from .models import Location, Tour, Review, Request, Booking, Rating
 from django.contrib.auth.models import User
 
 
@@ -20,7 +20,7 @@ class TourSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Review
@@ -40,4 +40,18 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Booking
+        fields = '__all__'
+
+
+class RatingSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = Rating
         fields = '__all__'

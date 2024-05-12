@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import Location, Tour, Review, Request
+from .models import Location, Tour, Review, Request, Rating
 from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
-from .serializers import LocationSerializer, TourSerializer, ReviewSerializer, RequestSerializer, UserSerializer
+from .serializers import LocationSerializer, TourSerializer, ReviewSerializer, RequestSerializer, UserSerializer, \
+    RatingSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 
@@ -24,32 +25,24 @@ class LocationAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # list of tours
-class TourAPIView(generics.ListCreateAPIView):
+class TourAPIView(generics.ListAPIView):
+    queryset = Tour.objects.all()
     serializer_class = TourSerializer
-
     permission_classes = (IsOwnerOrReadOnly,)
-
-    def get_queryset(self):
-        location_id = self.kwargs['location_id']
-        queryset = Tour.objects.filter(location=location_id)
-        return queryset
 
 
 # tour detail
 class TourAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tour.objects.all()
     serializer_class = TourSerializer
     permission_classes = (IsOwnerOrReadOnly,)
-
-    def get_queryset(self):
-        location_id = self.kwargs['location_id']
-        queryset = Tour.objects.filter(location=location_id)
-        return queryset
 
 
 # list of review
 class ReviewAPIView(generics.ListAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 # create review
@@ -76,3 +69,22 @@ class RegistrationAPICreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+
+
+class RatingAPIView(generics.ListAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+class RatingCreateAPIView(generics.CreateAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+# review detail
+class RatingAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
