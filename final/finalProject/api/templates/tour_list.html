@@ -1,0 +1,19 @@
+<form method="GET">
+    <label for="name">Filter by Name:</label>
+    <input type="text" id="name" name="name" value="{{ request.GET.name }}">
+    <button type="submit">Filter</button>
+</form>
+
+<form method="GET">
+    <label for="price">Filter by Price (max):</label>
+    <input type="number" id="price" name="price" value="{{ request.GET.price }}">
+    <button type="submit">Filter</button>
+</form>
+
+<ul>
+    {% for tour in tours %}
+        <li>{{ tour.name }} - {{ tour.description }} - ${{ tour.price }}</li>
+    {% empty %}
+        <li>No tours found.</li>
+    {% endfor %}
+</ul>
