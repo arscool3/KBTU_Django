@@ -4,7 +4,7 @@ from fastapi import status, HTTPException
 def create(db: Session, model_class, model: dict):
     attribute_name = f"{model_class.__name__.lower()}_id"
 
-    if model_class.__name__ != 'Order':
+    if model_class.__name__ != 'Order' and model_class.__name__ != 'Review':
         if db.query(model_class).filter(model_class.name == model.name).first():
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"{model_class.__name__} already exists")
 

@@ -113,3 +113,16 @@ def update_order(order_id: int, order_data: entity.Order, db: Session = Depends(
 @router.delete("/orders/{order_id}")
 def delete_order(order_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, model_class=models.Order, model_id=order_id)
+
+# CRUD - Review
+@router.post("/reviews", response_model=entity.Review)
+def create_review(review_data:entity.Review, db: Session = Depends(get_db)):
+    return crud.create(db=db, model_class=models.Review, model=review_data)
+
+@router.get("/reviews/{review_id}", response_model=entity.Review)
+def read_review(review_id: int, db: Session = Depends(get_db)):
+    return crud.get(db=db, model_class=models.Review, model_id=review_id)
+
+@router.delete("/reviews/{review_id}")
+def delete_review(review_id: int, db: Session = Depends(get_db)):
+    return crud.delete(db=db, model_class=models.Review, model_id=review_id)

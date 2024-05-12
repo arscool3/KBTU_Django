@@ -45,7 +45,7 @@ class Review(Base):
     product_id = Column(Integer, ForeignKey("products.product_id"))
     user_id = Column(Integer, ForeignKey("users.user_id"))
     rating = Column(Float)
-    title = Column(String)
+    name = Column(String)
     description = Column(String)
 
 class Order(Base):

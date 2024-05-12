@@ -26,11 +26,10 @@ class Brand(BaseModel):
 
 
 class Review(BaseModel):
-    review_id: int
     product_id: int
     user_id: int
     rating: float
-    title: str
+    name: str
     description: str
 
 
