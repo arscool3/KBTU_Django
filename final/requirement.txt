@@ -1,0 +1,19 @@
+# your_project/
+# ├── app/
+# │   ├── models.py       # Pydantic models
+# │   ├── database.py     # Database connection and setup
+# │   ├── auth.py         # Authentication and authorization logic
+# │   ├── tasks.py        # Background task definitions
+# │   ├── dependencies.py # Dependency injection functions/classes
+# │   └── api.py          # API endpoints
+# ├── tasks.py            # Celery/Dramatiq worker configuration
+# ├── migrations/         # Database migrations (if using Alembic)
+# └── main.py             # Main application entry point
+
+FastApi
+1) 6 models
+2) 4 Relationships
+3) Authorization
+4) Background Tasks (Dramatiq / Celery)
+5) Postgres DB
+6) 3 DI (2 func, 1 class)
