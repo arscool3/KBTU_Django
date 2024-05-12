@@ -1,7 +1,14 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Request
 from contextlib import contextmanager
 from sqlalchemy import select
 from entity import Ingredient, Recipe, Article
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from sqlalchemy.orm import Session
+from models import User,  get_user_by_username, verify_password
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import models as db
 
 app = FastAPI()
@@ -25,9 +32,6 @@ def ingredient(id: int) -> Ingredient:
         if ingredient is None:
             raise HTTPException(status_code=404)
         return Ingredient.model_validate(ingredient)
-
-
-
 
 
 class AddDependency:
@@ -66,3 +70,33 @@ def add_recipe(recipe_di: str = Depends(AddDependency.add_recipe)) -> str:
 @app.post("/article")
 def add_article(article_di: str = Depends(AddDependency.add_article)) -> str:
     return article_di
+
+
+security = HTTPBasic()
+
+def authenticate_user(credentials: HTTPBasicCredentials, db: Session = Depends(get_db)):
+    user = get_user_by_username(db, credentials.username)
+    if not user or not verify_password(credentials.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    return user
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+@app.get("/protected")
+def read_protected(username: str = Depends(authenticate_user)):
+    return {"message": f"Hello {username}, you are authenticated"}
+
+
+
+
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
+# Route to serve the login page
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+

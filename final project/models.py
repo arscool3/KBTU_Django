@@ -1,4 +1,4 @@
-# models.py
+import bcrypt
 import sqlalchemy as sa
 from sqlalchemy import create_engine, Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship, Session
@@ -56,3 +56,8 @@ class User(Base):
     username = sa.Column(sa.String)
     recipes = relationship("Recipe", back_populates="user")
     articles= relationship("Article",back_populates="user")
+
+def get_user_by_username(db: Session, username: str):
+    return db.query(User).filter(User.username == username).first()
+def verify_password(plain_password: str, hashed_password: str):
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
