@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
 from sqlalchemy.orm import declarative_base, relationship
 
-from KBTU_Django.own_practice.practice10.main import Base
+Base = declarative_base()
 
 
 class Author(Base):

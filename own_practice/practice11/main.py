@@ -3,12 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from pydantic import BaseModel
 
-from own_practice.practice10.models import Author, Book, Publisher
-from websocket import WebSocket
+from models import Author, Book, Publisher, Base
+from fastapi import WebSocket
 
 DATABASE_URL = "postgresql://postgres:Ayef1407_@localhost/djangopractice"
 engine = create_engine(DATABASE_URL)
-Base = declarative_base()
 Base.metadata.create_all(bind=engine)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

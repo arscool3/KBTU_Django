@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Company Info</title>
+</head>
+<body>
+    {% load my_filters %}
+    <h1>Company Information</h1>
+    <ul>
+        {% for company in companies %}
+            <li>{{ company.name|business_title }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
