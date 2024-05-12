@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_dramatiq',
     'trips',
     'rest_framework.authtoken',
+    'drf_spectacular',
     
 ]
 
@@ -179,6 +180,16 @@ DRAMATIQ_RESULT_BACKEND = {
     },
     "MIDDLEWARE_OPTIONS": {
         "result_ttl": 1000 * 60 * 10
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
     }
 }
 
