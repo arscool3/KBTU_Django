@@ -6,6 +6,7 @@ import student.models as student_models
 from typing import Annotated
 from fastapi import Depends, HTTPException
 from auth.utils import *
+from database import get_db
 
 router = APIRouter(
     prefix='/auth',
@@ -14,7 +15,7 @@ router = APIRouter(
 
 
 @router.post('/register')
-def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_session)]):
+def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)]):
     if check_user_existence(user, session):
         raise HTTPException(status_code=400, detail="Email already registered")
 

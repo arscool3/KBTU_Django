@@ -9,4 +9,4 @@ class Course(Base):
     name = Column(String(200), nullable=False)
     instructor_id = Column(Integer, ForeignKey('instructors.id'))
 
-    instructor = relationship("Instructor", backref="course_list", uselist=False)
+    assignments = relationship("Assignment", backref="course")

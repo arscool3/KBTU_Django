@@ -7,6 +7,7 @@ from fastapi import Depends, HTTPException, status
 from auth import models
 from datetime import datetime, timedelta
 from jose import jwt
+from database import get_db
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -24,17 +25,11 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-def get_session():
-    session = SessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
 
 # def get_user(user: UserCreate, session: Annotated[str, Depends(get_session)]):
 #     return 
 
-def check_user_existence(user: UserCreate, session: Annotated[str, Depends(get_session)]):
+def check_user_existence(user: UserCreate, session: Annotated[str, Depends(get_db)]):
     existing_user = session.query(models.User).filter_by(email=user.email).first()
     return existing_user != None
 

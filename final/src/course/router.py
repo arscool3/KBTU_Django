@@ -3,7 +3,7 @@ from course import schemas
 from course import models
 from typing import Annotated
 from fastapi import Depends
-from auth.utils import get_session
+from database import get_db
 
 router = APIRouter(
     prefix='/course',
@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 @router.post("/")
-def create_course(course: schemas.CourseCreate, session: Annotated[str, Depends(get_session)]):
+def create_course(course: schemas.CourseCreate, session: Annotated[str, Depends(get_db)]):
     new_course = models.Course(name=course.name, instructor_id=course.instructor_id)
 
     session.add(new_course)
