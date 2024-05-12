@@ -14,6 +14,8 @@ router = APIRouter(
 )
 
 
+
+
 @router.post('/register')
 def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)]):
     if check_user_existence(user, session):
