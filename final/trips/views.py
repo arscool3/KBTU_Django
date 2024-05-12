@@ -113,6 +113,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 #trips
+
 @api_view(['GET'])
 def trips_list(request):
     vocuhers = Trip.objects.all()

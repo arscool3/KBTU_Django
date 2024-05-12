@@ -2,6 +2,7 @@ from django.urls import path
 
 from rest_framework import routers
 from .views import CategoryViewSet, TripViewSet, UserViewSet, CommentViewSet, FavoriteViewSet, OrderViewSet, ProfileViewSet
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from .views import categories_list, categories_trips, trips_list, \
     trips_detail, favorite_list,home, \
@@ -21,6 +22,8 @@ router.register(r'orders', OrderViewSet)
 router.register(r'user_profile', ProfileViewSet)
 
 urlpatterns = [
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('', home, name='home'),
     path('categories_list/', categories_list, name="category_list"),
     path('categories/<int:category_id>/', categories_trips, name='category_detail'),
