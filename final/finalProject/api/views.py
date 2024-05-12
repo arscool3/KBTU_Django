@@ -8,6 +8,8 @@ from .serializers import LocationSerializer, TourSerializer, ReviewSerializer, R
     RatingSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
+from dramatiq import pipeline
+from tasks import send_email
 
 
 # Create your views here.
@@ -42,6 +44,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+
 class TourViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
@@ -51,7 +54,10 @@ class TourViewSet(viewsets.ModelViewSet):
     def increase_price(self, request, pk=None):
         tour = self.get_object()
         # Increase the price of the tour by 10%
-        tour.price *= 1.1
+        new_price = tour.price * 1.1
+        pipeline(send_email.send(to='admin@example.com', subject='Price Increased',
+                                 body=f"The price of tour {tour.name} has been increased to ${new_price}."))
+        tour.price = new_price
         tour.save()
         return Response({'detail': 'Price increased by 10%'})
 
