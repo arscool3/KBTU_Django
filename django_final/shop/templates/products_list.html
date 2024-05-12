@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Products List</h1>
+    <ul>
+        {% for product_data in products_data %}
+        <li>
+            <a href="{% url 'product_detail' product_data.id %}">
+                {{ product_data.name }} - {{ product_data.price }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <p>Go back to <a href="{% url 'home' %}">home page</a>.</p>
+</body>
+</html>
