@@ -4,8 +4,9 @@ from fastapi import status, HTTPException
 def create(db: Session, model_class, model: dict):
     attribute_name = f"{model_class.__name__.lower()}_id"
 
-    if db.query(model_class).filter(model_class.name == model.name).first():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"{model_class.__name__} already exists")
+    if model_class.__name__ != 'Order':
+        if db.query(model_class).filter(model_class.name == model.name).first():
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"{model_class.__name__} already exists")
 
     last = db.query(model_class).order_by(getattr(model_class, attribute_name).desc()).first()
     next_id = (getattr(last, attribute_name) + 1) if last else 1
@@ -33,8 +34,15 @@ def update(db: Session, model_class, model_id: int, model_data: dict):
     if not model:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
     
-    if model_data.name:
-        model.name = model_data.name
+    if model_class.__name__ != 'Order':
+        if model_data.name:
+            model.name = model_data.name
+    else:
+        model.status = model_data.status
+        if model_data.user_id:
+            model.user_id = model_data.user_id
+        elif model_data.product_id:
+            model.product_id = model_data.product_id
 
     if model_class.__name__ == 'Product':
         if model_data.description:

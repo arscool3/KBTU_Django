@@ -18,7 +18,6 @@ class ProductUpdate(BaseModel):
     description: str
 
 class Category(BaseModel):
-
     name: str
 
 
@@ -36,10 +35,9 @@ class Review(BaseModel):
 
 
 class Order(BaseModel):
-    order_id: int
     user_id: int
+    product_id: int
     status: str  
-    items: list[dict]  
 
 
 class Token(BaseModel):

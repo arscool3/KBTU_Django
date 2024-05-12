@@ -12,7 +12,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 router = APIRouter()
 
 # Authentication
-
 @router.post("/login", response_model=entity.Token)
 def login(details: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == details.username).first()
@@ -79,3 +78,38 @@ def update_brand(brand_id: int, brand_data: entity.Brand, db: Session = Depends(
 @router.delete("/brands/{brand_id}")
 def delete_brand(brand_id: int, db: Session = Depends(get_db)):
     return crud.delete(db=db, model_class=models.Brand, model_id=brand_id)
+
+# CRUD - Category
+@router.post("/categories", response_model=entity.Category)
+def create_category(category_data:entity.Category, db: Session = Depends(get_db)):
+    return crud.create(db=db, model_class=models.Category, model=category_data)
+
+@router.get("/categories/{category_id}", response_model=entity.Category)
+def read_category(category_id: int, db: Session = Depends(get_db)):
+    return crud.get(db=db, model_class=models.Category, model_id=category_id)
+
+@router.put("/categories/{category_id}", response_model=entity.Category)
+def update_category(category_id: int, category_data: entity.Category, db: Session = Depends(get_db)):
+    return crud.update(db=db, model_class=models.Category, model_id=category_id, model_data=category_data)
+
+@router.delete("/categories/{category_id}")
+def delete_category(category_id: int, db: Session = Depends(get_db)):
+    return crud.delete(db=db, model_class=models.Category, model_id=category_id)
+
+
+# CRUD - Order
+@router.post("/orders", response_model=entity.Order)
+def create_order(order_data:entity.Order, db: Session = Depends(get_db)):
+    return crud.create(db=db, model_class=models.Order, model=order_data)
+
+@router.get("/orders/{order_id}", response_model=entity.Order)
+def read_order(order_id: int, db: Session = Depends(get_db)):
+    return crud.get(db=db, model_class=models.Order, model_id=order_id)
+
+@router.put("/orders/{order_id}", response_model=entity.Order)
+def update_order(order_id: int, order_data: entity.Order, db: Session = Depends(get_db)):
+    return crud.update(db=db, model_class=models.Order, model_id=order_id, model_data=order_data)
+
+@router.delete("/orders/{order_id}")
+def delete_order(order_id: int, db: Session = Depends(get_db)):
+    return crud.delete(db=db, model_class=models.Order, model_id=order_id)

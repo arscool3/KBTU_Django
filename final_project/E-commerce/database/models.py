@@ -53,4 +53,5 @@ class Order(Base):
 
     order_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.user_id"))
+    product_id = Column(Integer, ForeignKey("products.product_id"))
     status = Column(String)
