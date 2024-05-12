@@ -1,46 +1,58 @@
+# models.py
 import sqlalchemy as sa
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, Mapped, mapped_column
+from sqlalchemy import create_engine, Table, Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship, Session
 from sqlalchemy.ext.declarative import declarative_base
 
 url = 'postgresql://postgres:postgres@localhost/postgres'
 engine = create_engine(url)
 session = Session(engine)
-
 Base = declarative_base()
 
+
 class Ingredient(Base):
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    title: Mapped[str]
-    description: Mapped[str]
-    __tablename__= 'ingredients'
+    __tablename__ = 'ingredients'
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    recipes = relationship("Recipe", secondary='recipe_category_association', back_populates="ingredients")
 
 class Comment(Base):
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    title: Mapped[str]
-    description: Mapped[str]
-    __tablename__= 'comments' 
+    __tablename__ = 'comments'
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    article_id = sa.Column(sa.Integer, sa.ForeignKey('articles.id'))
+    article = relationship("Article", back_populates="comments")
+    
 
 class Recipe(Base):
-    __tablename__= 'recipe'
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    title: Mapped[str]
-    description: Mapped[str]
+    __tablename__ = 'recipes'
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    user_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    user = relationship("User", back_populates="recipes")
 
 class Category(Base):
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    __tablename__= 'categories' 
-    title: Mapped[str]
-    description: Mapped[str]
+    __tablename__ = 'categories'
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    recipes = relationship("Recipe", secondary='recipe_category_association', back_populates="categories")
 
 class Article(Base):
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    __tablename__ ='articles'
-    title: Mapped[str]
-    description: Mapped[str]
+    __tablename__ = 'articles'
+    id = sa.Column(sa.Integer, primary_key=True)
+    title = sa.Column(sa.String)
+    description = sa.Column(sa.String)
+    comments = relationship("Comment", back_populates="article")
+    user_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    user = relationship("User", back_populates="articles")
 
 class User(Base):
     __tablename__ = 'users'
-    id: Mapped[int] = mapped_column(sa.INTEGER, primary_key=True)
-    username: Mapped[str]
+    id = sa.Column(sa.Integer, primary_key=True)
+    username = sa.Column(sa.String)
+    recipes = relationship("Recipe", back_populates="user")
+    articles= relationship("Article",back_populates="user")
