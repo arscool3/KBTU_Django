@@ -17,6 +17,12 @@ class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
     permission_classes = [permissions.IsAuthenticated]  # Требует аутентификации для всех операций
 
+from django.shortcuts import render
+from .models import Company
+
+def company_list(request):
+    companies = Company.objects.all()
+    return render(request, 'myapp/index.html', {'companies': companies})
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
