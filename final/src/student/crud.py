@@ -5,6 +5,13 @@ from fastapi import Depends
 from database import get_db
 
 
+def create_student(user_id: int, session: Annotated[str, Depends(get_db)]):
+    new_student = models.Student(user_id=user_id)
+    session.add(new_student)
+    session.flush()
+
+    return new_student
+
 def get_all_students(session: Annotated[str, Depends(get_db)], skip: int = 0, limit: int = 100):
     return session.query(models.Student).offset(skip).limit(limit).all()
 

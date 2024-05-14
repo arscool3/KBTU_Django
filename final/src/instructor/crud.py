@@ -5,6 +5,14 @@ from fastapi import Depends
 from database import get_db
 
 
+def create_instructor(user_id: int, session: Annotated[str, Depends(get_db)]):
+    new_instructor = models.Instructor(user_id=user_id)
+    session.add(new_instructor)
+    session.flush()
+
+    return new_instructor
+
+
 def get_all_instructors(session: Annotated[str, Depends(get_db)], skip: int = 0, limit: int = 100):
     return session.query(models.Instructor).offset(skip).limit(limit).all()
 
