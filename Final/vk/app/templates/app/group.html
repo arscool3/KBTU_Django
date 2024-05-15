@@ -11,10 +11,27 @@
             <p>{{group.description}}</p>
 
             Подписчиков: {{group.id | subs}}
+
+            {% if not is_owner %}
+                {% if group|isSub:request.user %}
+                    <button onclick="location.href='{% url 'UnsubG' g_id=group.id %}'">Отписаться</button>
+                {% else %}
+                    <button onclick="location.href='{% url 'SubG' g_id=group.id %}'">Подписаться</button>
+                {% endif %}
+            {% endif %}
+
         </div>
 
     </div>
 
+    {% if is_owner %}
+        <form method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            {{ image_form.as_p }}
+            {{ post_form.as_p }}
+        <button type="submit">готово</button>
+        </form>
+    {% endif %}
 
     {% for p in Posts %}
     <a href="{% url 'postpage' p.id %}" style="text-decoration: none;  color: inherit;">

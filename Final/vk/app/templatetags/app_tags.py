@@ -26,7 +26,7 @@ def dateTime(d):
 # Post
 @register.filter
 def postimage(pid):
-    return Image.objects.getPostImage(pid).photo.url
+    return Image.objects.getPostImage(pid)
 
 @register.filter
 def AuthorName(pus):
@@ -65,5 +65,9 @@ def peoplename(p):
 @register.filter
 def subs(g):
     return Subscription.objects.amount(g)
+
+@register.filter
+def isSub(g, u):
+    return Subscription.objects.isSub(g, u)
 
 

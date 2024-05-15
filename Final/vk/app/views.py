@@ -20,7 +20,7 @@ def postspage(request):
 
 def postpage(request, p_id):
     P = Post.objects.get(id=p_id)
-    Im = Image.objects.get(post=p_id).photo.url
+    Im = Image.objects.getPostImage(p_id)
     comments = Comment.objects.getPostComs(p_id)
 
     if request.method == 'POST':
@@ -48,7 +48,35 @@ def group(request, g_id):
     posts = Post.objects.getGroupPosts(g_id)
     g = Group.objects.get(id=g_id)
 
-    return render(request, 'app/group.html', {'Posts': posts, 'group': g})
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
+
+        if post_form.is_valid() and image_form.is_valid():
+            post_form.instance.user = request.user
+            post_form.instance.group = g
+            post_instance = post_form.save()
+
+            image_form.instance.post = post_instance
+            image_form.save()
+    else:
+        post_form = PostForm()
+        image_form = ImageForm()
+
+    context = {'Posts': posts, 'group': g, 'is_owner': g.owner == request.user,
+               'post_form': post_form, 'image_form': image_form}
+
+    return render(request, 'app/group.html', context)
+
+
+def SubGroup(request, g_id):
+    Subscription.objects.subscribe(Group.objects.get(id=g_id), request.user)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+def UnsubGroup(request, g_id):
+    Subscription.objects.unsubscribe(Group.objects.get(id=g_id), request.user)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
 
 def people(request):
     User = get_user_model()
@@ -83,7 +111,7 @@ def mypage(request):
 
             image_form.instance.post = post_instance
             image_form.save()
-            return redirect('admin:app_image_changelist')
+            return redirect('mypage')
     else:
         post_form = PostForm()
         image_form = ImageForm()

@@ -29,8 +29,9 @@ class UserInfo(models.Model):
 
 class ImageQuerySets(models.QuerySet):
     def getPostImage(self, p):
-        return self.filter(post=p)
-
+        try:
+            return self.get(post=p).photo.url
+        except: 'user_photos/'
 
 class Image(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")
@@ -46,10 +47,11 @@ class PostQuerySets(models.QuerySet):
         return self.get(post=p)
 
     def getPersonPosts(self, u_id):
-        return self.filter(user=u_id).order_by('-created_at')
+        return self.filter(user=u_id).order_by('-created_at').filter(group=None)
 
     def getGroupPosts(self, g_id):
         return self.filter(group=g_id).order_by('-created_at')
+
 
 
 class Post(models.Model):
@@ -61,7 +63,7 @@ class Post(models.Model):
     objects = PostQuerySets.as_manager()
 
     def __str__(self):
-        return self.user.username + '_' + str(self.created_at)
+        return self.user.username + '_' + str(self.created_at) + '_' + str(self.id)
 
 
 class ComQuerySets(models.QuerySet):
@@ -101,7 +103,6 @@ class Like(models.Model):
         return self.post.user.username + '_' + str(self.post.created_at) + '_' + self.user.username
 
 
-
 class Group(models.Model):
     photo = models.ImageField(upload_to="group_photos/%Y/%m/%d/")
     name = models.CharField(max_length=255)
@@ -116,6 +117,18 @@ class Group(models.Model):
 class SubsQuerySets(models.QuerySet):
     def amount(self, g):
         return self.filter(group=g).count()
+
+    def isSub(self, g, u):
+        try:
+            self.get(group=g, user=u)
+            return True
+        except: return False
+
+    def subscribe(self, g, u):
+        self.create(group=g, user=u)
+
+    def unsubscribe(self, g, u):
+        self.get(group=g, user=u).delete()
 
 
 class Subscription(models.Model):
