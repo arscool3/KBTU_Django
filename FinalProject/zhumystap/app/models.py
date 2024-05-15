@@ -92,3 +92,10 @@ class Response(models.Model):
 
     def __str__(self):
         return f"{self.vacancy.title} - {self.resume.user.username}"
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField(null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+

@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, get_user_model
 from .models import Vacancy, Company, User, Resume
 from .forms import UserProfileForm, UserRegistrationForm, UserLoginForm, ResumeForm, ResponseForm, ChangePasswordForm, \
     VacancyFilterForm, VacancyForm
-# from .tasks import process_vacancy
+
 
 # GET
 def home(request):
