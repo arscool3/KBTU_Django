@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <h2>User Information:</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    <h2>User's Cars:</h2>
+    <ul>
+        {% for car in cars %}
+            <li>{{ car.make }} {{ car.model }} (Year: {{ car.year }})</li>
+        {% endfor %}
+    </ul>
+
+    <h2>User's Parking Information:</h2>
+    <ul>
+        {% for payment in payments %}
+            <li>Parking Space: {{ payment.parking_space }} - Start Time: {{ payment.start_time }} - End Time: {{ payment.end_time }} - Amount: {{ payment.amount }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

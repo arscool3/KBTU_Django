@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter-Terrorist Team Information</title>
+</head>
+<body>
+    <h1>Counter-Terrorist Team Information</h1>
+    <ul>
+        {% for counter_terrorist in iterable %}
+            <li>
+                <strong>Name:</strong> {{ counter_terrorist.name }}<br>
+                <strong>Score:</strong> {{ counter_terrorist.score }}<br>
+                 <p><strong>
+                    Main Weapon:
+                    {{ counter_terrorist.main_weapon }}
+               </strong></p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

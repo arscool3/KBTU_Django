@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrorist Team Information</title>
+</head>
+<body>
+    <h1>Terrorist Team Information</h1>
+    <ul>
+        {% for terrorist in iterable %}
+            <li>
+                <strong>Name:</strong> {{ terrorist.name }}<br>
+                <strong>Score:</strong> {{ terrorist.score }}<br>
+               <p><strong>
+                    Main Weapon:
+                    {{ terrorist.main_weapon }}
+               </strong></p>
+                <strong>Planted Bomb By:</strong>
+                {% if terrorist.bomb_set.exists %}
+                    {{ terrorist.bomb_set.first.planted_by.name }}
+                {% else %}
+                    Not planted
+                {% endif %}
+                <!-- Add more fields as needed -->
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
