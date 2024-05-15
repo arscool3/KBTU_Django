@@ -9,9 +9,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     username = Column(String, unique=True, index=True)
     password = Column(String, unique=True, index=True)
-
-    posts = relationship('Post', back_populates='owner')
-    comments = relationship('Comment', back_populates='owner')
+    posts = relationship('Post', back_populates='user')
+    comments = relationship('Comment', back_populates='user')
 
 
 class Post(Base):
@@ -32,3 +31,10 @@ class Comment(Base):
     post_id = Column(Integer, ForeignKey('posts.id'))
 
     user = relationship('User', back_populates='comments')
+
+#
+# class HashedPassword(Base):
+#     __tablename__ = 'hashed_passwords'
+#     id = Column(Integer, primary_key=True, index=True)
+#     user_id = Column(Integer, ForeignKey('users.id'))
+#     hashed_password = Column(String)
