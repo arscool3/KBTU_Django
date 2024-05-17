@@ -151,7 +151,7 @@ EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587 
 EMAIL_USE_TLS = True  
 EMAIL_HOST_USER = 'o_ten@kbtu.kz'  
-EMAIL_HOST_PASSWORD = 'T10O10.10'  
+EMAIL_HOST_PASSWORD = '******'  
 DEFAULT_FROM_EMAIL = 'o_ten@kbtu.kz' 
 
 
