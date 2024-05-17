@@ -1,5 +1,8 @@
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
+
+from .dramatiq_tasks import createUserInfo
 from .serializers import *
 from app.models import Post, UserInfo, Image, Comment, Like, Group, Subscription
 from django.contrib.auth.models import User
@@ -42,6 +45,25 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
 
     lookup_field = 'id'
+
+    def create(self, request):
+        if "uid" in request.POST:
+            try:
+                instance = User.objects.get(pk=request.POST['uid'])
+                serializer = UserSerializer(
+                    instance=instance,
+                    data=request.data
+                )
+            except User.DoesNotExist:
+                serializer = UserSerializer(data=request.data)
+        else:
+            serializer = UserSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        createUserInfo(User.objects.get(id=serializer.data.get('id')))
+
+        return Response(serializer.data)
 
     @action(detail=True, methods=['get'])
     def getUserInfo(self, request, id: int):

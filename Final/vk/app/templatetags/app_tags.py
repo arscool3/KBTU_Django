@@ -15,7 +15,7 @@ def ShowMenu(isLoged):
 
 @register.inclusion_tag('app/menu2.html')
 def ShowMenu2():
-    menu2 = [{'title': 'Группы', 'link': 'groups'}, {'title': 'Люди', 'link': 'people'}]
+    menu2 = [{'title': 'Группы', 'link': 'groups'}, {'title': 'Люди', 'link': 'people'}, {'title': 'Посты', 'link': 'home'}]
     return {'menu2': menu2}
 
 @register.filter
@@ -35,8 +35,7 @@ def AuthorName(pus):
 
 @register.filter
 def ava(pus):
-    info = UserInfo.objects.getinfo(pus.id)
-    return info.photo.url
+    return UserInfo.objects.getAva(pus)
 
 
 @register.filter
@@ -53,8 +52,11 @@ def peopleinfo(p):
 
 @register.filter
 def peopleimage(p):
-    pi = peopleinfo(p)
-    return pi.photo.url
+    try:
+        pi = peopleinfo(p)
+        return pi.photo.url
+    except:
+        return 'user/'
 
 @register.filter
 def peoplename(p):

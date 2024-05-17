@@ -13,6 +13,12 @@ class UserInfoQuerySets(models.QuerySet):
     def getinfo(self, u):
         return self.get(user=u)
 
+    def getAva(self, u):
+        try:
+            return self.get(user=u).photo.url
+        except:
+            return 'user_photos/'
+
 
 class UserInfo(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -59,7 +65,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     group = models.ForeignKey('Group', models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=2)
     objects = PostQuerySets.as_manager()
 
     def __str__(self):
@@ -79,7 +85,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     post = models.ForeignKey('Post', models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=2)
     objects = ComQuerySets.as_manager()
 
     def __str__(self):
@@ -90,10 +96,17 @@ class LikeQuerySets(models.QuerySet):
     def amount(self, p):
         return self.filter(post=p).count()
 
+    def likeDislike(self, user, postId):
+        post = Post.objects.get(id=postId)
+        try:
+            self.create(user=user, post=post)
+        except:
+            self.get(user=user, post=post).delete()
+
 
 class Like(models.Model):
     post = models.ForeignKey('Post', models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_DEFAULT, default=2)
     objects = LikeQuerySets.as_manager()
 
     class Meta:
@@ -103,12 +116,19 @@ class Like(models.Model):
         return self.post.user.username + '_' + str(self.post.created_at) + '_' + self.user.username
 
 
+class GroupQuerySets(models.QuerySet):
+    def myGroups(self, user):
+        return self.filter(owner=user)
+
+
+
 class Group(models.Model):
     photo = models.ImageField(upload_to="group_photos/%Y/%m/%d/")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = GroupQuerySets.as_manager()
 
     def __str__(self):
         return self.name
@@ -132,8 +152,8 @@ class SubsQuerySets(models.QuerySet):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    group = models.ForeignKey('Group', models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE)
     objects = SubsQuerySets.as_manager()
 
     class Meta:

@@ -5,10 +5,13 @@
 {% block content %}
     <div style="display: flex;
     align-items: center; margin-bottom: 20px; border: 2px solid; padding: 20px 100px">
-        <img src="{{user.photo.url}}" width="200px" >
+        <img src="{{user.user | ava }}" width="200px" >
         <div style="margin-left: 20px;">
             <h1>{{user.name}} {{user.surname}}</h1>
             <p>{{user.description}}</p>
+            {% if is_me %}
+                <button onclick="location.href='{% url 'changeUserInfo' %}'">Изменить</button>
+            {% endif %}
         </div>
 
     </div>

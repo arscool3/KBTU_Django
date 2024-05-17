@@ -40,3 +40,20 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['photo']
 
+
+class GroupForm(forms.ModelForm):
+    description = forms.CharField(label='', widget=forms.Textarea(attrs={'rows': 4, 'cols': 40}))
+    photo = forms.ImageField()
+
+    class Meta:
+        model = Group
+        fields = ['photo', 'name', 'description']
+
+
+class UserInfoForm(forms.ModelForm):
+    description = forms.CharField(label='', widget=forms.Textarea(attrs={'rows': 4, 'cols': 40}))
+
+    class Meta:
+        model = UserInfo
+        fields = '__all__'
+        exclude = ('user',)

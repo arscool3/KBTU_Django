@@ -3,6 +3,30 @@
 
 
 {% block content %}
+
+    {% if request.user.is_authenticated %}
+        <div style="border: 2px solid; padding: 20px">
+            <h1>Мои группы:</h1>
+            {% if MyGroups %}
+                {% for g in MyGroups %}
+                    <a href="{% url 'group' g.id %}" style="text-decoration: none;  color: inherit;">
+                        <div style="background-color: gray; padding: 20px 200px; margin: 20px";>
+                        <h1><img src="{{g.photo.url}}" width="200px">
+                        {{g.name}}</h1>
+                        Подписчиков: {{g.id | subs}}
+                        </div>
+                    </a>
+                <button onclick="location.href='{% url 'addGroup' %}'">Добавить группу</button>
+            {% endfor %}
+        {% else %}
+
+        <button onclick="location.href='{% url 'addGroup' %}'">Добавить группу</button>
+
+        {% endif %}
+        </div>
+    {% endif %}
+
+
     <h1>Группы</h1>
     {% for g in Groups %}
         <a href="{% url 'group' g.id %}" style="text-decoration: none;  color: inherit;">

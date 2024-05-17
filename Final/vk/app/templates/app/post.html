@@ -10,13 +10,21 @@
         <img src="{{Im}}" width="500px">
         <p>{{P.text}}</p>
         <h5>{{P.updated_at | dateTime}}</h5>
-        <button>Лайки:</button> {{P.id | likes}} <button>Комменты:</button> {{P.id | coms }}
+        {% if request.user.is_authenticated %}
+            <button onclick="location.href='{% url 'like' P.id %}'">Лайки:</button> {{P.id | likes}}
+        {% else %}
+            <button>Лайки:</button> {{P.id | likes}}
+        {% endif %}
+
+        <button>Комменты:</button> {{P.id | coms }}
     </div>
 
+    {% if request.user.is_authenticated %}
     <form method="post" style="margin: 10px">
         {% csrf_token %}
         {{ form1.as_p }}
     <button type="submit">Готово</button>
+    {% endif %}
 
     {% for c in coms %}
         <div style="border: 2px solid; padding-left:100px; padding-right:100px; margin: 20px">

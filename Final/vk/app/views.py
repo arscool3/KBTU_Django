@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import get_user_model
 
-
 from .forms import *
 from .models import *
 from django.contrib.auth import login, logout
@@ -39,9 +38,18 @@ def postpage(request, p_id):
     return render(request, 'app/post.html', {'P': P, 'Im': Im, 'coms': comments, 'form1': form})
 
 
+def like(request, p_id):
+    Like.objects.likeDislike(request.user, p_id)
+    return redirect(request.META.get('HTTP_REFERER', 'redirect_if_referer_not_found'))
+
+
 def groups(request):
     Groups = Group.objects.all()
-    return render(request, 'app/groups.html', {'Groups': Groups})
+    if request.user.is_authenticated:
+        myGroups = Group.objects.myGroups(request.user)
+    else:
+        myGroups = []
+    return render(request, 'app/groups.html', {'Groups': Groups, 'MyGroups': myGroups})
 
 
 def group(request, g_id):
@@ -67,6 +75,22 @@ def group(request, g_id):
                'post_form': post_form, 'image_form': image_form}
 
     return render(request, 'app/group.html', context)
+
+
+def addGroup(request):
+    if request.method == 'POST':
+        form = GroupForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                form.instance.owner = request.user
+                form.save()
+                return redirect('groups')
+            except ValidationError as e:
+                form.add_error(None, e)
+    else:
+        form = GroupForm()
+
+    return render(request, 'app/addPage.html', { 'title': 'Добавить Группу', 'form': form})
 
 
 def SubGroup(request, g_id):
@@ -122,6 +146,18 @@ def mypage(request):
 
     return render(request, 'app/profil.html', data)
 
+def ChangeUserInfo(request):
+    usInfo = UserInfo.objects.getinfo(request.user)
+    if request.method == 'POST':
+        form = UserInfoForm(request.POST, request.FILES, instance=usInfo)
+
+        if form.is_valid():
+            form.save()
+            return redirect('mypage')
+    else:
+        form = UserInfoForm(instance=usInfo)
+
+    return render(request, 'app/addPage.html', {'title': 'Изменить профиль', 'form': form})
 
 class LoginUser(LoginView):
     form_class = AuthenticationForm
@@ -140,7 +176,10 @@ class RegisterUser(CreateView):
         user = form.save()
         login(self.request, user)
         UserInfo.objects.just_registrated(user)
+
         return redirect('home')
+
+
 
 def logout_user(request):
     logout(request)
