@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites</title>
+</head>
+<body>
+    <h1>My Favorites</h1>
+    <ul>
+        {% for favorite in favorites %}
+            <li>{{ favorite.book.title }}</li>
+        {% empty %}
+            <li>No favorites yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_username">Username:</label><br>
+        <input type="text" id="id_username" name="username" required><br>
+
+        <label for="id_email">Email:</label><br>
+        <input type="email" id="id_email" name="email" required><br>
+
+        <label for="id_password">Password:</label><br>
+        <input type="password" id="id_password" name="password" required><br>
+
+        <input type="checkbox" id="id_consent_to_notifications" name="consent_to_notifications">
+        <label for="id_consent_to_notifications">I agree to receive notifications</label><br>
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popular Categories</title>
+</head>
+<body>
+    <h1>Popular Categories</h1>
+    <ul>
+        {% for category in popular_categories %}
+            <li>{{ category.name }} - {{ category.num_products }} products</li>
+        {% empty %}
+            <li>No popular categories found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

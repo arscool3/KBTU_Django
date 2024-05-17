@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trips List</title>
+</head>
+<body>
+    <h1>Trips List</h1>
+    <ul>
+        {% for trip_data in trips_data %}
+        <li>
+            <a href="{% url 'trips_detail' trip_data.id %}">
+                {{ trip_data.name }} - {{ trip_data.description }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

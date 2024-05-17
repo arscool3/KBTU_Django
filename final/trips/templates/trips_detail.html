@@ -1,0 +1,108 @@
+{% load utils %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .trip-info {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .trip-info img {
+            width: 300px;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .trip-details {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .trip-details p {
+            margin: 5px 0;
+        }
+        .comments {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+        .comment {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 2px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trip Details</h1>
+        <div class="trip-info">
+            <img src="{{ trip_data.img | image_url }}" alt="{{ trip_data.name }}">
+            <div class="trip-details">
+                <p><strong>Name:</strong> {{ trip_data.name }}</p>
+                <p><strong>Description:</strong> {{ trip_data.description }}</p>
+                <p><strong>Rate:</strong> {{ trip_data.rate }}</p>
+                <p><strong>Likes:</strong> {{ trip_data.like }}</p>
+                <p><strong>Price:</strong> {{ trip_data.price | format_price }}</p>
+                <p><strong>Category:</strong> {{ trip_data.category.name }}</p>
+                <form action="{% url 'favorite_list' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="trip_id" value="{{ trip_data.id }}">
+                    <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Add to Favorites</button>
+                </form>
+            </div>
+        </div>
+
+        <h2>Add Comment</h2>
+        <form action="{% url 'add_comment' trip_id=trip_data.id %}" method="post">
+            {% csrf_token %}
+            <textarea name="comment" rows="4" cols="50"></textarea><br>
+            <button type="submit">Add Comment</button>
+        </form>
+            
+        <h2>Comments</h2>
+        <ul>
+            {% for comment in comments %}
+            <li>
+                <strong>{{ comment.user.username }}</strong>: {{ comment.description }}
+                {% if comment.user == request.user %}
+                <form action="{% url 'edit_comment' comment_id=comment.id %}" method="get">
+                    {% csrf_token %}
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="{% url 'delete_comment' comment.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete Comment</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</body>
+</html>

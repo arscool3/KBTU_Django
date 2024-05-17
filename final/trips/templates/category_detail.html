@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trips in Category</title>
+</head>
+<body>
+    <h1>Trips in {{ category.name }}</h1>
+    <ul>
+        {% for trip in trips %}
+            <li>
+                <a href="{% url 'trips_detail' trip.id %}">{{ trip.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
