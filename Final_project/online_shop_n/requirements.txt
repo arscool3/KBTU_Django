@@ -1,0 +1,8 @@
+Django==4.2
+djangorestframework==3.14
+djoser==2.1
+django-filter==23.1
+django-celery-beat==2.5.0
+celery==5.2.7
+dramatiq==1.12.1
+redis==4.6.0
