@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+    <h2>My Bookings</h2>
+    <ul>
+        {% for booking in bookings %}
+            <li>{{ booking.title|capitalize }} - {{ booking.status }}</li>
+        {% empty %}
+            <li>No bookings yet.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'logout' %}">Logout</a>
+{% endblock %}

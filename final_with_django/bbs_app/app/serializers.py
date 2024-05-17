@@ -11,10 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
 class ManagerSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     username = serializers.ReadOnlyField(source='user.username')
+    first_name = serializers.ReadOnlyField(source='user.first_name')
+    last_name = serializers.ReadOnlyField(source='user.last_name')
 
     class Meta:
         model = Manager
-        fields = ['id', 'user', 'username']
+        fields = ['id', 'user', 'username', 'first_name', 'last_name']
 
 class BarberSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -38,9 +40,9 @@ class BarbershopSerializer(serializers.ModelSerializer):
 class BookingRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookingRequest
-        fields = ['id', 'receiver', 'status', 'timestamp', 'client', 'barbershop']
+        fields = ['id', 'receiver', 'status', 'timestamp', 'barbershop']
 
 class ApplicationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationRequest
-        fields = ['id', 'receiver', 'status', 'timestamp', 'barber', 'barbershop']
+        fields = ['id', 'receiver', 'status', 'timestamp', 'barbershop']

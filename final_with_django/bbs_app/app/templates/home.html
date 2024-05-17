@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h2>Welcome to the Hair Salon Booking App</h2>
+    <p>This is the home page. Use the navigation links to register, log in, or view your bookings.</p>
+    <a href="{% url 'register' %}">Register</a> | 
+    <a href="{% url 'login' %}">Login</a> | 
+    <a href="{% url 'booking_list' %}">My Bookings</a>
+{% endblock %}
