@@ -24,7 +24,24 @@ INSTALLED_APPS = [
     
     'app',
     'rest_framework',
+    'django_dramatiq',
 ]
+
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.redis.RedisBroker",
+    "OPTIONS": {
+        "url": "redis://localhost:6379/0",
+    },
+    "MIDDLEWARE": [
+        "dramatiq.middleware.AgeLimit",
+        "dramatiq.middleware.TimeLimit",
+        "dramatiq.middleware.Callbacks",
+        "dramatiq.middleware.Retries",
+        "django_dramatiq.middleware.DbConnectionsMiddleware",
+    ]
+}
+
+DRAMATIQ_TASKS_DATABASE = "default"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

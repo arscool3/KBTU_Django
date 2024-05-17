@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Manager, Barber, Client, Barbershop, BookingRequest, ApplicationRequest
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active', 'date_joined']
+
         
 class ManagerSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -8,7 +14,7 @@ class ManagerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Manager
-        fields = ['id', 'user', 'username', 'first_name', 'last_name']
+        fields = ['id', 'user', 'username']
 
 class BarberSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())

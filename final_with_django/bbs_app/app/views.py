@@ -1,14 +1,23 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
+
+from .tasks import send_booking_confirmation
 from .permissions import IsAdminUserOrReadOnly, IsBookingClient, IsManager, IsManagerOrReadOnly
-from .models import Manager, Barber, Client, Barbershop, BookingRequest, ApplicationRequest
-from .serializers import ManagerSerializer, BarberSerializer, ClientSerializer, BarbershopSerializer, BookingRequestSerializer, ApplicationRequestSerializer
+from .models import Manager, Barber, Client, Barbershop, BookingRequest, ApplicationRequest, User
+from .serializers import ManagerSerializer, BarberSerializer, ClientSerializer, BarbershopSerializer, BookingRequestSerializer, ApplicationRequestSerializer, UserSerializer
+from rest_framework.permissions import IsAdminUser
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
 
 class ManagerViewSet(viewsets.ModelViewSet):
     queryset = Manager.objects.all()
     serializer_class = ManagerSerializer
-    permission_classes = [permissions.IsAuthenticated, IsManagerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsManagerOrReadOnly | IsAdminUser]
 
 class BarberViewSet(viewsets.ModelViewSet):
     queryset = Barber.objects.all()
@@ -31,7 +40,8 @@ class BookingRequestViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsBookingClient | IsManager]
     
     def perform_create(self, serializer):
-        serializer.save(client=self.request.user)
+        booking = serializer.save(client=self.request.user.client, status="pending")
+        send_booking_confirmation.send(booking.client.user.email, booking.id)
     
 class BookingModelViewSet(viewsets.ModelViewSet):
     queryset = BookingRequest.objects.all()
