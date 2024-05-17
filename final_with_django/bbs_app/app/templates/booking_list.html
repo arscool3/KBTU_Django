@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
-{% block title %}My Bookings{% endblock %}
+{% load custom_filters %}
+{% block title %}Barbers{% endblock %}
 
 {% block content %}
-    <h2>My Bookings</h2>
+    <h2>Barbers</h2>
     <ul>
         {% for booking in bookings %}
             <li>{{ booking.title|capitalize }} - {{ booking.status }}</li>

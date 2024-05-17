@@ -6,7 +6,8 @@ from .views import (ManagerViewSet,
                     BarbershopViewSet, 
                     BookingRequestViewSet, 
                     ApplicationRequestViewSet, 
-                    UserViewSet)
+                    UserViewSet, 
+                    barbershops_list, homepage, managers_list, user_detail, users_list)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -19,4 +20,9 @@ router.register(r'application-requests', ApplicationRequestViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('home/', homepage, name='homepage'),
+    path('managers_list/', managers_list, name='managers_list'),
+    path('barbershops_list/', barbershops_list, name='barbershops_list'),
+    path('users_list/', users_list, name='users_list'),
+    path('users_list/<int:user_id>/', user_detail, name='user_detail'),
 ]

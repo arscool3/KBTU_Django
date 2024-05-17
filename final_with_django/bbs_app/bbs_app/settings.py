@@ -13,6 +13,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+from django.conf.urls import handler404
+
+handler404 = 'django.views.defaults.page_not_found'
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

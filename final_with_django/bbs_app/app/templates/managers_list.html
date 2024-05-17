@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Managers{% endblock %}
+
+{% block content %}
+    <h2>Managers</h2>
+    <ul class="list">
+        {% for manager in managers %}
+            <li class="list-item">
+                <strong>{{ manager.user.first_name|capitalize }} {{ manager.user.last_name|capitalize }}</strong>
+                (username: {{manager.user.username}})
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

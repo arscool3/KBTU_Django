@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}User Detail{% endblock %}
+
+{% block content %}
+    <h2>User Detail</h2>
+    <ul class="user-detail">
+        <li><strong>ID:</strong> {{ user.id }}</li>
+        <li><strong>Username:</strong> {{ user.username }}</li>
+        <li><strong>First Name:</strong> {{ user.first_name|capitalize }}</li>
+        <li><strong>Last Name:</strong> {{ user.last_name|capitalize }}</li>
+    </ul>
+{% endblock %}

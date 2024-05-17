@@ -1,66 +1,89 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}My App{% endblock %}</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Hair Salon Booking App{% endblock %}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-        }
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        button {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #4cae4c;
-        }
-        a {
-            color: #5cb85c;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      header {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      nav {
+        margin: 10px 0;
+      }
+
+      nav a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #fff;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      footer {
+        background-color: #4caf50;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+      }
+
+      .list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .list-item {
+        background-color: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .list-item strong {
+        color: #4caf50;
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-</body>
+  </head>
+  <body>
+    <header>
+      <h1>Hair Salon Booking App</h1>
+      <nav>
+        <a href="{% url 'homepage' %}">Home</a> |
+        <a href="{% url 'managers_list' %}">Managers</a> |
+        <a href="{% url 'barbershops_list' %}">Barbershops</a> |
+        <a href="{% url 'users_list' %}">Users</a>
+      </nav>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+    <footer>
+      <p>&copy; 2024 Hair Salon</p>
+    </footer>
+  </body>
 </html>

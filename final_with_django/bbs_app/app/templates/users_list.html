@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    <h2>Users</h2>
+    <ul class="list">
+        {% for user in users %}
+            <li class="list-item">
+                {% comment %} <strong>{{ user.username|capitalize }}</strong> {% endcomment %}
+                <a href="{% url 'user_detail' user.id %}">{{ user.username|capitalize }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .button:hover {
+            background-color: #45a049;
+        }
+        
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+          color: #333;
+        }
+  
+        header {
+          background-color: #4caf50;
+          color: #fff;
+          padding: 10px 0;
+          text-align: center;
+        }
+  
+        nav {
+          margin: 10px 0;
+        }
+  
+        nav a {
+          margin: 0 15px;
+          text-decoration: none;
+          color: #fff;
+        }
+  
+        nav a:hover {
+          text-decoration: underline;
+        }
+  
+        main {
+          padding: 20px;
+        }
+  
+        footer {
+          background-color: #4caf50;
+          color: #fff;
+          text-align: center;
+          padding: 10px 0;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+        }
+  
+        h1,
+        h2 {
+          margin: 0;
+        }
+  
+        .list {
+          list-style-type: none;
+          padding: 0;
+        }
+  
+        .list-item {
+          background-color: #fff;
+          margin: 10px 0;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+  
+        .list-item strong {
+          color: #4caf50;
+        }
+      </style>
+</head>
+<body>
+    <header>
+        <h1>Page Not Found</h1>
+    </header>
+    <main>
+        <p>Sorry, the page you are looking for does not exist.</p>
+        <a href="{% url 'homepage' %}" class="button">Go Home</a>
+    </main>
+    <footer>
+        <p>&copy; 2024 Hair Salon</p>
+    </footer>
+</body>
+</html>
