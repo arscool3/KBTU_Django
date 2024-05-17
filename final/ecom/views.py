@@ -2,21 +2,21 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, decorators, logout
 from django.contrib.auth.forms import AuthenticationForm
-from rest_framework import status
+from rest_framework import status, generics, viewsets
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets
 
-from .renderers import UserJSONRenderer
+from .permissions import CustomPermission
+from .renderers import UserRenderer
 from .serializers import *
 from .models import *
-from final.celery import send_email
+from final.celery import send_notification
 
 
 class UserRegistrationAPIView(APIView):
-    renderer_classes = (UserJSONRenderer,)
+    renderer_classes = (UserRenderer,)
     permission_classes = (AllowAny,)
     serializer_class = UserRegistrationSerializer
 
@@ -27,16 +27,13 @@ class UserRegistrationAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        email = serializer.data.get('email')
-
-        send_email(email, 'Welcome!', 'Thank you for registering!')
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserLoginAPIView(APIView):
     permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
+    renderer_classes = (UserRenderer,)
     serializer_class = UserLoginSerializer
 
     def post(self, request):
@@ -44,11 +41,14 @@ class UserLoginAPIView(APIView):
 
         serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
+        username = serializer.data.get('username')
+        user_id = serializer.data.get('id')
+        send_notification(user_id, 'Welcome back,' + username)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ProductViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (CustomPermission,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -69,15 +69,13 @@ class ProductViewSet(viewsets.ModelViewSet):
             products = products.filter(name__icontains=search_param)
 
         serializer = self.serializer_class(products, many=True)
-        return Response({
-            "success": "true",
-            "products": serializer.data
-        }, status=status.HTTP_200_OK)
+        print(serializer.data)
+        return render(request, 'product.html', {'products': serializer.data})
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    queryset = Product.objects.all()
+    permission_classes = (CustomPermission,)
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     def create(self, request, *args, **kwargs):
@@ -90,16 +88,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         search_param = request.GET.get("search")
-        products = self.get_queryset()
+        categories = self.get_queryset()
 
         if search_param:
-            products = products.filter(name__icontains=search_param)
+            categories = categories.filter(name__icontains=search_param)
 
-        serializer = self.serializer_class(products, many=True)
-        return Response({
-            "success": "true",
-            "category": serializer.data
-        }, status=status.HTTP_200_OK)
+        serializer = self.serializer_class(categories, many=True)
+        return render(request, 'categories.html', {'categories': serializer.data})
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -147,10 +142,6 @@ class LikeViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         search_param = request.GET.get("search")
         likes = self.get_queryset()
-
-        if search_param:
-            likes = comments.filter(content__icontains=search_param)
-
         serializer = self.serializer_class(likes, many=True)
         return Response({
             "success": "true",
@@ -158,29 +149,38 @@ class LikeViewSet(viewsets.ModelViewSet):
         }, status=status.HTTP_200_OK)
 
 
-def get_products(request):
-    categories = Category.objects.all()
-    products = Product.objects
-    form = ProductPriceForm(request.POST)
-    if name := request.GET.get('name'):
-        products = products.filter(name=name.capitalize())
-    products = products.all()
-    return render(request, "productlist.html", {"iterable": products,"categories": categories, "object": "Products", 'form': form, "user":request.user.is_authenticated})
+class ProductLikesList(generics.ListAPIView):
+    serializer_class = LikeSerializer
 
+    def get_queryset(self):
+        product_id = self.kwargs['pk']
+        return Like.objects.filter(product_id=product_id)
 
-def add_product(request):
-    form = ProductPriceForm(request.POST)
-    if form.is_valid():
-            form.save()
-            return redirect('categories')
-    return render(request, "main.html", { "object": "Category", 'form': form})
+class ProductCommentsList(generics.ListAPIView):
+    serializer_class = CommentSerializer
 
-def get_product_list_by_category(request, category_name):
-    categories = Category.objects.all()
-    product = Product.objects.get_products_by_category(category_name)
-    return render(request, "productlist.html", {"iterable": product,"categories": categories, "object": "Products","user":request.user.is_authenticated})
+    def get_queryset(self):
+        product_id = self.kwargs['pk']
+        return Comment.objects.filter(product_id=product_id)
 
+class NotificationsViewSet(viewsets.ModelViewSet):
+    permission_classes = (CustomPermission,)
+    serializer_class = NotificationSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data = request.data)
+        serializer.user = request.user
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"success": "true", "data": {"Notification": serializer.data}}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"success": "false", "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, *args, **kwargs):
+        notifications = Notification.objects.filter(user=request.user)
+        serializer = self.serializer_class(notifications, many=True)
+        return Response({
+            "success": "true",
+            "notifications": serializer.data,
+            "count": notifications.count()
+        }, status=status.HTTP_200_OK)
 
-def get_product_details(request, product_id):
-     product = Product.objects.get_product_details(product_id)
-     return render(request, "product.html", {"iterable": product, "object": "Product details"})

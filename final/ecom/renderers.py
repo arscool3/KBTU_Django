@@ -3,7 +3,7 @@ import json
 from rest_framework.renderers import JSONRenderer
 
 
-class UserJSONRenderer(JSONRenderer):
+class UserRenderer(JSONRenderer):
     charset = 'utf-8'
 
     def render(self, data, media_type=None, renderer_context=None):
@@ -12,7 +12,7 @@ class UserJSONRenderer(JSONRenderer):
         token = data.get('token', None)
 
         if errors is not None:
-            return super(UserJSONRenderer, self).render(data)
+            return super(UserRenderer, self).render(data)
 
         if token is not None and isinstance(token, bytes):
             data['token'] = token.decode('utf-8')

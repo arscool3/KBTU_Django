@@ -3,6 +3,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -10,22 +11,23 @@
     <title>Document</title>
 </head>
 <body>
-    
-    <h1>Categories</h1>
-    <h2>{{object}}</h2>
-    <ul>
-        {% for category in ss %}
-        <div class="categories">
-            <div class = "category">
-                <a href="http://127.0.0.1:8000/api/products/{{category.name}}">
-                    {{category.name| capitalize}}
-                </a>
-                <img src="{{category.photoUrl}}" alt="">
-            </div>        
-        </div>
-    {%endfor%}
-    </ul>
+            <h2>Categories List</h2>
+            <div class = "products">
+            {% for category in categories|sort_by_name:"name" %}
+              <div  class = "product">
+                <div>
+                  
+                        <img class="product-photo" [src]="{{category.photoUrl}}">
+                        <strong>{{ category.name | capitalize}}</strong><br>
+                     
 
-     <h2>
+                    <div class ="share">
+            {% endfor %}
+          </div>
+      </div>
+      
+  </div>
+</div>
+
 </body>
 </html>

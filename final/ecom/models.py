@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
-from .managers import *
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -71,7 +70,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Category(models.Model):
     name = models.CharField(max_length=255)
     photoUrl = models.TextField()
-    objects = CategoryManager()
     def __str__(self):
         return f'Category name: {self.name}'
 
@@ -110,3 +108,8 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ['user', 'product']
+
+class Notification(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

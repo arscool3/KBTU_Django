@@ -1,3 +1,5 @@
+{% load utils %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,35 +11,17 @@
     <title>Document</title>
 </head>
 <body>
-    {%if user == 0 %}
-    <a href = 'http://127.0.0.1:8000/api/login'>
-        <button >Sign In</button>
-    </a>
-    <a href = 'http://127.0.0.1:8000/api/register'>
-        <button >Sign Up</button>
-    </a>
-    {% else %}
-    <a href = 'http://127.0.0.1:8000/api/logout'>
-        <button >Log Out</button>
-    </a>
-    {%endif%}
-
-
-
+            <h2>Product List</h2>
             <div class = "products">
-
-            {% for product in iterable %}
+            {% for product in products|sort_by_name:"name" %}
               <div  class = "product">
                 <div>
                   
                         <img class="product-photo" [src]="{{product.photoUrl}}">
-                        <h3>
-                            
-                                {{ product.name }}
-                        </h3>
-                        <p>
-                            Description: {{ product.description }}
-                        </p>
+                        <strong>{{ product.name | capitalize}}</strong><br>
+                        Description: {{ product.description }}<br>
+                        Total Likes: {{ product.total_likes }}<br>
+                        Total Comments: {{ product.total_comments }}
                      
 
                     <div class ="share">

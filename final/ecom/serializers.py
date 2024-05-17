@@ -24,6 +24,7 @@ class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255, read_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+    id = serializers.IntegerField(read_only=True)
 
     def validate(self, data):
         email = data.get('email', None)
@@ -47,6 +48,7 @@ class UserLoginSerializer(serializers.Serializer):
             )
 
         return {
+            'id': user.id,
             'email': user.email,
             'username': user.username,
             'token': user.token
@@ -54,9 +56,19 @@ class UserLoginSerializer(serializers.Serializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    total_likes = serializers.SerializerMethodField()
+    total_comments = serializers.SerializerMethodField()
+
+    def get_total_likes(self, obj):
+        return Like.objects.filter(product=obj).count()
+
+    def get_total_comments(self, obj):
+        return Comment.objects.filter(product=obj).count()
+
     class Meta:
         model = Product
-        fields = ["name", "photoUrl", "category", "description","price"]
+        fields = '__all__'
+        # read_only_fields = ('seller',)
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -73,4 +85,9 @@ class CommentSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
+        fields = '__all__'
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
         fields = '__all__'
