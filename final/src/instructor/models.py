@@ -10,4 +10,5 @@ class Instructor(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
 
+    user = relationship("User", back_populates="instructor")
     courses = relationship("Course", backref="tutor")

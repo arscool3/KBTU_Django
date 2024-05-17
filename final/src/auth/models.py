@@ -19,7 +19,7 @@ class User(Base):
     password = Column(String(200), nullable=False)
     role = Column(ENUM(RoleEnum), nullable=False)
 
-    instructor = relationship("Instructor", uselist=False, backref="user")
+    instructor = relationship("Instructor", uselist=False, back_populates="user")
     student = relationship("Student", uselist=False, backref="user")
 
     

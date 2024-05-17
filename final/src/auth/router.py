@@ -2,10 +2,12 @@ from fastapi import APIRouter
 from auth import schemas
 from auth import crud
 from typing import Annotated
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from auth.utils import *
+from auth import models
 from database import get_db
 from auth.exceptions import authentication_exception
+from auth.forms import CustomOAuth2PasswordRequestForm
 
 router = APIRouter(
     prefix='/auth',
@@ -22,18 +24,29 @@ def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)])
 
 @router.post('/login')
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: Annotated[str, Depends(get_db)]
+    form_data: Annotated[CustomOAuth2PasswordRequestForm, Depends()], session: Annotated[str, Depends(get_db)]
 ) -> schemas.Token:
     user = authenticate_user(form_data.username, form_data.password, session)
     if not user:
         raise authentication_exception
     
+    scopes = []
+    if(user.role == models.RoleEnum.INSTRUCTOR.value):
+        scopes = ["instructor"]
+    else:
+        scopes = ["student"]
+    
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={
-            "sub": user.username,
-            "role": user.role.value
+            "sub": user.email,
+            "scopes": scopes
             }, 
             expires_delta=access_token_expires
     )
     return schemas.Token(access_token=access_token, token_type="bearer")
+
+
+@router.get("/user")
+def get_token_user(user: Annotated[schemas.TokenData, Depends(get_current_user)]):
+    return user

@@ -16,3 +16,8 @@ user_already_exists_exception = HTTPException(
     status_code=400, 
     detail="Email already registered"
 )
+
+permission_exception = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="Not enough permissions",
+)

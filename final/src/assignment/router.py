@@ -15,14 +15,14 @@ router = APIRouter(
 
 @router.post("/load_assignment")
 async def load_assignment(assignment_id: int):
-    load_assignment_task.send(1)
+    load_assignment_task.send(assignment_id)
     return {"message": "Assignment loading started"}
 
 # FastAPI endpoint to retrieve the progress
-@router.get("/progress/{message_id}")
-async def get_progress(message_id: str):
+@router.get("/progress/{assignment_id}")
+async def get_progress(assignment_id: str):
     try:
-        status = result_backend.get_result(load_assignment_task.message(message_id))
+        status = result_backend.get_result(load_assignment_task.message(assignment_id))
         if status == "Assignment loaded successfully":
             return {"status": "complete"}
         else:

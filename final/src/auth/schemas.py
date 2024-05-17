@@ -6,15 +6,27 @@ class RoleEnum(str, Enum):
     STUDENT = "STUDENT"
     INSTRUCTOR = "INSTRUCTOR"
 
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
     username: str
     email: str
     password: str
     role: RoleEnum
+
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed = True
+
+class UserCreate(UserBase):
+    pass
+
+class User(UserBase):
+    id: int
+    
 
 class Token(BaseModel):
     access_token: str
     token_type: str
 
 class TokenData(BaseModel):
-    username: Union[str, None] = None
+    email: Union[str, None] = None
+    scopes: list[str] = []

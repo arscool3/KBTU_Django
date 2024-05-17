@@ -11,9 +11,12 @@ from student.crud import create_student
 def check_user_existense(email: str, session: Annotated[str, Depends(get_db)]):
    return session.query(models.User).filter(models.User.email==email).first()
 
+def get_user_by_id(id: int, session: Annotated[str, Depends(get_db)]):
+   return session.query(models.User).filter(models.User.id==id).first()
+
 
 def create_user(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)]): 
-   if not check_user_existense(user.email, session):
+   if check_user_existense(user.email, session):
       raise user_already_exists_exception
    
    encrypted_password = get_password_hash(user.password)
@@ -32,9 +35,5 @@ def create_user(user: schemas.UserCreate, session: Annotated[str, Depends(get_db
    session.commit()
 
    return new_user
-
-
-# def get_assignment_by_id(assignment_id: int, session: Annotated[str, Depends(get_db)]):
-#     return session.query(models.Assignment).filter(models.Assignment.id==assignment_id).first()
 
 
