@@ -39,13 +39,12 @@ class Event(Base):
     name = Column(String, index=True)
     description = Column(String)
     date_time = Column(DateTime)
-    location_id = Column(Integer, ForeignKey("locations.id"))
     organizer_id = Column(Integer, ForeignKey("users.id"))
     category_id = Column(Integer, ForeignKey("categories.id"))
-
+    is_archived = Column(Boolean, default=False)
+    # venue_name = Column(String,)
     # Relationships
     organizer = relationship("User", back_populates="organized_events")
-    location = relationship("Location", back_populates="events")
     category = relationship("Category", back_populates="events")
     bookings = relationship("Booking", back_populates="event")
     venue = relationship("Venue", back_populates="events")
@@ -86,14 +85,3 @@ class Booking(Base):
     user = relationship("User", back_populates="bookings")
     event = relationship("Event", back_populates="bookings")
 
-
-class Location(Base):
-    __tablename__ = "locations"
-
-    id = Column(Integer, primary_key=True, index=True)
-    city = Column(String)
-    state = Column(String)
-    country = Column(String)
-
-    # Relationships
-    events = relationship("Event", back_populates="location")

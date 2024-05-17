@@ -26,7 +26,6 @@ class EventCreate(BaseModel):
     name: str
     description: str
     date_time: datetime
-    location_id: int
     organizer_id: int
     category_id: int
 
@@ -35,7 +34,6 @@ class EventUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     date_time: Optional[datetime] = None
-    location_id: Optional[int] = None
     organizer_id: Optional[int] = None
     category_id: Optional[int] = None
 
@@ -45,7 +43,6 @@ class Event(BaseModel):
     name: str
     description: str
     date_time: datetime
-    location_id: int
     organizer_id: int
     category_id: int
 
@@ -66,20 +63,6 @@ class Booking(BaseModel):
     class Config:
         orm_mode = True
 
-# Schema for creating a new location
-class LocationCreate(BaseModel):
-    city: str
-    state: str
-    country: str
-
-class Location(BaseModel):
-    id: int
-    city: str
-    state: str
-    country: str
-
-    class Config:
-        orm_mode = True
 
 class CategoryCreate(BaseModel):
     name: str
@@ -87,6 +70,35 @@ class CategoryCreate(BaseModel):
 class Category(BaseModel):
     id: int
     name: str
+
+    class Config:
+        orm_mode = True
+
+
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class VenueCreate(BaseModel):
+    name: str
+    address: str
+    city: str
+    state: str
+    country: str
+
+    class Config:
+        orm_mode = True
+
+class Venue(BaseModel):
+    id: int
+    name: str
+    address: str
+    city: str
+    state: str
+    country: str
 
     class Config:
         orm_mode = True

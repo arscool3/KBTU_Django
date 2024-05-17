@@ -56,6 +56,7 @@ def create_access_token(user : User, expires_delta: Optional[timedelta] = None):
 
 
 async def get_current_user(token: str = Depends(oauth2_bearer)):
+    
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -63,7 +64,7 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
             raise get_user_exception()
         return { 
             "username": username,
-            
+
         }
     except JWTError:
         raise get_user_exception()

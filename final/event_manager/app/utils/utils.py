@@ -2,7 +2,6 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from  models import models
 
 # Get environment variables or secret key
 SECRET_KEY = "e14bafafb7bac95d3bfdd463fe2b1e96c6e272cb0fcdf9c8"
