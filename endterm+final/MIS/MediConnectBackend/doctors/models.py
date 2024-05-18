@@ -22,6 +22,7 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date_and_time = models.DateTimeField(null=True, blank=True)
+    google_meet_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return f"Appointment with {self.doctor} at {self.date_and_time}"

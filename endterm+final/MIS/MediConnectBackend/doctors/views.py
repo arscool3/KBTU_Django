@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse, Http404
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
+from .tasks import send_reminder_email
 
 def get_profile_id_by_doctor_id(request, doctor_id):
     try:
@@ -104,7 +105,8 @@ class DoctorAppointmentListView(generics.ListCreateAPIView):
         appointment_data = request.data
         serializer = self.get_serializer(data=appointment_data)
         if serializer.is_valid():
-            serializer.save()
+            appointment = serializer.save()
+            send_reminder_email.send(appointment.id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -136,3 +138,15 @@ class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsCustomUserAuthenticated]
+
+class AppointmentUpdateGoogleMeetLinkView(APIView):
+    def patch(self, request, pk):
+        google_meet_link = request.data.get('google_meet_link')
+
+        try:
+            appointment = Appointment.objects.get(pk=pk)
+            appointment.google_meet_link = google_meet_link
+            appointment.save()
+            return Response({'message': 'Google Meet link updated successfully'}, status=status.HTTP_200_OK)
+        except Appointment.DoesNotExist:
+            return Response({'error': 'Appointment not found'}, status=status.HTTP_404_NOT_FOUND)
