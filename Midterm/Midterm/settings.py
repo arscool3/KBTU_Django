@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +29,9 @@ INSTALLED_APPS = [
     'django_dramatiq',
     'rest_framework',
     'myapp',
+    'rest_framework.authtoken',
+    'djoser',
+    'rest_framework_simplejwt',
 ]
 
 
@@ -126,7 +130,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
+
+SIMPJWT_ACCESS_TOKEN_LIFETIME = timedelta(minutes=15)
+SIMPJWT_REFRESH_TOKEN_LIFETIME = timedelta(days=7)

@@ -1,3 +1,6 @@
+import os
+
+import django
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker
 from dramatiq.results import Results
@@ -11,6 +14,10 @@ result_backend = RedisBackend()
 redis_broker = RedisBroker()
 redis_broker.add_middleware(Results(backend=result_backend))
 dramatiq.set_broker(redis_broker)
+
+# Установите DJANGO_SETTINGS_MODULE, если не установлен
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "KBTU_Django.settings")
+django.setup()
 
 
 @receiver(pre_save, sender=Category)

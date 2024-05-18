@@ -1,9 +1,11 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from .routers import router
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('drf-auth', include('rest_framework.urls')),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # # get full
     # path('', UserView.as_view(), name="users_default"),
     # path('users/', UserView.as_view(), name="users"),
