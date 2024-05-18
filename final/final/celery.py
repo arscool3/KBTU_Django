@@ -1,20 +1,22 @@
 from __future__ import absolute_import
-from celery import Celery
-from django.core.mail import send_mail
+from celery import Celery,shared_task
 import os
 import requests
+import logging
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celery_django.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'final.settings')
 
-app = Celery("celery_django", broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
+app = Celery("final")
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.autodiscover_tasks()
 
-@app.task
+logger = logging.getLogger(__name__)
+
+@shared_task
 def send_notification(user_id, content):
-    url = 'http://localhost:8000/api/notifications/'
+    url = 'http://127.0.0.1:8000/api/v1/notifications/'
     payload = {
         'user': user_id,
         'content': content
@@ -23,8 +25,9 @@ def send_notification(user_id, content):
         'Content-Type': 'application/json'
     }
 
-    response = requests.post(url, json=payload, headers=headers)
-    if response.status_code == 201:
-        print("Notification created successfully.")
-    else:
-        print(f"Failed to create notification. Status code: {response.status_code}")
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status() 
+        logger.info("Notification created successfully.")
+    except requests.RequestException as e:
+        logger.error(f"Failed to create notification: {e}")

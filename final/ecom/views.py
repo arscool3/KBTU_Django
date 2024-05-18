@@ -43,7 +43,8 @@ class UserLoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         username = serializer.data.get('username')
         user_id = serializer.data.get('id')
-        send_notification(user_id, 'Welcome back,' + username)
+        message = f"Welcome back! {username}"
+        send_notification.delay(user_id, message)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -164,7 +165,7 @@ class ProductCommentsList(generics.ListAPIView):
         return Comment.objects.filter(product_id=product_id)
 
 class NotificationsViewSet(viewsets.ModelViewSet):
-    permission_classes = (CustomPermission,)
+    permission_classes = (AllowAny,)
     serializer_class = NotificationSerializer
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data = request.data)
