@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, String, Column, Integer, ForeignKey
+from sqlalchemy import Boolean, String, Column, Integer, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from db import Base
 
@@ -37,3 +37,23 @@ class Comment(Base):
     user = relationship('User', back_populates='comments')
     post = relationship('Post', back_populates='comments')
 
+
+class Likes(Base):
+    __tablename__ = 'likes'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    post_id = Column(Integer, ForeignKey('posts.id'))
+
+
+class Profile(Base):
+    __tablename__ = 'profiles'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+
+class Stories(Base):
+    __tablename__ = 'stories'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    content = Column(String)
+    date = Column(DateTime)
