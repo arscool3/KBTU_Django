@@ -3,8 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DoctorService } from '../doctor.service';
 import { ProfileService } from '../profile.service';
 import { AppointmentService } from '../appointment.service';
-import { Appointment, Doctor } from '../models';
+import { Appointment, Doctor, EventResponse, Profile } from '../models';
 import { PatientService } from '../patient.service';
+import { v4 as uuidv4 } from 'uuid';
+import { HttpClient } from '@angular/common/http';
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-appointment',
@@ -22,6 +26,9 @@ export class AppointmentComponent implements OnInit {
   days: string[] = [];
   hours: string[] = [];
   appointment: Appointment | null = null;
+  appointmentId: number | null = null;
+  patientEmail: string = '';
+  doctorEmail: string = '';
 
   constructor(
     private profileService: ProfileService,
@@ -29,8 +36,11 @@ export class AppointmentComponent implements OnInit {
     private appointmentService: AppointmentService,
     private route: ActivatedRoute,
     private doctorService: DoctorService,
-    private patientService: PatientService
-  ) {}
+    private patientService: PatientService,
+    private http: HttpClient,
+    private oauthService: OAuthService
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -127,46 +137,127 @@ export class AppointmentComponent implements OnInit {
     }
   }
 
-
   scheduleAppointment(): void {
     if (!this.selectedSlotDate) {
       this.errorMessage = 'No slot selected';
       return;
     }
+  
     if (this.profileService.profileId !== null) {
-    this.patientService.getPatientIdByProfileId(this.profileService.profileId).subscribe({
-      next: (patientId) => {
-        let appointmentData = {
-          doctor: this.doctor_id,
-          patient: patientId,
-          date_and_time: this.selectedSlotDate
-        };
-    
-        if(this.profileService.profileId !== null && this.doctorProfileId !== null){
-          if (this.isEditMode && this.appointment !== null) {
-            this.appointmentService.updateAppointment(this.appointment, appointmentData, this.profileService.profileId).subscribe(() => {
-              this.message = 'Appointment updated successfully';
-              this.router.navigate(['/']);
-            });
-          } else {
-            this.appointmentService.scheduleAppointment(this.profileService.profileId, this.doctorProfileId, appointmentData).subscribe(() => {
-              this.message = 'Appointment created successfully';
-              this.router.navigate(['/']);
-            });
+      this.patientService.getPatientIdByProfileId(this.profileService.profileId).subscribe({
+        next: (patientId) => {
+          if (this.profileService.profileId !== null && this.doctorProfileId !== null) {
+            const doctorId = this.doctorProfileId;
+            let appointmentData = {
+              doctor: this.doctor_id,
+              patient: patientId,
+              date_and_time: this.selectedSlotDate
+            };
+  
+            if (this.isEditMode && this.appointment !== null) {
+              this.appointmentService.updateAppointment(this.appointment, appointmentData, this.profileService.profileId).subscribe((appointment) => {
+                this.appointmentId = appointment.id;
+                this.message = 'Appointment updated successfully';
+              });
+            } else {
+              this.appointmentService.scheduleAppointment(this.profileService.profileId, this.doctorProfileId, appointmentData).subscribe((appointment) => {
+                this.appointmentId = appointment.id;
+                this.message = 'Appointment created successfully';
+              });
+            }
+            this.createGoogleMeetEvent(appointmentData);
           }
-       }
-      },
-      error: (error) => {
-        console.error('Failed to fetch patient ID:', error.message);
-      }
-    });
-  } else {
-    this.router.navigate(['/login'], { queryParams: { errorMessage: 'Please log in' }});
-    return;
-  }
-    
-  }
+        },
+        error: (error) => {
+          console.error('Failed to fetch patient ID:', error.message);
+        }
+      });
+    } else {
+      console.error('Profile ID or Doctor ID is null');
+      this.router.navigate(['/login'], { queryParams: { errorMessage: 'Please log in' }});
+    }
+  }  
+  
 
+  createGoogleMeetEvent(appointmentData: any): void {
+    if (this.profileService.profileId !== null && this.doctorProfileId !== null) {
+      forkJoin([
+        this.profileService.getProfile(this.profileService.profileId),
+        this.profileService.getProfile(this.doctorProfileId)
+      ]).subscribe(
+        ([patientProfile, doctorProfile]) => {
+          const eventData = {
+            summary: 'Appointment with ' + appointmentData.doctor,
+            location: 'Google Meet',
+            description: 'Consultation via Google Meet.',
+            start: {
+              dateTime: appointmentData.date_and_time,
+              timeZone: 'Asia/Almaty'
+            },
+            end: {
+              dateTime: new Date(appointmentData.date_and_time.getTime() + 30 * 60000).toISOString(),
+              timeZone: 'Asia/Almaty'
+            },
+            attendees: [
+              { email: patientProfile.email },
+              { email: doctorProfile.email }
+            ],
+            conferenceData: {
+              createRequest: {
+                requestId: uuidv4(),
+                conferenceSolutionKey: {
+                  type: 'hangoutsMeet'
+                }          
+              }
+            }
+          };
+    
+          this.http.post<EventResponse>('https://www.googleapis.com/calendar/v3/calendars/primary/events', eventData, {
+            params: {
+              conferenceDataVersion: '1'
+            },
+            headers: {
+              Authorization: `Bearer ${this.oauthService.getAccessToken()}`
+            }
+          }).subscribe(response => {
+            console.log('Google Meet event created:', response);
+            this.message += ' and Google Meet link created.';
+            if (response.conferenceData && response.conferenceData.entryPoints) {
+              const googleMeetLink = response.conferenceData.entryPoints[0]?.uri;
+              if (googleMeetLink) {
+                if (this.appointmentId !== null){
+                  this.updateGoogleMeetLink(this.appointmentId, googleMeetLink)
+                }
+
+              }
+            } else {
+              console.error('No conference data found in response');
+            }
+            
+            this.router.navigate(['/']);
+          }, error => {
+            console.error('Error creating Google Meet event', error);
+            this.errorMessage = 'Failed to create Google Meet link';
+          });
+        }, error => {
+          console.error('Failed to get profiles:', error);
+        }
+      );
+    }
+  }
+  
+  updateGoogleMeetLink(appointmentId: number, googleMeetLink: string) {
+    this.appointmentService.updateGoogleMeetLink(appointmentId, googleMeetLink)
+      .subscribe(
+        response => {
+          console.log('Google Meet link updated successfully:', response);
+        },
+        error => {
+          console.error('Failed to update Google Meet link:', error);
+        }
+      );
+  }
+  
   goHome(): void {
     this.router.navigate(['/']);
   }

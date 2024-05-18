@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,7 +19,11 @@ export class LoginComponent {
   errorMessage: string | null = null;
 
 
-  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {  }
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute, 
+    private router: Router,) {
+    }
 
   ngOnInit(): void {
     this.errorMessage = this.route.snapshot.paramMap.get('errorMessage');

@@ -20,6 +20,7 @@ import { DoctorsComponent } from './doctors/doctors.component';
 import { MyAppointmentsComponent } from './my-appointments/my-appointments.component';
 import { AppointmentDetailsComponent } from './appointment-details/appointment-details.component';
 import { DoctorVerificationComponent } from './doctor-verification/doctor-verification.component';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { DoctorVerificationComponent } from './doctor-verification/doctor-verifi
     RouterModule,
     ReactiveFormsModule,
     CommonModule,
-    DoctorsComponent
+    DoctorsComponent,
+    OAuthModule.forRoot()
   ],
   providers: [ProfileService, AuthService],
   bootstrap: [AppComponent]

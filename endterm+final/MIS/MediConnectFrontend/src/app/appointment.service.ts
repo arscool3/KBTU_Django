@@ -64,7 +64,18 @@ export class AppointmentService {
         })
     );
 }
- 
+
+  update(id: number, profileId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiAppUrl}${id}/?profile_id=${profileId}`);
+  }
+
+  updateGoogleMeetLink(appointmentId: number, googleMeetLink: string) {
+    const url = `${this.apiAppUrl}${appointmentId}/update-google-meet-link/`;
+    const body = { google_meet_link: googleMeetLink };
+
+    return this.http.patch(url, body);
+  }
+
   cancelAppointment(appointment: Appointment, profile_id: number): Observable<any> {
     return this.profileService.getProfileIdByDoctorId(appointment.doctor).pipe(
       switchMap(doctor_profile_id => {

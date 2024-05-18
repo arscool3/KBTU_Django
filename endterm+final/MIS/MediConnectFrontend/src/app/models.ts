@@ -43,6 +43,7 @@ export interface Appointment {
   date_and_time: Date;
   doctor_full_name?: string;
   patient_full_name?: string;
+  google_meet_link?: string;
 }
 
 export interface Service {
@@ -55,4 +56,12 @@ export interface Service {
 export interface Specialty {
   id: number;
   name: string;
+}
+
+export interface EventResponse {
+  conferenceData?: {
+    entryPoints?: {
+      uri?: string;
+    }[];
+  };
 }
