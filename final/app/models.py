@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Table
 from sqlalchemy.orm import relationship
-from app.db import Base
+from db import Base
 from datetime import datetime
 
 paper_field = Table(
@@ -66,6 +66,7 @@ class Comment(Base):
     author = relationship("User", back_populates="comments")
     paper = relationship("Paper", back_populates="comments")
 
+# Favorit is paper that user liked and made it favorite for user
 class Favorite(Base):
     __tablename__ = 'favorites'
     id = Column(Integer, primary_key=True, index=True)

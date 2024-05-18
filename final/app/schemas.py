@@ -44,16 +44,4 @@ class Comment(CommentBase):
         orm_mode = True
 
 
-class FavoriteBase(BaseModel):
-    paper_id: int
-
-class FavoriteCreate(FavoriteBase):
-    pass
-
-class Favorite(FavoriteBase):
-    id: int
-    user_id: int
-    papers: List[str] = []
-    class Config:
-        orm_mode = True
 
