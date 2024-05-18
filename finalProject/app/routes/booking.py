@@ -3,7 +3,8 @@ from app.models import Booking, User, Seat
 from app.db import get_db
 from sqlalchemy.orm import Session
 from app.routes.auth import get_current_user
-from app.schemas import BookingResponse
+from app.schemas import BookingResponse, BookingCreate
+from tasks import booking_confirmation_email
 
 router = APIRouter()
 
@@ -29,10 +30,8 @@ async def get_booking(booking_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=BookingResponse,
              dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def create_booking(booking: Booking, current_user: User = Depends(get_current_user),
+async def create_booking(booking: BookingCreate, current_user: User = Depends(get_current_user),
                          db: Session = Depends(get_db)):
-    # Check if user is authenticated (through get_current_user dependency)
-
     # Validate seat availability
     seat = db.query(Seat).filter(Seat.id == booking.seat_id).first()
     if not seat:
@@ -42,21 +41,26 @@ async def create_booking(booking: Booking, current_user: User = Depends(get_curr
 
     # Check for existing booking for the same seat and schedule
     existing_booking = db.query(Booking).filter(
-        Booking.seat_id == booking.seat_id, Booking.schedule_id == seat.schedule_id
+        Booking.seat_id == booking.seat_id
     ).first()
     if existing_booking:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Seat is already booked for this schedule")
 
     booking.user_id = current_user.id
-    db.add(booking)
+    booking_db = Booking(**booking.dict())
+    db.add(booking_db)
     db.commit()
-    db.refresh(booking)
-    return booking
+    db.refresh(booking_db)
+
+    booking_confirmation_email.send(current_user.email, booking_db.seat_id,
+                                    booking_db.seat.schedule.departure_datetime.strftime("%Y-%m-%d %H:%M:%S"))
+
+    return booking_db
 
 
 @router.put("/{booking_id}", response_model=BookingResponse,
             dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def update_booking(booking_id: int, booking_data: Booking, db: Session = Depends(get_db)):
+async def update_booking(booking_id: int, booking_data: BookingCreate, db: Session = Depends(get_db)):
     booking = db.query(Booking).filter(Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")

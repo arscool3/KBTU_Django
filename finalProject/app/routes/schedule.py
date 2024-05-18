@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.models import Schedule, Bus, Route
 from app.db import get_db
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 from app.routes.auth import get_current_user
-from app.schemas import ScheduleResponse
+from app.schemas import ScheduleResponse, ScheduleCreate
 
 router = APIRouter()
 
@@ -14,20 +14,23 @@ async def get_schedules(db: Session = Depends(get_db)):
     return schedules
 
 
-@router.post("/", response_model= ScheduleResponse,  dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def create_schedule(schedule: Schedule, db: Session = Depends(get_db)):
+@router.post("/", response_model=ScheduleResponse,
+             dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
+async def create_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db)):
     # Check if bus and route exist
     bus = db.query(Bus).filter(Bus.id == schedule.bus_id).first()
     route = db.query(Route).filter(Route.id == schedule.route_id).first()
     if not bus or not route:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid bus or route ID")
-
-    db.add(schedule)
+    schedule_db = Schedule(**schedule.dict())
+    db.add(schedule_db)
     db.commit()
-    db.refresh(schedule)
-    return schedule
+    db.refresh(schedule_db)
+    return schedule_db
 
-@router.get("/{schedule_id}",response_model= ScheduleResponse, dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+
+@router.get("/{schedule_id}", response_model=ScheduleResponse,
+            dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
 async def get_schedule(schedule_id: int, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
@@ -35,8 +38,9 @@ async def get_schedule(schedule_id: int, db: Session = Depends(get_db)):
     return schedule
 
 
-@router.put("/{schedule_id}",response_model= ScheduleResponse, dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
-async def update_schedule(schedule_id: int, schedule_data: Schedule, db: Session = Depends(get_db)):
+@router.put("/{schedule_id}", response_model=ScheduleResponse,
+            dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+async def update_schedule(schedule_id: int, schedule_data: ScheduleCreate, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Schedule not found")
@@ -50,7 +54,8 @@ async def update_schedule(schedule_id: int, schedule_data: Schedule, db: Session
     return schedule
 
 
-@router.delete("/{schedule_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+@router.delete("/{schedule_id}",
+               dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
 async def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:

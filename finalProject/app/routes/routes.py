@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.models import Route
 from app.db import get_db
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 from app.routes.auth import get_current_user
-from app.schemas import RouteResponse
+from app.schemas import RouteResponse, RouteCreate
 
 router = APIRouter()
 
@@ -16,11 +16,12 @@ async def get_routes(db: Session = Depends(get_db)):
 
 @router.post("/", response_model=RouteResponse,
              dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def create_route(route: Route, db: Session = Depends(get_db)):
-    db.add(route)
+async def create_route(route: RouteCreate, db: Session = Depends(get_db)):
+    route_db = Route(**route.dict())
+    db.add(route_db)
     db.commit()
-    db.refresh(route)
-    return route
+    db.refresh(route_db)
+    return route_db
 
 
 @router.get("/{route_id}", response_model=RouteResponse,
@@ -34,7 +35,7 @@ async def get_route(route_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{route_id}", response_model=RouteResponse,
             dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def update_route(route_id: int, route_data: Route, db: Session = Depends(get_db)):
+async def update_route(route_id: int, route_data: RouteCreate, db: Session = Depends(get_db)):
     route = db.query(Route).filter(Route.id == route_id).first()
     if not route:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Route not found")

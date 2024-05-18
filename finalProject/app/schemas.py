@@ -66,14 +66,12 @@ class BusCreate(BaseModel):
 class RouteCreate(BaseModel):
     origin: str
     destination: str
-    stops: Optional[list[str]] = None
 
 
 class RouteResponse(BaseModel):
     id: int
     origin: str
     destination: str
-    stops: list[str]
 
     class Config:
         orm_mode = True
