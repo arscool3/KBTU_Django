@@ -8,3 +8,4 @@ class Assignment(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False)
     course_id = Column(Integer, ForeignKey('courses.id'))
+    max_points = Column(Integer, nullable=True)

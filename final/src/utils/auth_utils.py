@@ -1,13 +1,12 @@
 from passlib.context import CryptContext
 from typing import Annotated, Union
-from fastapi.security import OAuth2PasswordBearer, SecurityScopes
-from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import Depends
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from database import get_db
-from auth import crud
-from auth.exceptions import credentials_exception, permission_exception
-from auth import schemas
+from exceptions.auth_exceptions import credentials_exception, permission_exception
+from schemas import auth_schemas as schemas
 
 SECRET_KEY = "01d31b6eb6cd66725a02f8c496a61fab4a08ed731e88d01d1e6180e046ef876b"
 ALGORITHM = "HS256"
@@ -27,6 +26,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def authenticate_user(username: str, password: str, session: Annotated[str, Depends(get_db)]):
+    from crud import auth_crud as crud
     user = crud.check_user_existense(username, session)
     if not user:
         return {"error": "user does not exist"}

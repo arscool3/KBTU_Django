@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from assignment import schemas
-from assignment import models
-from assignment import crud
 from typing import Annotated
 from fastapi import Depends
 from database import get_db
-from assignment.task import *
+from tasks.assignment_task import *
 from dramatiq.results.errors import ResultMissing
+from crud import assignment_crud as crud
+
+from schemas.assignment_schemas import *
 
 router = APIRouter(
     prefix='/assignment',
@@ -31,7 +31,7 @@ async def get_progress(assignment_id: str):
         return {"status": "pending"}
 
 @router.post("/")
-def create_assignment(assignment: schemas.AssignmentCreate, session: Annotated[str, Depends(get_db)]):
+def create_assignment(assignment: AssignmentCreate, session: Annotated[str, Depends(get_db)]):
     new_assignment = crud.create_assignment(assignment, session)
 
     return {"message": "assignment successfully added"}

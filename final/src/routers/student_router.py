@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends
 from database import get_db
-from student import crud
 from typing import Annotated
-from student import models
+from crud import student_crud as crud
 
 router = APIRouter(
     prefix='/student',

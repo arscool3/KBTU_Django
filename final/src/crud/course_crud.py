@@ -1,8 +1,8 @@
-from course import schemas
-from course import models
 from typing import Annotated
 from fastapi import Depends
 from database import get_db
+from models import course_models as models
+from schemas import course_schemas as schemas
 
 def create_course(course: schemas.CourseCreate, session: Annotated[str, Depends(get_db)]):
     new_course = models.Course(name=course.name, instructor_id=course.instructor_id)

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from auth.models import User
+from models import User
 
 
 class InstructorBase(BaseModel):

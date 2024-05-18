@@ -1,8 +1,7 @@
-from student import schemas
-from student import models
 from typing import Annotated
 from fastapi import Depends
 from database import get_db
+from models import student_models as models
 
 
 def create_student(user_id: int, session: Annotated[str, Depends(get_db)]):

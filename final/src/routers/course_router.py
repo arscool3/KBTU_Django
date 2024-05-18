@@ -1,11 +1,10 @@
 from fastapi import APIRouter
-from course import schemas
-from course import models
 from typing import Annotated, Any
 from fastapi import Depends
 from database import get_db
-from auth.utils import require_scope
-from auth.crud import get_user_by_id
+from utils.auth_utils import require_scope
+from crud.auth_crud import get_user_by_id
+from schemas import course_schemas as schemas
 
 router = APIRouter(
     prefix='/course',

@@ -9,7 +9,6 @@ class RoleEnum(str, Enum):
 class UserBase(BaseModel):
     username: str
     email: str
-    password: str
     role: RoleEnum
 
     class Config:
@@ -17,7 +16,7 @@ class UserBase(BaseModel):
         arbitrary_types_allowed = True
 
 class UserCreate(UserBase):
-    pass
+    password: str
 
 class User(UserBase):
     id: int

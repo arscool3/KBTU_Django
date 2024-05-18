@@ -1,12 +1,12 @@
 from database import get_db
-from auth import schemas
-from auth import models
 from typing import Annotated
 from fastapi import Depends
-from auth.exceptions import user_already_exists_exception
-from auth.utils import get_password_hash
-from instructor.crud import create_instructor
-from student.crud import create_student
+from exceptions.auth_exceptions import user_already_exists_exception
+from utils.auth_utils import get_password_hash
+from crud.instructor_crud import create_instructor
+from crud.student_crud import create_student
+from schemas import auth_schemas as schemas
+from models import auth_models as models
 
 def check_user_existense(email: str, session: Annotated[str, Depends(get_db)]):
    return session.query(models.User).filter(models.User.email==email).first()

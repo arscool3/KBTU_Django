@@ -1,6 +1,5 @@
 from database import Base
 from sqlalchemy import Column, Integer, ForeignKey, Table
-from auth.models import User
 from sqlalchemy.orm import relationship
 
 student_course_association = Table(

@@ -1,13 +1,12 @@
 from fastapi import APIRouter
-from auth import schemas
-from auth import crud
 from typing import Annotated
 from fastapi import Depends
-from auth.utils import *
-from auth import models
 from database import get_db
-from auth.exceptions import authentication_exception
-from auth.forms import CustomOAuth2PasswordRequestForm
+from utils.auth_forms import CustomOAuth2PasswordRequestForm
+from utils.auth_utils import *
+from exceptions.auth_exceptions import *
+from models import auth_models as models
+from crud import auth_crud as crud
 
 router = APIRouter(
     prefix='/auth',
