@@ -106,7 +106,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# @api_view(['GET'])
-# def run_task(request):
-#     send_new_item_notification.send(request.user.id, "Sample Item")
-#     return Response({'status': 'Task is running'})
+@api_view(['GET'])
+def run_task(request):
+    send_new_item_notification.send(request.user.id, "Sample Item")
+    return Response({'status': 'Task is running'})

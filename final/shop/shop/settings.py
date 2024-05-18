@@ -76,7 +76,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shop.wsgi.application'
 
-
+DRAMATIQ_BROKER = {
+    "BROKER": "dramatiq.brokers.redis.RedisBroker",
+    "OPTIONS": {
+        "host": "localhost",
+        "port": 6379,
+        "database": 0,
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

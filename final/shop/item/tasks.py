@@ -9,7 +9,7 @@ def send_new_item_notification(user_id, item_name):
     send_mail(
         'New Item Available',
         f'Hello {user.username},\n\nA new item "{item_name}" has been added to the store.',
-        'from@example.com',
+        'ayanjkeewow@gmail.com',
         [user.email],
         fail_silently=False,
     )
