@@ -5,4 +5,9 @@
 {% block content %}
     <h2>Welcome to the Hair Salon Booking App</h2>
     <p>This is the home page. Use the navigation links to view barbershops, managers, and users.</p>
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <p>You are not logged in. <a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">Register</a></p>
+    {% endif %}
 {% endblock %}

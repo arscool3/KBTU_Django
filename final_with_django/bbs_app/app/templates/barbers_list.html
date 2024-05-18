@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Barbers{% endblock %}
+
+{% block content %}
+    <h2>Barbers</h2>
+    <ul class="list">
+        {% for barber in barbers %}
+            <li class="list-item">
+                <strong>{{ barber.user.first_name|capitalize }} {{ manager.user.last_name|capitalize }}</strong>
+                (username: {{ barber.user.username }})
+                (works at: {{ barber.barbershop.name }})
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
