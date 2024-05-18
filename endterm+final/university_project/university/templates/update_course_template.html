@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Course</title>
+</head>
+<body>
+    <h1>Update Course Description</h1>
+    <p>Количество элементов в списке: {{ my_list | length }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <label for="new_description">New Description:</label><br>
+        <textarea id="new_description" name="new_description" rows="4" cols="50"></textarea><br>
+        <button type="submit">Update Description</button>
+    </form>
+</body>
+</html>
