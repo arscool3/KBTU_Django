@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from .models import Company, Employee, Project, Task, Report, Salary
 from .serializers import CompanySerializer, EmployeeSerializer, ProjectSerializer, TaskSerializer, ReportSerializer, SalarySerializer
-from .tasks import update_task_status
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all()
@@ -52,3 +52,6 @@ class ReportViewSet(viewsets.ModelViewSet):
 class SalaryViewSet(viewsets.ModelViewSet):
     queryset = Salary.objects.all()
     serializer_class = SalarySerializer
+from django.shortcuts import render
+
+# Create your views here.
