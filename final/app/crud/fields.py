@@ -1,27 +1,24 @@
 from sqlalchemy.orm import Session
-from models import Field
+import models
 
 def create_field(db: Session, name: str):
-    field = Field(name=name)
+    field = models.Field(name=name)
     db.add(field)
     db.commit()
     db.refresh(field)
     return field
 
 def get_field(db: Session, field_id: int):
-    return db.query(Field).filter(Field.id == field_id).first()
+    return db.query(models.Field).filter(models..Field.id == field_id).first()
 
-def update_field(db: Session, field_id: int, name: str):
-    field = db.query(Field).filter(Field.id == field_id).first()
+def get_papers_by_field(db: Session, field_id: int):
+    field = db.query(models.Field).filter(models.Field.id == field_id).first()
     if field:
-        field.name = name
-        db.commit()
-        db.refresh(field)
-        return field
-    return None
+        return field.papers
+    return []
 
 def delete_field(db: Session, field_id: int):
-    field = db.query(Field).filter(Field.id == field_id).first()
+    field = db.query(models.Field).filter(models.Field.id == field_id).first()
     if field:
         db.delete(field)
         db.commit()

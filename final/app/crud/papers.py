@@ -1,56 +1,35 @@
 from sqlalchemy.orm import Session
-from models import Paper
+import models
+import schemas
 
-def create_paper(db: Session, title: str, abstract: str, file_path: str, author_id: int, tag_ids: list, field_ids: list):
-    paper = Paper(title=title, abstract=abstract, file_path=file_path, author_id=author_id)
-
-    for tag_id in tag_ids:
-        tag = db.query(Tag).filter(Tag.id == tag_id).first()
-        if tag:
-            paper.tags.append(tag)
-
-    for field_id in field_ids:
-        field = db.query(Field).filter(Field.id == field_id).first()
-        if field:
-            paper.fields.append(field)
-
-    db.add(paper)
-    db.commit()
-    db.refresh(paper)
-    return paper
 
 def get_paper(db: Session, paper_id: int):
-    return db.query(Paper).filter(Paper.id == paper_id).first()
+    return db.query(models.Paper).filter(models.Paper.id == paper_id).first()
 
-def update_paper(db: Session, paper_id: int, title: str, abstract: str, file_path: str,  tag_ids: list, field_ids: list):
-    paper = get_paper(Session, paper_id)
-    if paper:
-        paper.title = title
-        paper.abstract = abstract
-        paper.file_path = file_path
+def get_papers(db: Session, skip: int = 0, limit: int = 10):
+    return db.query(models.Paper).offset(skip).limit(limit).all()
 
-        paper.tags.clear()
-        for tag_id in tag_ids:
-            tag = db.query(Tag).filter(Tag.id == tag_id).first()
-            if tag:
-                paper.tags.append(tag)
+def create_paper(db: Session, paper: schemas.PaperCreate, user_id: int):
+    db_paper = models.Paper(**paper.dict(), author_id=user_id)
+    db.add(db_paper)
+    db.commit()
+    db.refresh(db_paper)
+    return db_paper
 
-        paper.fields.clear()
-        for field_id in field_ids:
-            field = db.query(Field).filter(Field.id == field_id).first()
-            if field:
-                paper.fields.append(field)
-
-        db.commit()
-        db.refresh(paper)
-        return paper
-    return None
+def update_paper(db: Session, paper_id: int, paper: schemas.PaperCreate):
+    db_paper = db.query(models.Paper).filter(models.Paper.id == paper_id).first()
+    if not db_paper:
+        return None
+    for key, value in paper.dict().items():
+        setattr(db_paper, key, value)
+    db.commit()
+    db.refresh(db_paper)
+    return db_paper
 
 def delete_paper(db: Session, paper_id: int):
-    paper = db.query(Paper).filter(Paper.id == paper_id).first()
-    if paper:
-        db.delete(paper)
+    db_paper = db.query(models.Paper).filter(models.Paper.id == paper_id).first()
+    if db_paper:
+        db.delete(db_paper)
         db.commit()
-        return True
-    return False
+
 

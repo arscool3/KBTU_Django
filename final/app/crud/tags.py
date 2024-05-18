@@ -11,14 +11,12 @@ def create_tag(db: Session, name: str):
 def get_tag(db: Session, tag_id: int):
     return db.query(Tag).filter(Tag.id == tag_id).first()
 
-def update_tag(db: Session, tag_id: int, name: str):
+def get_papers_by_tag(db: Session, tag_id: int):
     tag = db.query(Tag).filter(Tag.id == tag_id).first()
     if tag:
-        tag.name = name
-        db.commit()
-        db.refresh(tag)
-        return tag
-    return None
+        return tag.papers
+    return []
+
 
 def delete_tag(db: Session, tag_id: int):
     tag = db.query(Tag).filter(Tag.id == tag_id).first()
