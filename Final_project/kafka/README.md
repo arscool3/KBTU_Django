@@ -2,14 +2,6 @@
 
 PdfService is a service to generate pdfs by getting and aggregating data from different resources.
 
-## Installation
-
-Clone the project from this repository.
-
-```bash
-git clone --branch pdf-generator-service https://gitlab.com/di-halyk-academy-maglnuse/maglnuse-egov.git
-```
-
 ## Setup and Using
 
 Create virtualenv
