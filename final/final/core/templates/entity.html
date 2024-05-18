@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{ent_type}}
+        </title>
+    </head>
+    <body>
+        <h1>{{ent_type}}: {{ent}}</h1>
+        {% for a in attrs %}
+            <p><b>{{a[0]}}</b>: {{a[1]}}</p>
+        {% endfor %}
+    </body>
+</html>
