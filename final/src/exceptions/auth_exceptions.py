@@ -21,3 +21,8 @@ permission_exception = HTTPException(
     status_code=status.HTTP_403_FORBIDDEN,
     detail="Not enough permissions",
 )
+
+not_allowed_exception = HTTPException(
+    status_code=status.HTTP_403_FORBIDDEN,
+    detail="This action is forbidden",
+)

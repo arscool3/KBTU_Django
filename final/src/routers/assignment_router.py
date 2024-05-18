@@ -7,10 +7,12 @@ from dramatiq.results.errors import ResultMissing
 from crud import assignment_crud as crud
 
 from schemas.assignment_schemas import *
+from utils.auth_utils import get_current_user
 
 router = APIRouter(
     prefix='/assignment',
-    tags=['assignment']
+    tags=['assignment'],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/load_assignment")

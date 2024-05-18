@@ -24,13 +24,14 @@ def register(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)])
 @router.post('/login')
 async def login_for_access_token(
     form_data: Annotated[CustomOAuth2PasswordRequestForm, Depends()], session: Annotated[str, Depends(get_db)]
-) -> schemas.Token:
+):
     user = authenticate_user(form_data.username, form_data.password, session)
     if not user:
         raise authentication_exception
     
     scopes = []
-    if(user.role == models.RoleEnum.INSTRUCTOR.value):
+    # return {"mess": user.role.value == models.RoleEnum.INSTRUCTOR.value}
+    if(user.role.value == models.RoleEnum.INSTRUCTOR.value):
         scopes = ["instructor"]
     else:
         scopes = ["student"]
@@ -49,3 +50,8 @@ async def login_for_access_token(
 @router.get("/user")
 def get_token_user(user: Annotated[schemas.TokenData, Depends(get_current_user)]):
     return user
+
+
+@router.get("/all")
+def get_all_users(session: Annotated[str, Depends(get_db)]):
+    return crud.get_all_users(session)

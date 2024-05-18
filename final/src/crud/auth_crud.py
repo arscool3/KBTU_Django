@@ -14,6 +14,8 @@ def check_user_existense(email: str, session: Annotated[str, Depends(get_db)]):
 def get_user_by_id(id: int, session: Annotated[str, Depends(get_db)]):
    return session.query(models.User).filter(models.User.id==id).first()
 
+def get_all_users(session: Annotated[str, Depends(get_db)]):
+   return session.query(models.User)
 
 def create_user(user: schemas.UserCreate, session: Annotated[str, Depends(get_db)]): 
    if check_user_existense(user.email, session):

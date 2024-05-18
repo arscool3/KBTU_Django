@@ -5,7 +5,7 @@ from fastapi import Depends
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from database import get_db
-from exceptions.auth_exceptions import credentials_exception, permission_exception
+from exceptions.auth_exceptions import credentials_exception, permission_exception, not_allowed_exception
 from schemas import auth_schemas as schemas
 
 SECRET_KEY = "01d31b6eb6cd66725a02f8c496a61fab4a08ed731e88d01d1e6180e046ef876b"
@@ -62,8 +62,11 @@ def require_scope(required_scope: str):
     def scope_dependency(scopes: Annotated[schemas.TokenData, Depends(get_current_user)]):
         if required_scope not in scopes.scopes:
             raise permission_exception
+        return scopes
     return scope_dependency
 
 
-def validate_user_by_email(email: str, token: Annotated[schemas.TokenData, Depends(require_scope)]):
-    return email == token.email
+def validate_user_by_email(email: str, token_email: str):
+    if email != token_email:
+        raise not_allowed_exception
+    return True

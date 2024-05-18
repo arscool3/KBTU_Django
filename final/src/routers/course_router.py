@@ -2,8 +2,8 @@ from fastapi import APIRouter
 from typing import Annotated, Any
 from fastapi import Depends
 from database import get_db
-from utils.auth_utils import require_scope
-from crud.auth_crud import get_user_by_id
+from utils.auth_utils import require_scope, validate_user_by_email
+from crud.instructor_crud import get_instructor_by_id
 from schemas import course_schemas as schemas
 
 router = APIRouter(
@@ -14,14 +14,10 @@ router = APIRouter(
 
 @router.post("/")
 def create_course(course: schemas.CourseCreate, session: Annotated[str, Depends(get_db)], scope: Annotated[Any, Depends(require_scope("instructor"))]):
-    user = get_user_by_id(course.instructor_id)
+    user = get_instructor_by_id(course.instructor_id, session).user
 
-    # new_course = models.Course(name=course.name, instructor_id=course.instructor_id)
-
-    # session.add(new_course)
-    # session.commit()
-
-    return {"message": ""}
+    if validate_user_by_email(user.email, scope.email):
+        return {"message": "course successfully created"}
 
 
 
