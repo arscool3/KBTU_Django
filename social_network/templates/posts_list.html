@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Posts List</title>
+</head>
+<body>
+    <h1>Posts List</h1>
+    <p>Total Posts: {{ posts|length }}</p>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.title|lower }} - {{ post.content }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

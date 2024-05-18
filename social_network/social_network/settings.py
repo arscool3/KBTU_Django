@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'social_network.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,7 +142,8 @@ CELERY_CACHE_BACKEND = 'default'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 EMAIL_HOST_USER = 'nursturugeldiev@gmail.com'
-EMAIL_HOST_PASSWORD = 'cvpocpuzbewoxfzn'
+EMAIL_HOST_PASSWORD = 'rnhl ddyq zpvl fiul'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

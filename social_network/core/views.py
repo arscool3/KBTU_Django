@@ -8,6 +8,7 @@ from .serializers import *
 from .models import *
 from core.tasks import send_email_task
 from django.shortcuts import get_object_or_404
+from django.template.response import TemplateResponse
 
 from .renderers import UserJSONRenderer
 from .serializers import (
@@ -38,7 +39,7 @@ class RegistrationAPIView(APIView):
         # если они нужны для формирования письма.
 
         # Отправьте задачу Celery для отправки электронного письма
-        result = send_email_task.delay('Subject', 'Message', ['recipient@example.com'])
+        result = send_email_task.delay('Subject', 'Welcome to network', [user.email])
         celery_task_data = {
             'id': result.id,
             'user': user.pk,
@@ -99,9 +100,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    def get_permissions(self):
+        if self.action == 'list':
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
         # Проверка наличия данных в запросе
@@ -125,7 +130,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         # Сериализация списка публикаций и возврат ответа
         serializer = self.get_serializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return TemplateResponse(request, 'posts_list.html', {'posts': serializer.data})
 
 
 class PostDetailViewSet(viewsets.ModelViewSet):

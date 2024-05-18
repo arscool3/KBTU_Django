@@ -8,5 +8,4 @@ def send_email_task(subject, message, recipient_list):
         send_mail(subject, message, 'nursturugeldiev@gmail.com', recipient_list)
         return "Succesfully sent email"
     except Exception as e:
-        print(e)
-        return "Error sending email"
+        return e
