@@ -3,6 +3,7 @@ from app.models import Schedule, Bus, Route
 from app.db import get_db
 from sqlalchemy import Session
 from app.routes.auth import get_current_user
+from app.schemas import ScheduleResponse
 
 router = APIRouter()
 
@@ -13,7 +14,7 @@ async def get_schedules(db: Session = Depends(get_db)):
     return schedules
 
 
-@router.post("/", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
+@router.post("/", response_model= ScheduleResponse,  dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
 async def create_schedule(schedule: Schedule, db: Session = Depends(get_db)):
     # Check if bus and route exist
     bus = db.query(Bus).filter(Bus.id == schedule.bus_id).first()
@@ -26,7 +27,7 @@ async def create_schedule(schedule: Schedule, db: Session = Depends(get_db)):
     db.refresh(schedule)
     return schedule
 
-@router.get("/{schedule_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+@router.get("/{schedule_id}",response_model= ScheduleResponse, dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
 async def get_schedule(schedule_id: int, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
@@ -34,7 +35,7 @@ async def get_schedule(schedule_id: int, db: Session = Depends(get_db)):
     return schedule
 
 
-@router.put("/{schedule_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+@router.put("/{schedule_id}",response_model= ScheduleResponse, dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
 async def update_schedule(schedule_id: int, schedule_data: Schedule, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:

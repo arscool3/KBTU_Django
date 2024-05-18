@@ -3,6 +3,7 @@ from app.models import Schedule, Seat
 from app.db import get_db
 from sqlalchemy import Session
 from app.routes.auth import get_current_user
+from app.schemas import SeatResponse
 
 router = APIRouter()
 
@@ -18,7 +19,7 @@ async def get_seats(schedule_id: int, db: Session = Depends(get_db)):
     return seats
 
 
-@router.post("/schedules/{schedule_id}/seats",
+@router.post("/schedules/{schedule_id}/seats", response_model=SeatResponse,
              dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
 async def create_seat(seat: Seat, schedule_id: int, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
@@ -38,14 +39,15 @@ async def create_seat(seat: Seat, schedule_id: int, db: Session = Depends(get_db
     return seat
 
 
-@router.get("/{seat_id}")  # No get_current_user dependency (optional for some)
+@router.get("/{seat_id}", response_model=SeatResponse, )
 async def get_seat(seat_id: int, db: Session = Depends(get_db)):
     seat = db.query(Seat).filter(Seat.id == seat_id).first()
     if not seat:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Seat not found")
     return seat
 
-@router.put("/{seat_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
+
+@router.put("/{seat_id}", response_model= SeatResponse,dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
 async def update_seat(seat_id: int, seat_data: Seat, db: Session = Depends(get_db)):
     seat = db.query(Seat).filter(Seat.id == seat_id).first()
     if not seat:
@@ -57,7 +59,8 @@ async def update_seat(seat_id: int, seat_data: Seat, db: Session = Depends(get_d
             Seat.schedule_id == seat.schedule_id, Seat.seat_number == seat_data.seat_number
         ).first()
         if existing_seat and existing_seat.id != seat.id:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Seat number already exists for this schedule")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Seat number already exists for this schedule")
 
     seat.update(seat_data.dict(exclude_unset=True))
     db.commit()
@@ -65,7 +68,8 @@ async def update_seat(seat_id: int, seat_data: Seat, db: Session = Depends(get_d
     return seat
 
 
-@router.delete("/{seat_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
+@router.delete("/{seat_id}",
+               dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication (optional)
 async def delete_seat(seat_id: int, db: Session = Depends(get_db)):
     seat = db.query(Seat).filter(Seat.id == seat_id).first()
     if not seat:

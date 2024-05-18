@@ -13,8 +13,9 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class UserResponse(UserBase):
     id: int
+    email: EmailStr
 
     class Config:
         orm_mode = True
@@ -62,30 +63,68 @@ class BusCreate(BaseModel):
     capacity: int
 
 
-class Route(BaseModel):
+class RouteCreate(BaseModel):
     origin: str
     destination: str
-    stops: Optional[list[str]] = None  # Include stops if needed
+    stops: Optional[list[str]] = None
 
 
-class Schedule(BaseModel):
+class RouteResponse(BaseModel):
+    id: int
+    origin: str
+    destination: str
+    stops: list[str]
+
+    class Config:
+        orm_mode = True
+
+
+class ScheduleCreate(BaseModel):
     departure_datetime: datetime.datetime
     bus_id: int
     route_id: int
-    bus: BusCreate
-    route: Route
 
 
-class Seat(BaseModel):
+class ScheduleResponse(BaseModel):
+    id: int
+    departure_datetime: datetime.datetime
+    bus_id: int
+    route_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class SeatCreate(BaseModel):
     seat_number: int
     seat_type: str
     schedule_id: int
-    schedule: Schedule  # Optional: Include nested Schedule information if desired
 
 
-class Booking(BaseModel):
+class SeatResponse(BaseModel):
+    id: int
+    seat_number: int
+    seat_type: str
+    schedule_id: int
+    schedule: ScheduleResponse  # Include nested Schedule data
+
+    class Config:
+        orm_mode = True
+
+
+class BookingCreate(BaseModel):
     user_id: int
     seat_id: int
     booking_date: datetime.datetime
-    user: User  # Optional: Include nested User information if desired
-    seat: Seat  # Optional: Include nested Seat information if desired
+
+
+class BookingResponse(BaseModel):
+    id: int
+    user_id: int
+    seat_id: int
+    booking_date: datetime.datetime
+    user: UserResponse  # Include nested User data (if applicable)
+    seat: SeatResponse  # Include nested Seat data
+
+    class Config:
+        orm_mode = True

@@ -3,6 +3,7 @@ from app.models import Booking, User, Seat
 from app.db import get_db
 from sqlalchemy.orm import Session
 from app.routes.auth import get_current_user
+from app.schemas import BookingResponse
 
 router = APIRouter()
 
@@ -18,15 +19,18 @@ async def get_user_bookings(user_id: int, db: Session = Depends(get_db)):
     return bookings
 
 
-@router.get("/{booking_id}")  # No get_current_user dependency (optional for some)
+@router.get("/{booking_id}", response_model=BookingResponse)
 async def get_booking(booking_id: int, db: Session = Depends(get_db)):
     booking = db.query(Booking).filter(Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")
     return booking
 
-@router.post("/", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
-async def create_booking(booking: Booking, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+
+@router.post("/", response_model=BookingResponse,
+             dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
+async def create_booking(booking: Booking, current_user: User = Depends(get_current_user),
+                         db: Session = Depends(get_db)):
     # Check if user is authenticated (through get_current_user dependency)
 
     # Validate seat availability
@@ -50,7 +54,8 @@ async def create_booking(booking: Booking, current_user: User = Depends(get_curr
     return booking
 
 
-@router.put("/{booking_id}", dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
+@router.put("/{booking_id}", response_model=BookingResponse,
+            dependencies=[Depends(get_current_user)])  # Add get_current_user for authentication
 async def update_booking(booking_id: int, booking_data: Booking, db: Session = Depends(get_db)):
     booking = db.query(Booking).filter(Booking.id == booking_id).first()
     if not booking:

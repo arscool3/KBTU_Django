@@ -2,22 +2,21 @@ from datetime import datetime
 from functools import wraps
 from typing import Annotated
 
+import jwt
+from jwt import ExpiredSignatureError
 from email_validator import validate_email
-from pydantic_core._pydantic_core import ValidationError
-from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
-from jose import JWTError
+from pydantic import ValidationError
+from sqlalchemy.orm import Session
 
+from app import schemas, models
+from app.auth_bearer import JWTBearer
+from app.db import get_db
+from app.models import User, TokenTable
+from tasks import generate_and_send_password_email
 from app.utils import create_access_token, create_refresh_token, verify_password, get_hashed_password, \
     generate_password_reset_token
-from app.models import User, TokenTable
-from app.auth_bearer import JWTBearer
-
-from app.tasks import generate_and_send_password_email
-from app import schemas, models
-from app.db import Base, engine, SessionLocal, get_db
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
@@ -53,7 +52,7 @@ def register_user(user: schemas.UserCreate, session: Session = Depends(get_db)):
 
 @router.post('/login1', response_model=schemas.TokenSchema)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == form_data.email).first()
+    user = db.query(User).filter(User.email == form_data.username).first()
     if user is None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect email")
     hashed_pass = user.password
@@ -143,7 +142,7 @@ def token_required(func):
     return wrapper
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login1")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
@@ -160,7 +159,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not fetch user"
             )
         return user
-    except JWTError:
+    except ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid access token"
         )

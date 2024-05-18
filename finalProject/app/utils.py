@@ -46,5 +46,6 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) ->
 
 
 def generate_password_reset_token(email: str):
-    payload = {"reset_email": email, "exp": timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)}
+    expires_delta = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    payload = {"sub": email, "exp": expires_delta}
     return jwt.encode(payload, JWT_SECRET_KEY, algorithm=ALGORITHM)
