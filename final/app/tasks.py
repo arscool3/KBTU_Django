@@ -4,7 +4,7 @@ from dramatiq.brokers.redis import RedisBroker
 from dramatiq.results import Results
 from dramatiq.results.backends.redis import RedisBackend
 
-from other_app_instances import *
+from .other_app_instances import *
 
 result_backend = RedisBackend()
 redis_broker = RedisBroker()
