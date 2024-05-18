@@ -1,0 +1,3 @@
+[flake8]
+exclude = my_venv, venv
+ignore = E, W, F, N

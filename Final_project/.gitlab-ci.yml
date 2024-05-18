@@ -1,0 +1,49 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+build-job-frontend:       # This job runs in the build stage, which runs first.
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  script:
+    - echo "Building Docker frontend image..."
+    - docker build -t maglnuse_egov_frontend:$CI_FRONTEND_NAME ./front  # CI_FRONTEND_NAME: egov_frontend
+    - docker tag maglnuse_egov_frontend:egov_frontend $DOCKER_USER/maglnuse_egov_frontend
+    - docker push $DOCKER_USER/maglnuse_egov_frontend
+
+build-job-backend:
+  stage: build
+  image: docker:latest
+  before_script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  script:
+    - echo "Building Docker backend image..."
+    - docker build -t maglnuse_egov_backend:$CI_BACKEND_NAME ./backend  # CI_BACKEND_NAME: egov_backend
+    - docker tag maglnuse_egov_backend:egov_backend $DOCKER_USER/maglnuse_egov_backend
+    - docker push $DOCKER_USER/maglnuse_egov_backend
+
+
+unit-test-job:   # This job runs in the test stage.
+  stage: test    # It only starts when the job in the build stage completes successfully.
+  image: python:3.9
+  script:
+    - echo "Running unit tests..."
+    - pip install pytest
+    - pytest  
+
+lint-test-job:   # This job also runs in the test stage.
+  stage: test
+  image: python:3.9 
+  script:
+    - pip install flake8 
+    - flake8 ./backend 

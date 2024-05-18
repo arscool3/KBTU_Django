@@ -1,0 +1,299 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family:'Times New Roman', Times, serif;
+}
+
+.header {
+    background-color: #f6f6f6;
+    width: 95%;
+    height: 35px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 40px;
+    align-items: center;
+}
+
+.headerButtons button{
+    height: 35px;
+    border: 1px solid white;
+    padding: 10px;
+
+}
+
+.headerLogin {
+    background-color: rgb(246, 255, 246);
+    height: 35px;
+    padding: 5px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    box-sizing:border-box;
+    margin-right: 80px;
+
+}
+
+.headerLogin a {
+    color: black;
+    font-size: 16px;
+}
+
+.login {
+    background-color: rgb(247, 247, 247);
+    height: 100vh;
+}
+
+.registration {
+    background-color: rgb(247, 247, 247);
+    height: 100vh;
+}
+
+.registration .loginTitle {
+    margin: 100px 0px 30px 0px;
+}
+
+.loginHeader {
+    height: 50px;
+    background-color: green;
+    width: 100%;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 50px;
+}
+
+
+.loginLogo {
+    display: flex;
+    font-size: 30px;
+    padding: 10px;
+    align-items: center;
+    gap: 10px;
+}
+
+.loginLogo img{
+    padding: 10px;
+    width: 80px;
+}
+
+.loginRegister {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin: 0px 80px;
+}
+
+.loginRegister a{
+    color: lightgray;
+    text-decoration: none;
+
+}
+
+.loginRegister a:hover{
+    color: white;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.loginContainer form{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+}
+
+.loginContainer button {
+    margin: 20px 0px;
+}
+
+.loginTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 150px 0px 30px 0px;
+}
+
+.categories {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    background-color: green;
+    margin: 30px 0px;
+    padding: 0px 40px;
+
+}
+
+.categoryButton.active {
+    width: 200px;
+    background-color: green;
+    color: white;   
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.categoryButton{
+    width: 200px;
+    background-color: rgb(51, 172, 51);
+    color: white;   
+    border: 1px solid green;
+    font-size: 20px;
+}
+
+.categories button:hover{
+    background-color: green;
+}
+
+.profileContainer {
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.profile{
+    display: flex;
+    background-color: white;
+
+}
+
+.profile.left{
+    flex:1;
+    flex-direction: column;
+    margin: 0px 40px;
+    border-right: 1px solid rgb(212, 212, 212);
+    padding: 0px 20px;
+    gap: 10px;
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+}
+
+.profile.right{
+    flex:3;
+    flex-direction: column;
+    gap: 40px;
+    padding: 10px 0px;
+}
+
+.profile.right p{
+    font-size: 50px;
+    font-weight: 900;
+}
+
+.allInfo{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 200px;
+    font-size: 20px;
+}
+
+.applicationsContainer{
+    width: 96%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.applications{
+    width: 900px;
+    height: 60vh;  
+    overflow-y: scroll;
+    background-color: rgb(246, 255, 246);
+    border-radius: 10px;
+    margin: 30px;
+    border: 2px solid green;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding: 50px 10px; 
+}
+
+.application button{
+    width: 700px;
+    background-color: rgb(34, 75, 34);
+    color: white;
+    font-size: 25px;
+    height: 80px;
+    border: none;
+    border-radius: 10px;
+}
+
+.application button:hover{
+    background-color: rgb(137, 155, 137);
+}
+
+.userApplication{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.userApplication button{
+    width: 800px;
+    background-color: rgb(34, 75, 34);
+    color: white;
+    font-size: 25px;
+    height: 80px;
+    border: none;
+    border-radius: 10px;
+    padding: 0px 20px;
+}
+
+.userApplication button:hover{
+    background-color: rgb(137, 155, 137);
+}
+
+.userContainerButtonPersonal{
+    height: 700px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.noChangeContainerButtonPersonal{
+    height: 600px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.defaultButton {
+    background-color: green;
+    margin: 30px;
+    padding:10px;
+    color:white;
+}
+
+.defaultButton.disabled {
+    background-color: rgb(226, 255, 226);
+    margin: 30px;
+    padding:10px;
+    color:white;
+}
+
+.defaultButton.disabled:hover {
+    background-color: rgb(226, 255, 226);
+    margin: 30px;
+    padding:10px;
+    color:white;
+    cursor: default;
+    outline: none;
+}

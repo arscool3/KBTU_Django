@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta name="pdfkit-page-size" content="Legal"/>
+<meta name="pdfkit-orientation" content="Landscape"/>
+<style>
+table {{
+    border-collapse: collapse;
+    border: 1px solid;
+    width: 100%;
+}}
+th, td {{
+    border: 1px solid;
+}}
+</style>
+</head>
+<body>
+    <h1><center>StatGov</center></h1>
+    <table>
+        <tbody>
+            {STATGOV}
+        </tbody>
+    </table>
+    <h1><center>GosZakup</center></h1>
+    {GOSZAKUP}
+    <h1><center>DATA EGOV</center></h1>
+    <table>
+        <tbody>
+            {DATAEGOV}
+        </tbody>
+    </table>
+</body>
+</html>
