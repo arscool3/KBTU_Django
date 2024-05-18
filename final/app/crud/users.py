@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 import jwt
 from datetime import datetime, timedelta
-from app.models import User
-from app.schemas import UserCreate
+from models import User, Favorite
+from schemas import UserCreate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -16,6 +16,7 @@ def create_user(db: Session, user_create: UserCreate):
     db.add(user)
     db.commit()
     db.refresh(user)
+
     return user
 
 def authenticate_user(db: Session, username: str, password: str):
@@ -36,3 +37,17 @@ def create_access_token(user_id: int):
 def get_user_by_id(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
+def get_user_by_email(db: Session, email: str):
+    return db.query(User).filter(User.email == email).first()
+
+def get_current_user(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM)
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            return None
+        return db.query(User).filter(User.id == user_id).first()
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.JWTError:
+        return None

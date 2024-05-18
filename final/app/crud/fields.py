@@ -9,7 +9,7 @@ def create_field(db: Session, name: str):
     return field
 
 def get_field(db: Session, field_id: int):
-    return db.query(models.Field).filter(models..Field.id == field_id).first()
+    return db.query(models.Field).filter(models.Field.id == field_id).first()
 
 def get_papers_by_field(db: Session, field_id: int):
     field = db.query(models.Field).filter(models.Field.id == field_id).first()
