@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+httpx
+python-decouple
+dramatiq
+redis
+sqlalchemy
+databases
+asyncpg
+alembic
+pydantic
+passlib[bcrypt]
+pyjwt
