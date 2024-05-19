@@ -31,7 +31,7 @@ class UserViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['post'])
     def logout(self, request):
-        request.auth.delete()
+        # request.auth.delete()
         logout(request)
         return Response({'status': 'User logged out'}, status=status.HTTP_200_OK)
 
