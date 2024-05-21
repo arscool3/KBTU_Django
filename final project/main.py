@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from fastapi import FastAPI, HTTPException, Depends, Request
 from contextlib import contextmanager
 from sqlalchemy import select
@@ -10,6 +11,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import models as db
+from dramatiq.results.errors import ResultMissing
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
+import secrets, uvicorn
+
+from tasks import add_employee_task, result_backend
 
 app = FastAPI()
 
@@ -33,6 +40,13 @@ def ingredient(id: int) -> Ingredient:
             raise HTTPException(status_code=404)
         return Ingredient.model_validate(ingredient)
 
+@app.get("/ingredient_availability")
+def get_response(message_id: str):
+    try:
+        status = result_backend.get_result(add_employee_task.message().copy(message_id=message_id))
+    except ResultMissing:
+        return {"status": "pending"}
+    return {'status': status + " the ingredient is raised in your current area and available in this season "}
 
 class AddDependency:
 
@@ -73,12 +87,17 @@ def add_article(article_di: str = Depends(AddDependency.add_article)) -> str:
 
 
 security = HTTPBasic()
+templates = Jinja2Templates(directory="templates")
 
-def authenticate_user(credentials: HTTPBasicCredentials, db: Session = Depends(get_db)):
-    user = get_user_by_username(db, credentials.username)
-    if not user or not verify_password(credentials.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid credentials")
-    return user
+def authenticate_user(credentials: HTTPBasicCredentials = Depends(security)):
+    user = db.get(credentials.username)
+    if not user or not secrets.compare_digest(user["password"], credentials.password):
+        raise HTTPException(
+            status_code=HTTPStatus.HTTP_401_UNAUTHORIZED,  
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 @app.get("/")
 def read_root():
@@ -88,15 +107,10 @@ def read_root():
 def read_protected(username: str = Depends(authenticate_user)):
     return {"message": f"Hello {username}, you are authenticated"}
 
-
-
-
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-
-templates = Jinja2Templates(directory="templates")
-
-# Route to serve the login page
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+if __name__ == "__main__":
+    
+    uvicorn.run(app, host="0.0.0.0", port=8000)
