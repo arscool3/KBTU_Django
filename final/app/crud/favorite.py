@@ -13,8 +13,9 @@ def remove_from_favorites(db: Session, user_id: int, paper_id: int):
     if favorite:
         db.delete(favorite)
         db.commit()
-        return True
-    return False
+        return 'OK'
+    raise HTTPException(status_code=404, detail="Favorite not found")
+
 
 def get_favorites_for_user(db: Session, user_id: int):
     return db.query(models.Favorite).filter(models.Favorite.user_id == user_id).all()
