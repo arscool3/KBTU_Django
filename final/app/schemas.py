@@ -16,8 +16,9 @@ class User(UserBase):
 
 class PaperBase(BaseModel):
     title: str
-    content: str
-    field_id: int
+    abstract: str
+    fields: List[int] = []
+    file_path: str
 
 class PaperCreate(PaperBase):
     pass
@@ -25,8 +26,7 @@ class PaperCreate(PaperBase):
 class Paper(PaperBase):
     id: int
     author_id: int
-    tags: List[str] = []
-    fields: List[str] = []
+    tags: List[int] = []
     class Config:
         orm_mode = True
 
@@ -43,5 +43,15 @@ class Comment(CommentBase):
     class Config:
         orm_mode = True
 
+class Tag(BaseModel):
+    id: int
+    name: str
+    class Config:
+        orm_mode = True
 
+class Field(BaseModel):
+    id: int
+    name: str
+    class Config:
+        orm_mode = True
 
