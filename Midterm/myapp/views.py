@@ -1,18 +1,11 @@
-from django.contrib.auth.hashers import make_password
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
-from django.views.generic import View
 from rest_framework import permissions, status, viewsets, mixins
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import *
-from .tasks import *
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -67,17 +60,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
-
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data,
-                                         partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostViewSet(viewsets.ModelViewSet):

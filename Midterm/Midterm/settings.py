@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_dramatiq',
     'rest_framework',
-    'myapp',
+    'myapp.apps.MyappConfig',
     'rest_framework.authtoken',
     'djoser',
     'rest_framework_simplejwt',
@@ -137,5 +137,5 @@ REST_FRAMEWORK = {
     ]
 }
 
-SIMPJWT_ACCESS_TOKEN_LIFETIME = timedelta(minutes=15)
+SIMPJWT_ACCESS_TOKEN_LIFETIME = timedelta(hours=2)
 SIMPJWT_REFRESH_TOKEN_LIFETIME = timedelta(days=7)
