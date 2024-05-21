@@ -1,3 +1,11 @@
+# Project - ResWipe-  a website to share recipes and advices in cooking as "articles" among users. 
+# Users can write comments under the articles. 
+# Users can check the availability of the ingredients based on their location
+
+# FastAPI, dramatiq, Postgre, sqlalchemy, alembic...
+
+# ----------------------
+
 # from sqlalchemy import Table, Column, Integer, ForeignKey
 # from sqlalchemy.orm import relationship
 # from sqlalchemy.ext.declarative import declarative_base
