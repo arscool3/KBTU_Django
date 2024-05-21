@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
+
 from passlib.context import CryptContext
 import jwt
 from datetime import datetime, timedelta
+
 from models import User, Favorite
 from schemas import UserCreate
 
@@ -12,7 +15,7 @@ ALGORITHM = "HS256"
 
 def create_user(db: Session, user_create: UserCreate):
     hashed_password = pwd_context.hash(user_create.password)
-    user = User(username=user_create.username, email=user_create.email, hashed_password=hashed_password)
+    user = User(username=user_create.username, email=user_create.email, password=hashed_password)
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -21,7 +24,7 @@ def create_user(db: Session, user_create: UserCreate):
 
 def authenticate_user(db: Session, username: str, password: str):
     user = db.query(User).filter(User.username == username).first()
-    if user and pwd_context.verify(password, user.hashed_password):
+    if user and pwd_context.verify(password, user.password):
         return user
     return None
 
@@ -40,14 +43,13 @@ def get_user_by_id(db: Session, user_id: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
-def get_current_user(token: str):
+def get_current_user(db: Session, token: str):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithm=ALGORITHM)
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
-            return None
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token or missing user ID")
         return db.query(User).filter(User.id == user_id).first()
     except jwt.ExpiredSignatureError:
-        return None
-    except jwt.JWTError:
-        return None
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Your token has expired. Please log in again.")
+
