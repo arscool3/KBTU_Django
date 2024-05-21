@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/question_detail.css' %}">
+    <div class="question-detail">
+        <h2 class="question-title">{{ question.title }}</h2>
+        <div class="question-body">{{ question.body|markdown }}</div>
+        <div class="question-info">
+            <p class="question-author">Asked by {{ question.author.username }}</p>
+            <p class="question-tags">Tags: {{ question.tags.all|tag_list }}</p>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h3 class="answers-header">Answers</h3>
+        <ul class="answers-list">
+            {% for answer in question.answer_set.all %}
+                <li class="answer-item">
+                    <div class="answer-body">{{ answer.body|markdown }}</div>
+                    <div class="answer-info">
+                        <p class="answer-author">Answered by {{ answer.author.username }}</p>
+                        <form class="vote-form" method="post" action="{% url 'answer-upvote' answer.id %}">
+                            {% csrf_token %}
+                            <button class="vote-button" type="submit">Upvote</button>
+                        </form>
+                        <form class="vote-form" method="post" action="{% url 'answer-downvote' answer.id %}">
+                            {% csrf_token %}
+                            <button class="vote-button" type="submit">Downvote</button>
+                        </form>
+                        <div class="votes-info">
+                            <p class="upvotes">Upvotes: {{ answer.upvotes }}</p>
+                            <p class="downvotes">Downvotes: {{ answer.downvotes }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if user.is_authenticated %}
+            {% if question.author != user %}
+                <h3 class="submit-answer-header">Submit Your Answer</h3>
+                <a class="submit-answer-link" href="{% url 'create_answer' question.id %}">Write an answer</a>
+            {% else %}
+                <p class="own-question-message">You cannot answer your own question.</p>
+            {% endif %}
+        {% else %}
+            <p class="login-message">You need to <a href="{% url 'login' %}">login</a> to submit an answer.</p>
+        {% endif %}
+
+        <h3 class="vote-header">Vote</h3>
+        <form class="vote-form" method="post" action="{% url 'question-upvote' question.id %}">
+            {% csrf_token %}
+            <button class="vote-button" type="submit">Upvote</button>
+        </form>
+        <form class="vote-form" method="post" action="{% url 'question-downvote' question.id %}">
+            {% csrf_token %}
+            <button class="vote-button" type="submit">Downvote</button>
+        </form>
+        <div class="votes-info">
+            <p class="upvotes">Upvotes: {{ question.upvotes }}</p>
+            <p class="downvotes">Downvotes: {{ question.downvotes }}</p>
+        </div>
+    </div>
+{% endblock %}

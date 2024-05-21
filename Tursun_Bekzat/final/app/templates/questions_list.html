@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/questions_list.css' %}">
+    <div class="questions-list">
+        <h2 class="page-title">Questions</h2>
+        <ul class="questions">
+            {% for question in questions %}
+                <li class="question-item">
+                    <a class="question-title" href="{% url 'question_detail' question.id %}">{{ question.title }}</a>
+                    <div class="question-meta">
+                        <span class="question-author">by {{ question.author.username }}</span>
+                        <span class="question-tags">Tags: {{ question.tags.all|tag_list }}</span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
