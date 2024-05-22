@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Detail</title>
+</head>
+<body>
+    <h1>Order #{{ order.id }}</h1>
+    <p>Created at: {{ order.created_at }}</p>
+    <h2>Items</h2>
+    <ul>
+        {% for item in order.items.all %}
+            <li>{{ item.product.name }} - Quantity: {{ item.quantity }} </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'orderitem_update' order.id %}">Edit Order</a>
+</body>
+</html>

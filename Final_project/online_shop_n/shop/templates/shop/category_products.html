@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }} Products</title>
+</head>
+<body>
+    <h1>{{ category.name }} Products</h1>
+    <a href="{% url 'order_list' %}"> Order List</a>
+    <ul>
+        {% for product in products %}
+        <li><a href="{% url 'product_reviews' product.id %}">{{ product.name }}</a> - ${{ product.price }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

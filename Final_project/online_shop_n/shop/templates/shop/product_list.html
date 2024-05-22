@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Product List</title>
+    </head>
+    <body>
+        <h1>Products</h1>
+        <a href="{% url 'order_list' %}"> Order List</a>
+        <form method="get">
+            <label for="min_price">Min Price:</label>
+            <input type="number" name="min_price" id="min_price">
+            <label for="max_price">Max Price:</label>
+            <input type="number" name="max_price" id="max_price">
+            <button type="submit">Filter</button>
+        </form>
+        <ul>
+            {% for product in products %}
+                <li><a href="{% url 'product_reviews' product.id %}">{{ product.name }}</a> - ${{ product.price }}</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if order %}Edit{% else %}Create{% endif %} Order</title>
+</head>
+<body>
+    <h1>{% if order %}Edit{% else %}Create{% endif %} Order</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if order %}Update{% else %}Create{% endif %} Order</button>
+    </form>
+</body>
+</html>
