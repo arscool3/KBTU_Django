@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "adbf4c6c795d078a9f735dcd154649112bc460f8a18be6da0d20a81bed27c9d8"
+            "sha256": "5566e8618fc06b0b2ae25a96f004e1412cc5c2ba19070796d089c8fe96c4c686"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -505,6 +505,14 @@
             "markers": "python_version >= '3.8'",
             "version": "==3.10.3"
         },
+        "passlib": {
+            "hashes": [
+                "sha256:aa6bca462b8d8bda89c70b382f0c298a20b5560af6cbfa2dce410c0a2fb669f1",
+                "sha256:defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04"
+            ],
+            "index": "pypi",
+            "version": "==1.7.4"
+        },
         "pyasn1": {
             "hashes": [
                 "sha256:3a35ab2c4b5ef98e17dfdec8ab074046fbda76e281c5a706ccd82328cfc8f64c",
@@ -821,7 +829,7 @@
                 "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0",
                 "sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.8'",
             "version": "==4.11.0"
         },
         "ujson": {
