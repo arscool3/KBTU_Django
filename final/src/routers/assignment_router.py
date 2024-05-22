@@ -16,8 +16,8 @@ router = APIRouter(
 )
 
 @router.post("/load_assignment")
-async def load_assignment():
-    load_assignment_task.send(1)
+async def load_assignment(assignment_id: int):
+    load_assignment_task.send(assignment_id)
     return {"message": "Assignment loading started"}
 
 @router.get("/progress")
