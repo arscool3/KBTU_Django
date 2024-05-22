@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Order Detail</h2>
+  <p>Order ID: {{ order.pk }}</p>
+  <p>Total Price: {{ order.total_price }}</p>
+{% endblock %}
