@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Main{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/product-detail.css' %}">
+    <div class="product-detail">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="product-detail-content">
+            <h1>{{ product.name }}</h1>
+            <p class="price">Price: {{ product.price }} KZT</p>
+            <p>{{ product.description }}</p>
+            <p class="stock">Stock: {{ product.stock }}</p>
+            <div class="buttons">
+                <a href="{% url 'add_to_cart' product.id %}" class="add-to-cart">Add to Cart</a>
+                <a href="{% url 'create_order' product.id %}" class="order-now">Order</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-form">
+        <h2>Add Review</h2>
+        <form id="review-form">
+            {% csrf_token %}
+            <label for="rating">Rating:</label>
+            <select name="rating" id="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <br>
+            <label for="comment">Comment:</label>
+            <textarea name="comment" id="comment" rows="3"></textarea>
+            <br>
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+
+    <div class="existing-reviews">
+        <h2>Reviews</h2>
+        {% for review in product.reviews.all %}
+            <div class="review">
+                <p><strong>Rating:</strong> {{ review.rating }}</p>
+                <p><strong>Comment:</strong> {{ review.comment }}</p>
+                <p><strong>Posted By:</strong> {{ review.user.username }}</p>
+            </div>
+        {% empty %}
+            <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        $('#review-form').submit(function(event) {
+            event.preventDefault();
+            var rating = $('#rating').val();
+            var comment = $('#comment').val();
+            $.ajax({
+                url: '{% url "review-create" pk=product.id %}',
+                type: 'POST',
+                data: {
+                    product_id: '{{ product.id }}',
+                    rating: rating,
+                    comment: comment,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+{% endblock %}

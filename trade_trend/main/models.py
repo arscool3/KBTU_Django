@@ -31,7 +31,7 @@ class Cart(models.Model):
     quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self) -> str:
-        return self.user
+        return str(self.id)
 
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='orders', on_delete=models.CASCADE)
@@ -49,8 +49,8 @@ class Review(models.Model):
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self) -> str:
-        return self.user
+    def __str__(self):
+        return str(self.id)
 class Notification(models.Model):
     user = models.ForeignKey(User, related_name='notification', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

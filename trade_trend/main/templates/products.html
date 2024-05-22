@@ -1,17 +1,23 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{Products}}</title>
+    <title>Products</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body>
-    <div class = "product-list">
+{% block content %}
+    <div class="product-list">
         {% for product in products %}
-            <h2>{{product.name}}</h2>
-            <img src="{{ product.image }}">
-            <p>Price: {{product.price}}KZT</p>
+        <div class="product">
+            <h2><a href="{% url 'product-detail' product.pk %}">{{ product.name }}</a></h2>
+            <a href="{% url 'product-detail' product.pk %}">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
+            <p>Price: {{ product.price }} KZT</p>
+        </div>
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

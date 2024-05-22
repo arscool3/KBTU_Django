@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Main{% endblock %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/product-detail.css' %}">
+    <h1>Your Cart</h1>
+    <div class="cart-items">
+        {% for item in cart %}
+            <div class="cart-item">
+                <img src="{{ item.product.image.url }}" alt="{{ product.name }}">
+                <h2>{{ item.product.name }}</h2>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Price: {{ item.product.price }} KZT</p>
+                <a href="{% url 'create_order' item.product.id %}" class="order-now">Order</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

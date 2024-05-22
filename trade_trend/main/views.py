@@ -2,35 +2,33 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import User, Product, Category, Review
 from .serializers import UserSerializer, ProductSerializer, CategorySerializer, ReviewSerializer
-from .models import Product, Category
+from .models import *
 from rest_framework.decorators import action
+from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework import status, generics
-from django.shortcuts import HttpResponse, redirect
+from django.shortcuts import HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, decorators, logout, forms
+from .tasks import notify_user_of_order
+from .forms import ReviewForm
+
 
 def get_index(request):
     products = Product.objects.all()
     return render(request, "index.html", {"products": products})
 
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    return render(request, 'product_detail.html', {'product': product})
 
 def product_list(request):
-    category = request.GET.get('category')
-    min_price = request.GET.get('min_price')
-    max_price = request.GET.get('max_price')
-
-    products = Product.objects.all()
-    
-    if category:
-        products = products.filter(category__name=category)
-    
-    if min_price:
-        products = products.filter(price__gte=min_price)
-    
-    if max_price:
-        products = products.filter(price__lte=max_price)
-
-    return render(request, 'product_list.html', {'products': products})
+    category_id = request.GET.get('category')
+    if category_id:
+        products = Product.objects.filter(category_id=category_id)
+    else:
+        products = Product.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'products.html', {'products': products, 'categories': categories})
 
 
 # Create your views here.
@@ -70,3 +68,47 @@ def login_view(request):
         else:
             raise Exception(f"some erros {form.errors}")
     return render(request, 'login.html', {'form': forms.AuthenticationForm()})
+
+@login_required
+def cart_view(request):
+    cart = Cart.objects.filter(user=request.user)
+    return render(request, 'cart.html', {'cart': cart})
+
+@login_required
+def orders_view(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'orders.html', {'orders': orders})
+
+@login_required
+def create_review(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+            return redirect('product-detail', pk=pk)
+    else:
+        form = ReviewForm()
+    return render(request, 'review_form.html', {'form': form})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = Product.objects.get(id=product_id)
+    cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    return redirect('cart')
+
+@login_required
+def create_order(request, product_id):
+    product = Product.objects.get(id=product_id)
+    order, created = Order.objects.get_or_create(user=request.user, status='Pending')
+    if created:
+        cart_item, _ = Cart.objects.get_or_create(user=request.user, product=product)
+        cart_item.quantity = 1
+        cart_item.save()
+    return redirect('orders')
