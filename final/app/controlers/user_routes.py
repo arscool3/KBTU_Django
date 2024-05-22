@@ -9,7 +9,7 @@ from typing import Annotated
 router = APIRouter()
 
 
-@router.post("/register")
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 def register_user(user_create: schemas.UserCreate, db: Annotated[Session, Depends(get_db)]):
     db_user = get_user_by_email(db, email=user_create.email)
     if db_user:
