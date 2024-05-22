@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Cosmetic Shop</h1>
+    {% if user.is_authenticated %}
+    <ul>
+        <li><a href="{% url 'products_list' %}">Product page</a></li>
+        <li><a href="{% url 'order_list' %}">Order page</a></li>
+        <li><a href="{% url 'send_email' %}">Send Email</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+        
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <br>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+    
+</body>
+</html>
