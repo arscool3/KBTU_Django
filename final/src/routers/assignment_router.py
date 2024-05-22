@@ -12,7 +12,7 @@ from utils.auth_utils import get_current_user
 router = APIRouter(
     prefix='/assignment',
     tags=['assignment'],
-    # dependencies=[Depends(get_current_user)]
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/load_assignment")
