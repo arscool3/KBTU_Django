@@ -2,47 +2,68 @@
 from sqlalchemy.orm import Session
 import models
 import schemas
+from sqlalchemy.orm import Session
+from passlib.context import CryptContext
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks, status
 
-# Function to seed data
-def seed_data(db: Session):
-    # Seed your data here using SQLAlchemy ORM or raw SQL queries
-    pass
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# CRUD operations for Seed entity
-def create_seed(db: Session, seed: schemas.SeedCreate):
-    db_seed = models.Seed(**seed.dict())
-    db.add(db_seed)
+def get_user_by_username(db: Session, username: str):
+    return db.query(models.User).filter(models.User.username == username).first()
+
+def create_user(db: Session, user: schemas.UserCreate):
+    hashed_password = pwd_context.hash(user.password)
+    db_user = models.User(
+        username=user.username,
+        email=user.email,
+        full_name=user.username,
+        hashed_password=hashed_password
+    )
+    db.add(db_user)
     db.commit()
-    db.refresh(db_seed)
-    return db_seed
+    db.refresh(db_user)
+    return db_user
 
-def get_seeds(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(models.Seed).offset(skip).limit(limit).all()
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
 
-def get_seed(db: Session, seed_id: int):
-    return db.query(models.Seed).filter(models.Seed.id == seed_id).first()
+def authenticate_user(db: Session, username: str, password: str):
+    user = get_user_by_username(db, username)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
 
-def update_seed(db: Session, seed_id: int, seed: schemas.SeedUpdate):
-    db_seed = db.query(models.Seed).filter(models.Seed.id == seed_id).first()
-    if db_seed:
-        for var, value in vars(seed).items():
-            if value is not None:
-                setattr(db_seed, var, value)
-        db.commit()
-        db.refresh(db_seed)
-        return db_seed
-    else:
+def get_object(db: Session, model, obj_id: int):
+    return db.query(model).filter(model.id == obj_id).first()
+
+def get_objects(db: Session, model, skip: int = 0, limit: int = 10):
+    return db.query(model).offset(skip).limit(limit).all()
+
+def create_object(db: Session, model, obj_in):
+    db_obj = model(**obj_in.dict())
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
+
+def update_object(db: Session, model, obj_id: int, obj_in):
+    db_obj = get_object(db, model, obj_id)
+    if not db_obj:
         return None
+    for key, value in obj_in.dict().items():
+        setattr(db_obj, key, value)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj
 
-def delete_seed(db: Session, seed_id: int):
-    db_seed = db.query(models.Seed).filter(models.Seed.id == seed_id).first()
-    if db_seed:
-        db.delete(db_seed)
-        db.commit()
-        return {"message": "Seed deleted successfully"}
-    else:
-        return {"message": "Seed not found"}
-# crud.py
-def verify_token(token: str):
-    # Dummy implementation, replace it with your actual token verification logic
-    return token == "valid_token"
+def delete_object(db: Session, model, obj_id: int):
+    db_obj = get_object(db, model, obj_id)
+    if not db_obj:
+        return None
+    db.delete(db_obj)
+    db.commit()
+    return db_obj
+
+
