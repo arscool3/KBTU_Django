@@ -4,13 +4,13 @@ from crud.papers import *
 from crud.users import get_current_user
 from db import get_db
 from models import User
-from schemas import PaperCreate, Paper
+from schemas import PaperCreate, Paper, PaperUpdate
 from typing import Optional, List
 
 router = APIRouter()
 
 
-@router.post("/papers", response_model=Paper)
+@router.post("/papers", response_model=Paper, status_code=status.HTTP_201_CREATED)
 def create_paper_route(paper_create: PaperCreate, token: str, db: Session = Depends(get_db)):
     current_user = get_current_user(db, token)
     return create_paper(db=db, paper=paper_create, user_id = current_user.id)
@@ -41,15 +41,14 @@ def get_papers_route(
     return papers
 
 @router.put("/papers/{paper_id}", response_model=Paper)
-def update_paper_route(paper_id: int, paper_update: Paper, db: Session = Depends(get_db)):
-    return update_paper(db=db, paper_id=paper_id, paper_update=paper_update)
+def update_paper_route(paper_id: int, token: str, paper_update: PaperUpdate, db: Session = Depends(get_db)):
+    current_user = get_current_user(db, token)
+    return update_paper(db=db, paper_id=paper_id, paper=paper_update, user_id = current_user.id)
 
 
 @router.delete("/papers/{paper_id}")
 def delete_paper_route(paper_id: int, token: str, db: Session = Depends(get_db)):
     current_user = get_current_user(db, token)
-    deleted = delete_paper(db=db, paper_id=paper_id, user_id = current_user.id)
-    if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Paper not found")
+    delete_paper(db=db, paper_id=paper_id, user_id = current_user.id)
     return {"message": "Paper deleted successfully"}
 
