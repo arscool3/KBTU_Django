@@ -7,8 +7,13 @@ from .enums import Gender
 
 class UserBase(BaseModel):
     email: str
-    username: str
-    
+    username: str   
+    name: str
+    dob: Optional[date] = None
+    gender: Optional[Gender] = None
+    bio: Optional[str] = None
+    location: Optional[str] = None
+    profile_pic: Optional[str] = None
 
 
 class UserCreate(UserBase):
