@@ -92,3 +92,77 @@ add get, post queries for them
 
 Practice  #11
 Add websocket endpoint to your API
+
+Final project
+
+DRF
+1) 6 Models (Done)
+2) 4 Relationships (Done)
+3) 1 Template (Done)
+4) 2 Filters for templates (Done)
+6) Authorization (Done)
+7) DRF serializers for all models (Done)
+8) Viewsets for all models (Done)
+9) 2 DRF Actions (Done)
+10) Background Tasks (Dramatiq / Celery) (Done)
+
+Designing a university system using Django and Django REST Framework
+
+Models:
+
+1) Department: Represents a department within the university. It has a name and a unique code.
+2) Professor: Represents a professor or faculty member. It contains fields for the first name, last name, and department to which the professor belongs.
+3) Course: Represents a specific course offered by the university. It has a name, a unique code, and is associated with a department and a professor.
+4) Student: Represents a student enrolled at the university. It contains fields for the first name, last name, and the courses the student is enrolled in (through a Many-to-Many relationship with the Course model).
+5) Schedule: Represents the schedule of a course, including the day of the week, start time, and end time. It is associated with a specific course.
+6) Grade: Represents the grade of a student in a particular course. It contains fields for the student, the course, and the grade achieved by the student in that course.
+
+Relationships:
+
+> Students can be associated with several groups (many to many).
+> Teachers can teach several subjects (one to many).
+> Subjects are tied to certain groups and teachers (many to many).
+> The schedule is related to the subject, the teacher and the group (many to one).
+
+Functionality:
+
+Registration and authentication of users (students and teachers).
+View and edit information about students, teachers, groups, and subjects through the Django admin panel.
+API for accessing data about students, teachers, groups, subjects, and schedules.
+The ability to view the class schedule for each group.
+Grades for subjects, entering them and viewing them for students and teachers.
+Filters for viewing schedules by day of the week, groups and teachers.
+
+![img.png](img.png)
+Needs to be authorized
+
+![img_1.png](img_1.png)
+Works correctly after authorization
+
+dramatiq university.tasks   
+![img_2.png](img_2.png)
+Testing Dramatiq task
+
+![img_3.png](img_3.png)
+Successfully done 
+
+Роуты:
+Получить список всех департаментов:
+GET /api/departments/
+Получить список всех курсов:
+GET /api/courses/
+Получить список всех студентов:
+GET /api/students/
+Получить список всех преподавателей:
+GET /api/professors/
+Получить курсы, преподаваемые определенным преподавателем:
+GET /api/professors/<professor_id>/courses_taught/
+Записать студента на определенный курс:
+POST /api/courses/<course_id>/enroll_student/
+Тело запроса: {"student_id": "<student_id>"}
+Получить список курсов, на которые записан определенный студент:
+GET /api/students/<student_id>/enrolled_courses/
+Dramatiq таск:
+Обновить описание курса:
+Вызовите этот таск с помощью HTTP запроса или из кода вашего приложения с помощью Dramatiq, передав идентификатор курса и новое описание.
+
