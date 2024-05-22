@@ -10,4 +10,4 @@ venv/
 # Ignore environment-specific files
 .env
 
-
+app/config.py
