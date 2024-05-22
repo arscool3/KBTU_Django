@@ -22,9 +22,10 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderItemSerializer(serializers.ModelSerializer):
+    product = serializers.ReadOnlyField(source='product.name')
     class Meta:
         model = OrderItem
-        fields = '__all__'
+        fields = ['id', 'order', 'product', 'quantity', 'price']
 
 class OrderSerializer(serializers.ModelSerializer):
     product = OrderItemSerializer(many=True, read_only=True)

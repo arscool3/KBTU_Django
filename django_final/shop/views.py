@@ -85,20 +85,20 @@ def order_list(request):
             orders = OrderItem.objects.filter(order__user=request.user)
             serializer = OrderItemSerializer(orders, many=True)
             return Response(serializer.data)
+            #return render(request, 'order_list.html', {'orders_data': serializer.data})
         except Exception as e:
             return Response({'message': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     if request.method == 'POST':
+        user = request.user
+        product_id = request.data.get('product_id')
+        send_email.send(user.id) 
         try:
-            user = request.user
-            product_id = request.data.get('product_id')
-            
             if not product_id:
                 return Response({'message': 'Product ID is missing.'}, status=status.HTTP_400_BAD_REQUEST)
 
             product = Product.objects.get(id=product_id)
-
-            order = Order.objects.create(user=user, total_price=0)  
+            order = Order.objects.create(user=user, total_price=0) 
             OrderItem.objects.create(order=order, product=product, price=product.price, quantity=1)
             
             return Response({'message': 'This product was added successfully.'}, status=status.HTTP_201_CREATED)
@@ -108,6 +108,7 @@ def order_list(request):
             
         except IntegrityError:
             return Response({'message': 'Failed to create order. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 #ViewSet
 class BrandViewSet(viewsets.ModelViewSet):
     queryset = Brand.objects.all()

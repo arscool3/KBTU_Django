@@ -7,18 +7,19 @@
 </head>
 <body>
     <h1>Cosmetic Shop</h1>
-    <h3>Home</h3>
+    {% if user.is_authenticated %}
     <ul>
-        
-        {% if user.is_authenticated %}
         <li><a href="{% url 'products_list' %}">Product page</a></li>
         <li><a href="{% url 'order_list' %}">Order page</a></li>
-        <a href="{% url 'send_email' %}">Send Email</a>
+        <li><a href="{% url 'send_email' %}">Send Email</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
-        {% else %}
-            <li><a href="{% url 'login' %}">Login</a></li>
-            <li><a href="{% url 'register' %}">Register</a></li>
-        {% endif %}
     </ul>
+        
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <br>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+    
 </body>
 </html>

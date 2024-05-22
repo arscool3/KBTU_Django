@@ -6,49 +6,21 @@
     <title>Home</title>
 </head>
 <body>
-    <h1>Welcome to Order Page</h1>
-    {% if orders %}
-        <ul>
-            {% for order in orders %}
-                <li>
-                    <strong>Order ID:</strong> {{ order.id }}<br>
-                    <strong>User:</strong> {{ order.user.username }}<br>
-                    <strong>Seller:</strong> {{ order.seller.name }}<br>
-                    <strong>Total Price:</strong> {{ order.total_price }}<br>
-                    <strong>Products:</strong>
-                    <ul>
-                        {% for item in order.orderitem_set.all %}
-                            <li>
-                                {{ item.quantity }} x {{ item.product.name }} - {{ item.price }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No orders found.</p>
-    {% endif %}
+    <h1>Order</h1>
+
+    
     <p>Go back to <a href="{% url 'home' %}">home page</a>.</p>
-<script>
-    fetch('/order_list/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        'product_id': product_id,
-        'seller_id': seller_id
-      })
-    })
-    .then(response => {
-      if (response.ok) {
-      } else {
-      }
-    })
-    .catch(error => {
-    });
-</script>
+    
+    {% for order_data in orders_data %}
+    
+        <li>
+            {{ order_data.products }} - {{ order_data.total_price }}
+            
+        </li>  
+    
+    
+    {% endfor %}
+
     
 </body>
 </html>

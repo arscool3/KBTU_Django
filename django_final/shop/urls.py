@@ -12,10 +12,9 @@ router.register(r'orderitems', OrderItemViewSet)
 
 urlpatterns = [
     path('', home, name='home'),
-    path('api/register', register_view, name='register'),
-    path('api/login', login_view, name='login'),
-    path('api/logout', logout_view, name='logout'),
-
+    path('register', register_view, name='register'),
+    path('login', login_view, name='login'),
+    path('logout', logout_view, name='logout'),
     path('products/', products_list, name="products_list"),
     path('products/<int:product_id>/', products_detail, name='product_detail'),
     path('order_list/', order_list, name='order_list'),
