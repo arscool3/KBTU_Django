@@ -7,8 +7,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import update_product_stock
 from django.shortcuts import render, get_object_or_404, redirect
 from .filters import ProductFilter
-from .forms import ReviewForm
+from .forms import ReviewForm, OrderForm, OrderItemForm
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.urls import reverse_lazy
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -89,17 +91,41 @@ def category_products(request, category_id):
     products = Product.objects.filter(category=category)
     return render(request, 'shop/category_products.html', {'category': category, 'products': products})
 
-#def product_detail(request, pk):
-#    product = get_object_or_404(Product, pk=pk)
-#    reviews = Review.objects.filter(product=product)
-#    if request.method == 'POST':
-#        form = ReviewForm(request.POST)
-#        if form.is_valid():
-#            review = form.save(commit=False)
-#            review.product = product
-#            review.user = request.user
-#            review.save()
-#            return redirect('product_reviews', pk=pk)
-#    else:
-#        form = ReviewForm()
-#    return render(request, 'shop/product_reviews.html', {'product': product, 'form': form, 'reviews': reviews})
+class OrderListView(ListView):
+    model = Order
+    template_name = 'orders/order_list.html'
+    context_object_name = 'orders'
+
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'orders/order_detail.html'
+    context_object_name = 'order'
+
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'orders/order_form.html'
+    success_url = reverse_lazy('order_list')
+
+class OrderUpdateView(UpdateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'orders/order_form.html'
+    success_url = reverse_lazy('order_list')
+
+class OrderItemCreateView(CreateView):
+    model = OrderItem
+    form_class = OrderItemForm
+    template_name = 'order_items/orderitem_form.html'
+    success_url = reverse_lazy('order_detail')
+
+    def get_success_url(self):
+        return reverse_lazy('order_detail', kwargs={'pk': self.object.order.id})
+
+class OrderItemUpdateView(UpdateView):
+    model = OrderItem
+    form_class = OrderItemForm
+    template_name = 'order_items/orderitem_form.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('order_detail', kwargs={'pk': self.object.order.id})

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order List</title>
+</head>
+<body>
+    <h1>Orders</h1>
+    <a href="{% url 'order_create' %}">Create New Order</a>
+    <ul>
+        {% for order in orders %}
+            <li>
+                <a href="{% url 'order_detail' order.id %}">Order #{{ order.id }}</a>
+                - {{ order.created_at }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

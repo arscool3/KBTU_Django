@@ -5,6 +5,7 @@
     </head>
     <body>
         <h1>Categories</h1>
+        <a href="{% url 'order_list' %}"> Order List</a>
         <ul>
             {% for category in categories %}
             <li><a href="{% url 'category_products' category.id %}">{{ category.name }}</a></li>
