@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from crud.users import *
 import schemas
 import models
+from worker import send_registration_email
 from db import get_db
 from typing import Annotated
 
@@ -15,6 +16,7 @@ def register_user(user_create: schemas.UserCreate, db: Annotated[Session, Depend
     if db_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     user = create_user(db, user_create)
+    send_registration_email.send(user.email)
     return {"message": "User created successfully"}
 
 @router.post("/login")
