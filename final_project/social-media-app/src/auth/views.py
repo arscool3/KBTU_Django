@@ -55,17 +55,13 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# get current user
 @router.get("/profile", status_code=status.HTTP_200_OK, response_model=UserSchema)
-async def current_user(token: str, db: Session = Depends(get_db)):
-    db_user = await get_current_user(db, token)
+async def current_user(token: str, db: Session = Depends(get_db), db_user: UserSchema = Depends(get_current_user)):
     if not db_user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="token invalid"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid"
         )
-
     return db_user
-
 
 # update user
 @router.put("/{username}", status_code=status.HTTP_204_NO_CONTENT)
