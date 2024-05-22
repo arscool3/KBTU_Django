@@ -6,7 +6,7 @@ from .schemas import PostCreate, Post as PostSchema, Hashtag as HashtagSchema
 from .models import Post, Hashtag, post_hashtags
 from ..auth.models import User
 from ..auth.schemas import User as UserSchema
-from ..activity.models import Activity
+# from ..activity.models import Activity
 
 
 # create hashtag from posts' content
@@ -118,14 +118,14 @@ async def like_post_svc(db: Session, post_id: int, username: str):
     post.liked_by_users.append(user)
     post.likes_count = len(post.liked_by_users)
 
-    # TO DO activity of like
-    like_activity = Activity(
-        username=post.author.username,
-        liked_post_id=post_id,
-        username_like=username,
-        liked_post_image=post.image,
-    )
-    db.add(like_activity)
+    # # TO DO activity of like
+    # like_activity = Activity(
+    #     username=post.author.username,
+    #     liked_post_id=post_id,
+    #     username_like=username,
+    #     liked_post_image=post.image,
+    # )
+    # db.add(like_activity)
 
     db.commit()
     return True, "done"
