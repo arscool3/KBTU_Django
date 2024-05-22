@@ -67,3 +67,29 @@ def delete_object(db: Session, model, obj_id: int):
     return db_obj
 
 
+
+def borrow_book(db: Session, book_id: int, member_id: int) -> bool:
+    # Check if both book and member exist
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+        return False
+
+    member = db.query(models.Member).filter(models.Member.id == member_id).first()
+    if not member:
+        return False
+
+    # Check if the book is available for borrowing
+    if book.is_available_for_borrowing:
+        # Update book status
+        book.is_available_for_borrowing = False
+        db.commit()
+
+        # Create a loan record
+        loan = models.Loan(book_id=book_id, member_id=member_id)
+        db.add(loan)
+        db.commit()
+        return True
+
+    return False
+
+

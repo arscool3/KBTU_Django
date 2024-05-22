@@ -268,7 +268,10 @@ def update_staff(staff_id: int, staff: schemas.StaffCreate, db: Session = Depend
 def delete_staff(staff_id: int, db: Session = Depends(get_db), token: str = Depends(check_authorization)):
     return crud.delete_object(db, models.Staff, staff_id)
 
-
+@app.post("/borrow/{book_id}/member/{member_id}")
+async def borrow_book_api(book_id: int, member_id: int, db: Session = Depends(get_db)):
+    task = borrow_book_async.send(str(db), book_id, member_id)
+    return {"message": "Book borrowing request received.", "task_id": str(task.message_id)}
 
 # @app.post("/borrow/{book_id}/member/{member_id}")
 # def borrow_book_api(book_id: int, member_id: int, db: Session = Depends(get_db)):
