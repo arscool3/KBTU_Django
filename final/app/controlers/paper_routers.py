@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
+from typing import Annotated
 from sqlalchemy.orm import Session
 from crud.papers import *
 from crud.users import get_current_user
@@ -8,6 +9,12 @@ from schemas import PaperCreate, Paper, PaperUpdate
 from typing import Optional, List
 
 router = APIRouter()
+
+
+class CommonQueryParams:
+    def __init__(self, paper_id: int, token: str):
+        self.paper_id = paper_id
+        self.token = token
 
 
 @router.post("/papers", response_model=Paper, status_code=status.HTTP_201_CREATED)
@@ -41,14 +48,14 @@ def get_papers_route(
     return papers
 
 @router.put("/papers/{paper_id}", response_model=Paper)
-def update_paper_route(paper_id: int, token: str, paper_update: PaperUpdate, db: Session = Depends(get_db)):
-    current_user = get_current_user(db, token)
-    return update_paper(db=db, paper_id=paper_id, paper=paper_update, user_id = current_user.id)
+def update_paper_route(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)], paper_update: PaperUpdate, db: Session = Depends(get_db)):
+    current_user = get_current_user(db, commons.token)
+    return update_paper(db=db, paper_id=commons.paper_id, paper=paper_update, user_id = current_user.id)
 
 
 @router.delete("/papers/{paper_id}")
-def delete_paper_route(paper_id: int, token: str, db: Session = Depends(get_db)):
-    current_user = get_current_user(db, token)
-    delete_paper(db=db, paper_id=paper_id, user_id = current_user.id)
+def delete_paper_route(commons: Annotated[CommonQueryParams, Depends(CommonQueryParams)], db: Session = Depends(get_db)):
+    current_user = get_current_user(db, commons.token)
+    delete_paper(db=db, paper_id=commons.paper_id, user_id = current_user.id)
     return {"message": "Paper deleted successfully"}
 
