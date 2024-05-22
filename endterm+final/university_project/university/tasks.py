@@ -1,9 +1,16 @@
+import os
+import django
 import dramatiq
 from dramatiq.brokers.redis import RedisBroker
 from dramatiq.results import Results
 from dramatiq.results.backends.redis import RedisBackend
 
-from .models import Course
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "university_project.settings")
+django.setup()
+
+
+from .models import *
 
 REDIS_URL = "redis://localhost:6379/0"
 
@@ -24,3 +31,4 @@ def update_course_description(course_id, new_description):
         return f"Course with id '{course_id}' does not exist."
     except Exception as e:
         return f"An error occurred: {str(e)}"
+
