@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+</head>
+<body>
+    {% load filters %}
+    <h1>Posts</h1>
+    <ul>
+        {% for post in posts %}
+            <li><strong>{{ post.title | capitalize_first_letter }}</strong></li>
+            <p>{{ post.description | capitalize_first_letter }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Post Image">
+            {% else %}
+                <i><p>No Picture</p></i>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>

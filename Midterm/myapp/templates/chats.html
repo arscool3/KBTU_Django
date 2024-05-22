@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chats</title>
+</head>
+<body>
+    {% load filters %}
+    <h1>Chats</h1>
+    <ul>
+        {% for chat in chats %}
+            <li>{{ chat.title | replaceSpace }}</li>
+            <ul>
+                {% for member in chat.members.all %}
+                    <li>{{ member.username }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+</body>
+</html>
