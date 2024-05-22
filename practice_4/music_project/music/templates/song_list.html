@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song List</title>
+</head>
+
+<body>
+    <h1>Songs</h1>
+    <ul>
+        {% for song in songs %}
+        <li>{{ song.title }} - {{ song.album.title }} by {{ song.album.artist.name }}</li>
+        {% empty %}
+        <li>No songs found.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

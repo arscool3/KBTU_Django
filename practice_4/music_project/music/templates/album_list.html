@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album List</title>
+</head>
+
+<body>
+    <h1>Albums</h1>
+    <ul>
+        {% for album in albums %}
+        <li>{{ album.title }} - {{ album.artist.name }}</li>
+        {% empty %}
+        <li>No albums found.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
