@@ -7,10 +7,12 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 sqlalchemy = "*"
-python-jose = {extras = ["cryptography"], version = "*"}
+python-jose = {extras = ["cryptography"] }
 python-multipart = "*"
 bcrypt = "*"
 passlib = "*"
+psycopg2-binary = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
