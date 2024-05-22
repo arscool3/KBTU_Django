@@ -17,7 +17,7 @@ async def create_book(book_data: BookCreate, current_user: User = Depends(get_cu
     db.add(db_book)
     db.commit()
     db.refresh(db_book)
-    add_book.send()
+    add_book.send(book_data.title)
     return db_book
 
 
