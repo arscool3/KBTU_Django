@@ -12,25 +12,24 @@ from utils.auth_utils import get_current_user
 router = APIRouter(
     prefix='/assignment',
     tags=['assignment'],
-    dependencies=[Depends(get_current_user)]
+    # dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/load_assignment")
-async def load_assignment(assignment_id: int):
-    load_assignment_task.send(assignment_id)
+async def load_assignment():
+    load_assignment_task.send(1)
     return {"message": "Assignment loading started"}
 
-# FastAPI endpoint to retrieve the progress
-@router.get("/progress/{assignment_id}")
-async def get_progress(assignment_id: str):
+@router.get("/progress")
+async def get_progress(assignment_id: int):
     try:
-        status = result_backend.get_result(load_assignment_task.message(assignment_id))
+        status = redis_client.get(assignment_id)
         if status == "Assignment loaded successfully":
             return {"status": "complete"}
         else:
             return {"status": "in_progress", "progress": status}
     except ResultMissing:
-        return {"status": "pending"}
+        return {"status": status}
 
 @router.post("/")
 def create_assignment(assignment: AssignmentCreate, session: Annotated[str, Depends(get_db)]):

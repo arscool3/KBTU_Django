@@ -16,3 +16,4 @@ class Student(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
 
     courses = relationship("Course", secondary=student_course_association, backref="students")
+    student_assignments = relationship("Assignment", backref="student")

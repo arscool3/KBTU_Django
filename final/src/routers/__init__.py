@@ -3,3 +3,4 @@ from .auth_router import router as auth_router
 from .course_router import router as course_router
 from .instructor_router import router as instructor_router
 from .student_router import router as student_router
+from .news_router import router as news_router

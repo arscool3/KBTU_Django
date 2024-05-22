@@ -1,0 +1,7 @@
+FastApi
+1) 6 models
+2) 4 Relationships
+3) Authorization
+4) Background Tasks (Dramatiq / Celery)
+5) Postgres DB
+6) 3 DI
