@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Posts</title>
+</head>
+<body>
+    <h1>All Blog Posts</h1>
+    {% for post in posts %}
+        <div>
+            <h2>{{ post.title }}</h2>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="width: 100%; max-width: 300px;">
+            {% endif %}
+            <p>Posted by {{ post.user.email }} on {{ post.created_at|date:"Y-m-d H:i" }}</p>
+            <p>Category: {{ post.category.name }}</p>
+            <p>{{ post.content|linebreaks }}</p>
+
+            {% load post_filters %}
+
+            <p>{{ post.content|truncate_n_words:20 }}</p>
+            <p>{{ post.title|highlight:"Django" }}</p>
+
+        </div>
+    {% empty %}
+        <p>No posts found.</p>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Bookstore</title>
+</head>
+<body>
+    <h1>Welcome to Our Online Bookstore</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! | <a href="{% url 'profile' %}">View Profile</a> | <a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a></p>
+    {% endif %}
+    
+    <!-- Search Form -->
+    <form method="get">
+        <input type="text" name="search" placeholder="Search books or authors...">
+        <select name="genre">
+            <option value="">Select Genre</option>
+            <!-- Dynamically populate genres -->
+            {% for genre in genres %}
+                <option value="{{ genre }}" {% if selected_genre == genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+    
+    <!-- Books List -->
+    <div>
+        {% for book in books %}
+            <div>
+                <h2>{{ book.title }}</h2>
+                <p>Author: {{ book.author.name }}</p>
+                <p>Genre: {{ book.genre }}</p>
+                <p>Published: {{ book.publish_date }}</p>
+                <p>Summary: {{ book.summary }}</p>
+            </div>
+        {% empty %}
+            <p>No books found.</p>
+        {% endfor %}
+    </div>
+
+    
+</body>
+</html>
