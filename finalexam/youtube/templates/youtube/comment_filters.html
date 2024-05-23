@@ -1,0 +1,25 @@
+{% load comment_filters %}
+
+
+<head>
+    <title>Comment Filters</title>
+</head>
+<body>
+    <h1>Comment Filters</h1>
+
+    <div>
+        <h2>Original Comment Text:</h2>
+        <p>{{ comment.text }}</p>
+    </div>
+
+    <div>
+        <h2>Formatted Comment Text (Uppercase):</h2>
+        <p>{{ comment.text | format_comment }}</p>
+    </div>
+
+    <div>
+        <h2>Shortened Comment Text (Maximum Length: 50 characters):</h2>
+        <p>{{ comment.text | shorten_comment:50 }}</p>
+    </div>
+</body>
+
