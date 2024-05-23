@@ -18,8 +18,8 @@ bad_citizens = [
 
 
 @dramatiq.actor(store_results=True)
-def check_valid_name(name: str) -> bool:
+def check_valid_name(name: str)->str:
     for person_name in bad_citizens:
         if person_name == name:
-            return False
-    return True
+            return "Dangerous"
+    return 'ok'

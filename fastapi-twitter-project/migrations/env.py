@@ -12,7 +12,7 @@ from app.models import Base
 config = context.config
 config.set_main_option(
     "sqlalchemy.url",
-    f'postgresql+psycopg2://postgres:postgres@localhost:5432/twitter-db')
+    f'postgresql+psycopg2://postgres:postgres@localhost:5432/twitter_db')
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
