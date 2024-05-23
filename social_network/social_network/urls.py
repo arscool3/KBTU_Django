@@ -19,18 +19,4 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('core.urls', namespace='core')),
-
-    # path('api-auth/', include('rest_framework.urls')),
-
-    # path('/api/auth/register'),
-    # path('/api/auth/login'),
-    # path('/api/auth/refresh'),
-    #
-    # path('/api/posts/'),
-    # path('/api/posts/<post_id>/like'),
-    # path('/api/posts/<post_id>/dislike'),
-    # path('/api/posts/<post_id>/'),
-    # path('/api/users/<user_id>/posts/'),
-    # path('/api/users/<user_id>/liked_posts/'),
-
 ]
