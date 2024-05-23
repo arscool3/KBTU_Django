@@ -1,0 +1,57 @@
+{% extends 'base.html'%}
+{%block title %} Ekart|Home {%endblock%}
+{%block body%}
+<div class="row mt-2">
+    <div class="col-md-3 mt-2">
+        <h5>Filter by Category</h5>
+        <hr>
+        <a href="{%url 'index' %}">All</a><br><br>
+        <a href="{%url 'mobileView' %}">Mobile</a><br><br>
+        <a href="{%url 'laptopView' %}">Laptop</a><br><br>
+        <a href="{%url 'tvView' %}">TV</a><br>
+
+        <h5>Filter by Price</h5>
+        <hr>
+        <form method="post" action="{%url 'rangeView' %}">
+            {%csrf_token%}
+            <div class="mb-3 ">
+              <label for="min" class="form-label">Min</label>
+              <input type="number" class="form-control" id="min" name="min" placeholder="Minimum">
+            </div> 
+            <div class="mb-3">
+              <label for="max" class="form-label">Max</label>
+              <input type="number" class="form-control" id="max" name="max" placeholder="Maximum">
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <h4 class="text-danger">{{msg}}</h4>
+          </form>
+        <h5>Sort by Price</h5>
+        <hr>
+        <p><a href="{%url 'sortAsc'%}?sort=high_to_low">High to Low </a></p>
+        <p><a href="{%url 'sortAsc'%}?sort=low_to_high">Low to High </a></p>
+    </div>
+    <div class="col-md-9 mt-2">
+        <div class="row mt-2">
+            
+            {% for x in products%}
+            <!--Product 1-->
+            <div class="col-md-4 mb-3">
+                <div class="card" style="width: 300px; height: 450px;">
+                    <img src="{{x.image.url}}" style="height: 300px"  class="card-img-top" alt="product">
+                    <div class="card-body">
+                        <h5 class="card-title">{{x.prod_name}}</h5>
+                        <p class="card-text">{{x.price}}</p>
+                        <a href="{%url 'addCart' x.product_id %}" class="btn btn-danger">Add to Cart</a>
+                        <a href="{% url 'prodSpecfic' x.pk %}" class="btn btn-danger">View</a>
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+            <h3>Products not Available</h3>
+            {%endfor%}
+            
+
+    </div>
+
+</div>
+{%endblock%}
