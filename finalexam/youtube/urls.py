@@ -1,25 +1,12 @@
 from django.urls import path
-from .views import (
-    RegistrationAPIView,
-    LoginAPIView,
-    UserProfileView,
-    PostViewSet,
-    CommentViewSet,
-    LikeViewSet,
-    FollowViewSet
-)
-from rest_framework.routers import DefaultRouter
-
-router = DefaultRouter()
-router.register(r'posts', PostViewSet, basename='post')
-router.register(r'comments', CommentViewSet, basename='comment')
-router.register(r'likes', LikeViewSet, basename='like')
-router.register(r'follows', FollowViewSet, basename='follow')
+from .views import RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView, UserProfileRetrieveUpdateAPIView, SeeChannelAPIView, AddCommentAPIView, SubscribeAPIView
 
 urlpatterns = [
     path('register/', RegistrationAPIView.as_view(), name='register'),
     path('login/', LoginAPIView.as_view(), name='login'),
-    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('user/', UserRetrieveUpdateAPIView.as_view(), name='user'),
+    path('userprofile/', UserProfileRetrieveUpdateAPIView.as_view(), name='userprofile'),
+    path('channel/<int:channel_id>/', SeeChannelAPIView.as_view(), name='seeChannel'),
+    path('video/<int:video_id>/comment/', AddCommentAPIView.as_view(), name='addComment'),
+    path('channel/<int:channel_id>/subscribe/', SubscribeAPIView.as_view(), name='subscribe'),
 ]
-
-urlpatterns += router.urls

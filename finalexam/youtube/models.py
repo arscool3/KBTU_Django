@@ -39,36 +39,46 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    Comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Comment by {self.author.username} on {self.post}"
-
-class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-class Follow(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
-class CeleryTask(models.Model):
+
+class Channel(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class Video(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    file = models.FileField(upload_to='videos/')
+    channel = models.ForeignKey(Channel, related_name='videos', on_delete=models.CASCADE)
+    upload_date = models.DateTimeField(auto_now_add=True)
+
+class Comment(models.Model):
+    video = models.ForeignKey(Video, related_name='comments', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class Like(models.Model):
+    video = models.ForeignKey(Video, related_name='likes', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task_name = models.CharField(max_length=255)
-    status = models.CharField(max_length=50)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
+class Playlist(models.Model):
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    videos = models.ManyToManyField(Video)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, related_name='subscribers', on_delete=models.CASCADE)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
