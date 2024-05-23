@@ -1,0 +1,21 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+
+# Environments
+.env
+*.env
+
+# VS Code
+.vscode/
+
+# Virtualenv
+venv/
+env/
+
+# Windows
+Thumbs.db

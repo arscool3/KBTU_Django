@@ -73,14 +73,17 @@ class UserRegistrationForm(UserCreationForm):
             gender = self.cleaned_data.get('gender')
             birth_date = self.cleaned_data.get('birth_date')
 
-            UserBankAccount.objects.create(
-                user=user,
-                gender=gender,
-                birth_date=birth_date,
-                account_type=account_type,
-                account_no=(
-                    user.id +
-                    settings.ACCOUNT_NUMBER_START_FROM
+            # Check if UserBankAccount already exists for this user
+            if not hasattr(user, 'userbankaccount'):
+                UserBankAccount.objects.create(
+                    user=user,
+                    gender=gender,
+                    birth_date=birth_date,
+                    account_type=account_type,
+                    account_no=(
+                        user.id +
+                        settings.ACCOUNT_NUMBER_START_FROM
+                    )
                 )
-            )
         return user
+

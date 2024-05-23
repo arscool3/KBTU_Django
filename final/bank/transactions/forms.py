@@ -47,9 +47,6 @@ class WithdrawForm(TransactionForm):
     def clean_amount(self):
         account = self.account
         min_withdraw_amount = settings.MINIMUM_WITHDRAWAL_AMOUNT
-        max_withdraw_amount = (
-            account.account_type.maximum_withdrawal_amount
-        )
         balance = account.balance
 
         amount = self.cleaned_data.get('amount')
@@ -59,9 +56,9 @@ class WithdrawForm(TransactionForm):
                 f'You can withdraw at least {min_withdraw_amount} $'
             )
 
-        if amount > max_withdraw_amount:
+        if amount > balance:
             raise forms.ValidationError(
-                f'You can withdraw at most {max_withdraw_amount} $'
+                f'You can withdraw at most {balance} $'
             )
 
         if amount > balance:

@@ -12,6 +12,13 @@ from django.db import models
 from .constants import GENDER_CHOICE
 from .managers import UserManager
 
+ACCOUNT_TYPES = [
+    "Saving Account",
+    "Checking Account",
+    "Money Market Account",
+    "Certificate of Deposit (CD)",
+    "BankAccountType"
+]
 
 class User(AbstractUser):
     username = None
@@ -31,9 +38,8 @@ class User(AbstractUser):
             return self.account.balance
         return 0
 
-
 class BankAccountType(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=50, unique=True)
     maximum_withdrawal_amount = models.DecimalField(
         decimal_places=2,
         max_digits=12
@@ -51,7 +57,7 @@ class BankAccountType(models.Model):
 
     def __str__(self):
         return self.name
-
+    
     def calculate_interest(self, principal):
         """
         Calculate interest for each account type.
@@ -67,16 +73,15 @@ class BankAccountType(models.Model):
 
         return round(interest, 2)
 
-
 class UserBankAccount(models.Model):
     user = models.OneToOneField(
         User,
-        related_name='account',
+        related_name='account',  # Ensure this is correctly set
         on_delete=models.CASCADE,
     )
     account_type = models.ForeignKey(
         BankAccountType,
-        related_name='account',
+        related_name='accounts',
         on_delete=models.CASCADE
     )
     account_no = models.PositiveIntegerField(unique=True)
@@ -109,7 +114,6 @@ class UserBankAccount(models.Model):
         )
         start = self.interest_start_date.month
         return [i for i in range(start, 13, interval)]
-
 
 class UserAddress(models.Model):
     user = models.OneToOneField(

@@ -3,8 +3,8 @@
 {% block head_title %}Banking System{% endblock %}
 
 {% block content %}
-{% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
+{% if errors %}
+    {% for field, error in errors.items %}
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2" role="alert">
             <p class="font-bold">Error!</p>
             <p class="block sm:inline">{{ error }}</p>
@@ -12,6 +12,12 @@
     {% endfor %}
 {% endif %}
 <h1 class="font-mono font-bold text-3xl text-center pb-5 pt-10">Sign In</h1>
+{% if incorrect_input %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-2" role="alert">
+        <p class="font-bold">Error!</p>
+        <p class="block sm:inline">Please enter a correct email and password. Note that both fields may be case-sensitive.</p>
+    </div>
+{% endif %}
 <hr>
 <div class="w-full mt-10">
     <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -42,4 +48,3 @@
     </form>
 </div>
 {% endblock %}
-
