@@ -2,9 +2,9 @@ from sqlalchemy import Column, Date, DateTime, Integer, String, Enum, ForeignKey
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
-from ..database import Base
+from database import Base
 from .enums import Gender
-from ..post.models import post_likes, Post
+from post.models import post_likes, Post
 
 
 class Follow(Base):
@@ -55,3 +55,5 @@ class User(Base):
 
     followers_count = Column(Integer, default=0)
     following_count = Column(Integer, default=0)
+    
+    

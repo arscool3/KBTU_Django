@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from ..database import get_db
+from database import get_db
 from .schemas import Profile, FollowersList, FollowingList
 from .service import (
     get_followers_svc,
@@ -11,7 +11,7 @@ from .service import (
     check_follow_svc,
     existing_user,
 )
-from ..auth.service import get_current_user
+from auth.service import get_current_user
 
 
 router = APIRouter(prefix="/profile", tags=["profile"])

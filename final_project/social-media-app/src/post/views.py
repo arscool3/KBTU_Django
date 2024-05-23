@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 
-from ..database import get_db
+from database import get_db
 from .schemas import PostCreate, Post
 from .service import (
     create_post_svc,
@@ -15,8 +15,8 @@ from .service import (
     unlike_post_svc,
     liked_users_post_svc,
 )
-from ..auth.service import get_current_user, existing_user
-from ..auth.schemas import User
+from auth.service import get_current_user, existing_user
+from auth.schemas import User
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 

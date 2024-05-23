@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Table
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from ..database import Base
+from database import Base
 
 post_hashtags = Table(
     "post_hashtags",

@@ -4,9 +4,9 @@ from sqlalchemy import desc
 
 from .schemas import PostCreate, Post as PostSchema, Hashtag as HashtagSchema
 from .models import Post, Hashtag, post_hashtags
-from ..auth.models import User
-from ..auth.schemas import User as UserSchema
-from ..activity.models import Activity
+from auth.models import User
+from auth.schemas import User as UserSchema
+from activity.models import Activity
 
 
 # create hashtag from posts' content

@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 
-from ..auth.models import User, Follow
-from ..activity.models import Activity
+from auth.models import User, Follow
+from activity.models import Activity
 from .schemas import FollowersList, FollowingList, Profile
-from ..auth.service import get_user_from_user_id, existing_user
+from auth.service import get_user_from_user_id, existing_user
 
 
 # follow

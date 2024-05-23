@@ -13,6 +13,9 @@ bcrypt = "*"
 passlib = "*"
 psycopg2-binary = "*"
 psycopg2 = "*"
+redis = "*"
+celery = "*"
+flower = "*"
 
 [dev-packages]
 

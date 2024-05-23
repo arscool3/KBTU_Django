@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from ..auth.schemas import UserBase
+from auth.schemas import UserBase
 
 
 class Profile(UserBase):

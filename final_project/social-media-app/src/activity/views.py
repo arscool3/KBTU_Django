@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db
+from database import get_db
 from .service import get_activities_by_username
 
 router = APIRouter(prefix="/activity", tags=["activity"])

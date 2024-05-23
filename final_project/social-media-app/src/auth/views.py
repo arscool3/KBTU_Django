@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 
 from .schemas import UserCreate, UserUpdate, User as UserSchema
-from ..database import get_db
+from database import get_db
 from .service import (
     existing_user,
     create_access_token,
@@ -55,13 +55,17 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+# get current user
 @router.get("/profile", status_code=status.HTTP_200_OK, response_model=UserSchema)
-async def current_user(token: str, db: Session = Depends(get_db), db_user: UserSchema = Depends(get_current_user)):
+async def current_user(token: str, db: Session = Depends(get_db)):
+    db_user = await get_current_user(db, token)
     if not db_user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="token invalid"
         )
+
     return db_user
+
 
 # update user
 @router.put("/{username}", status_code=status.HTTP_204_NO_CONTENT)
