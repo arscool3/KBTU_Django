@@ -12,6 +12,6 @@ router.register(r'members', MemberViewSet)
 router.register(r'borrows', BorrowViewSet)
 
 urlpatterns = [
-    path('', views.home, name='home'),  # Home view
-    path('', include(router.urls)),  # Include the router URLs
+    path('', views.home, name='home'),
+    path('', include(router.urls)),  
 ]
