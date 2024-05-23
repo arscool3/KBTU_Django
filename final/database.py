@@ -1,10 +1,18 @@
+import os
 
-import sqlalchemy
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import scoped_session, sessionmaker
 
+load_dotenv(".env")
 
-url = 'postgresql://postgres:postgres@localhost:5432/postgres'
-engine = sqlalchemy.create_engine(url)
-session = Session(engine)
+SQLALCHEMY_DATABASE_URL = os.environ["DATABASE_URL"]
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+)
+
+session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
+Base.query = session.query_property()

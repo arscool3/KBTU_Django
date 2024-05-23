@@ -1,28 +1,27 @@
 from typing import List
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm.session import Session
 from sqlalchemy import select
-from pydantic import BaseModel
-from database import session,engine
+from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import SQLAlchemyError
 
-from typing import List
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm.session import Session
-from sqlalchemy import select
+
+from fastapi import FastAPI,Depends,HTTPException
+
+from dramatiq.results.errors import ResultMissing
+from dramatiq_job.main import send_request_to_server,send_email_after_registration,result_backend,send_pdf
+
+
+from sqlalchemy import func
 from database import session,engine
-import uvicorn
-from fastapi import FastAPI, Body, Depends
 from app.auth.auth_bearer import JWTBearer
 from app.auth.auth_handler import signJWT
 from app.schemas import UserSchema,UserLoginSchema,CreateAuthor,Author,CreateBook,CreateGenre,Genre,Book,CreateQuote,Quote,BookReview,CreateBookReview
-from fastapi import Body
+
 import app.models as db
 import bcrypt
-from sqlalchemy.exc import SQLAlchemyError
+
 db.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
 
 
 def get_db():
@@ -35,11 +34,58 @@ def get_db():
         session.close()
 
 
-"""
-    fullname = Column(String, nullable=False)
-    email = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
-"""
+@app.get("/result_email", tags=["dramatiq"])
+def result_email(id: str):
+    try:
+        task = send_email_after_registration.message().copy(message_id=id)
+        return result_backend.get_result(task)
+    except ResultMissing:
+        return "Waiting for all requests"
+
+@app.get("/result_tg", tags=["dramatiq"])
+def result_email(id: str):
+    try:
+        task = send_pdf.message().copy(message_id=id)
+        return result_backend.get_result(task)
+    except ResultMissing:
+        return "Waiting for all requests"
+
+@app.post("/add_kid_friendly_genre", tags=["dramatiq"])
+def add_kid_friendly_genre(genre:Genre):
+    task = send_request_to_server.send(genre.name)
+    print("add_kid_friendly_genre")
+    return {'id': task.message_id}
+
+@app.get("/result_kid_friedly", tags=["dramatiq"])
+def result_kid_friendly(id: str):
+    print("no result")
+    try:
+        print("try result")
+        task = send_request_to_server.message().copy(message_id=id)
+        return result_backend.get_result(task)
+    except ResultMissing:
+        return "Waiting for all requests"
+    
+@app.delete("/users/{email}", tags=["Admin"])
+def delete_user(email: str):
+    db_user = session.execute(select(db.User).filter_by(email=email)).scalar()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    session.delete(db_user)
+    session.commit()
+    
+    return {"message": "User deleted successfully"}
+
+    
+@app.get("/users", tags=["Admin"])
+def get_users():
+    db_users = session.execute(select(db.User)).scalars().all()
+    users = []
+    for db_user in db_users:
+        users.append(UserSchema.model_validate(db_user))
+    return users
+
+    
 @app.post("/user/signup", tags=["user"])
 def create_user(user: UserSchema) -> str:
     try:
@@ -52,11 +98,15 @@ def create_user(user: UserSchema) -> str:
         session.add(new_user)
         session.commit()
         session.close()
-        return signJWT(user.email)
+        task=send_email_after_registration.send(user.email)
+        return task.message_id
     except SQLAlchemyError as e:
-        db.rollback()  # Roll back the transaction in case of an error
         raise HTTPException(status_code=500, detail="Database error occurred")
 
+@app.post("/send_pdf_to_tg" ,tags=["dramatiq"])
+def send_pdf_to_tg(chatID:str)->str: 
+    task=send_pdf.send(chatID)
+    return task.message_id
 
 def check_user(data: UserLoginSchema, session: Session):
     user = session.query(db.User).filter(db.User.email == data.email).first()
@@ -71,6 +121,8 @@ def user_login(user_login_data: UserLoginSchema, session: Session = Depends(get_
         return signJWT(user_login_data.email)
     else:
         return {"message": "Invalid email or password"}
+
+
 
 # Only authorized users can add books,authors, genres, quotes, and book reviews
 @app.post("/authors", dependencies=[Depends(JWTBearer())], tags=["authors"])

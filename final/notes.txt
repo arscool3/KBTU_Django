@@ -1,13 +1,7 @@
-# Use all topics in syllabus
-# Minimum 15 api handlters (post, get)
-# Use DI as class, as function
-# 6 Models, 4 relationships(user, book, bookreview, Author, bookshelf,)
-
-# Write min 10 tests
-
-goodreads:"https://www.goodreads.com/quotes/list?ref=nav_profile_quotes"
 
 alembic init alembic
+to create and run a redis server
+#docker run -d --name redis -p 6379:6379 redis/redis-stack-server:latest
 
 docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
 alembic revision -m 'initial_migration' --autogenerate
@@ -15,28 +9,33 @@ alembic upgrade head
 uvicorn main:app --reload
 
 
-Lecture #3. FastApi Methodology
-    1. Views
-    2. Controllers
-    3. DI
-    4. MVC
-Lecture #4. SqlAlchemy & Alembic
-    1. SqlAlchemy vs Django ORM
-    2. DataMapper vs Active Record
-    3. Migrations Management System
-    4. Migrations Overview
-    5. Django Migrations vs Alembic
-Lecture #5 SqlAlchemy & Alembic
-    1. SqlAlchemy vs Django ORM
-    2. DataMapper vs Active Record
-    3. Migrations Management System
-    4. Migrations Overview
-    5. Django Migrations vs Alembic
-Lecture #6. Pydantic
-    1. Serialization
-    2. Deserialization
-    3. Work with SqlAlchemy
+{
+  "amount": 2,
+  "x": 1,
+  "y": 3
+}
+for rn to run the app:
+1) start the db
+docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
+alembic revision -m 'initial_migration' --autogenerate
+alembic upgrade head
+2) make sure u hve redis running
+#docker run -d --name redis -p 6379:6379 redis/redis-stack-server:latest
+3) 
+fastapi uvicorn sqlalchemy graphene graphene-sqlalchemy alembic psycopg2 black python-dotenv
+4)start the main app 
+(venv) PS C:\Users\Админ\Desktop\adv backend\fast> uvicorn main:app --reload
+5) start the  dramatiq
+PS C:\Users\Админ\Desktop\adv backend\fast\dramatiq_job> dramatiq main
+6) start the test server on a separate port
+(venv) PS C:\Users\Админ\Desktop\adv backend\fast\test_server> uvicorn main:app --reload --port 9000      
 
-bookborrower
+
+alembic init alembic
+
+docker-compose run app alembic revision --autogenerate -m "New Migration" docker-compose run app alembic upgrade head
+DOCKER-COMPOSE BUILD
+DOCUKE
+
 
 

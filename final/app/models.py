@@ -1,16 +1,13 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String,JSON,func
 from database import Base
-#sqlaclhemy models
-# 6 Models, 4 relationships(user, book, bookreview, Author, Quote,bookshelf)
+
 from typing import Annotated
 import sqlalchemy
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from pydantic import BaseModel
-from database import Base
 
+from datetime import datetime
 _id = Annotated[int, mapped_column(sqlalchemy.Integer, primary_key=True)]
-from pydantic import BaseModel, Field, EmailStr
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -24,8 +21,6 @@ class UserLogin(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False)
-
-
 
 # genres and books relationship, author and books relationship, user and reviews relationship
 #reviews and books relationship, quote and author
@@ -65,3 +60,17 @@ class BookReview(Base):
     rating:Mapped[int]
     book_id: Mapped[int]=mapped_column(sqlalchemy.ForeignKey('books.id'))
     book: Mapped[Book] = relationship("Book", back_populates='bookreviews')
+
+class AccessLogJournal(Base):
+    __tablename__ = 'access_log_journal'
+    id: Mapped[_id]
+    data = Column(JSON, nullable=True)
+    method: Mapped[str]
+    request: Mapped[str]
+    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
+
+class Film(Base):
+    __tablename__ = 'film'
+    id:Mapped[_id]
+    name:Mapped[str]
+    director:Mapped[str]
