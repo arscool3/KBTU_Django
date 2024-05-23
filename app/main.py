@@ -1,12 +1,20 @@
+import logging
 from fastapi import FastAPI
-from app.routers.user import router
+from app.routers import user, video, comment, stream, token
+
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
 
-app.include_router(router)
-# app.include_router(auth.router, prefix="/auth", tags=["auth"])
-# app.include_router(videos.router, prefix="/videos", tags=["videos"])
+# Instrument the FastAPI app
+Instrumentator().instrument(app).expose(app)
+
+app.include_router(user.router, prefix="/users", tags=["users"])
+app.include_router(video.router, prefix="/videos", tags=["videos"])
+app.include_router(comment.router, prefix="/video", tags=["comments"])
+app.include_router(stream.router, prefix="/streams", tags=["streams"])
+app.include_router(token.router, prefix="/auth", tags=["auth"])
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)

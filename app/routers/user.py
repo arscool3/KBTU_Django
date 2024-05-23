@@ -19,7 +19,7 @@ class UserCreate(BaseModel):
     password: str
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 @router.post("/register")
 async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
@@ -35,6 +35,22 @@ async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
     db.add(db_user)
     await db.commit()
     await db.refresh(db_user)
-    logging.debug(f"User registered with ID: {db_user.id}")
+    # logging.debug(f"User registered with ID: {db_user.id}")
     return db_user
+
+@router.get("/{user_id}")
+async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_db)):
+    # Retrieve the user from the database by ID
+    user = await db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Return the user
+    return user
+
+@router.get("/", response_model=List[UserResponse])
+async def get_all_users(db: AsyncSession = Depends(get_db)):
+    # Retrieve all users from the database
+    users = await db.execute(select(User))
+    return users.scalars().all()
 
