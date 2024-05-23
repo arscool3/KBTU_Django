@@ -1,0 +1,1 @@
+Hello, I'm Zhilkibaev Yernar Oralovich, SITE, CSSE, 3 course. This is my final project. I used DRF for this project.

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        p {
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Library Management System</h1>
+        <p>Welcome to the Library Management System. This project is built with Django, Django Rest Framework (DRF), and Dramatiq for background tasks. Below is an overview of the project's components and their functionality.</p>
+        
+        <h2>Project Structure</h2>
+        <p>The project is structured as follows:</p>
+        <pre>
+library_management/
+    library/
+        __init__.py
+        admin.py
+        apps.py
+        models.py
+        tests.py
+        views.py
+        serializers.py
+        urls.py
+        templates/
+            library/
+                home.html
+        filters.py
+        tasks.py
+    library_management/
+        __init__.py
+        settings.py
+        urls.py
+        wsgi.py
+        asgi.py
+        celery.py
+    manage.py
+        </pre>
+        
+        <h2>Components</h2>
+        
+        <h3>Models</h3>
+        <p>Defines the data structure of the application:</p>
+        <ul>
+            <li><strong>Author</strong>: Stores information about book authors.</li>
+            <li><strong>Publisher</strong>: Stores information about book publishers.</li>
+            <li><strong>Category</strong>: Stores categories to classify books.</li>
+            <li><strong>Book</strong>: Stores details about books, linked to authors, publishers, and categories.</li>
+            <li><strong>Member</strong>: Stores information about library members.</li>
+            <li><strong>Borrow</strong>: Tracks borrowing records of books by members.</li>
+        </ul>
+        
+        <h3>Serializers</h3>
+        <p>Convert model instances to JSON format and vice versa for API interactions:</p>
+        <ul>
+            <li>AuthorSerializer</li>
+            <li>PublisherSerializer</li>
+            <li>CategorySerializer</li>
+            <li>BookSerializer</li>
+            <li>MemberSerializer</li>
+            <li>BorrowSerializer</li>
+        </ul>
+        
+        <h3>Viewsets</h3>
+        <p>Handle API requests for CRUD operations:</p>
+        <ul>
+            <li>AuthorViewSet</li>
+            <li>PublisherViewSet</li>
+            <li>CategoryViewSet</li>
+            <li>BookViewSet</li>
+            <li>MemberViewSet</li>
+            <li>BorrowViewSet</li>
+        </ul>
+        
+        <h3>Admin Interface</h3>
+        <p>Provides an interface to manage data in a user-friendly way:</p>
+        <ul>
+            <li>Registered models: Author, Publisher, Category, Book, Member, Borrow</li>
+        </ul>
+        
+        <h3>Templates</h3>
+        <p>Render HTML responses. In this case, the home page template.</p>
+        
+        <h3>Filters</h3>
+        <p>Allow easy filtering of querysets based on criteria defined in the filter classes:</p>
+        <ul>
+            <li>BookFilter</li>
+        </ul>
+        
+        <h3>Celery</h3>
+        <p>Handles background tasks asynchronously:</p>
+        <ul>
+            <li>Configured in celery.py</li>
+        </ul>
+        
+        <h3>Dramatiq</h3>
+        <p>Another library used for background tasks:</p>
+        <ul>
+            <li>Tasks defined in tasks.py</li>
+        </ul>
+        
+        <h3>Redis</h3>
+        <p>Used as the message broker for Celery and Dramatiq to manage the task queue.</p>
+        
+        <h2>How to Use the Project</h2>
+        <ol>
+            <li><strong>Set Up the Environment:</strong> Create and activate a virtual environment, install dependencies, and set up the database.</li>
+            <li><strong>Run Redis:</strong> Start the Redis server, which is used by Celery and Dramatiq for task management.</li>
+            <li><strong>Run the Celery Worker:</strong> Start the Celery worker to process background tasks.</li>
+            <li><strong>Run the Django Development Server:</strong> Start the Django development server to serve the application.</li>
+            <li><strong>Access the Admin Interface:</strong> Navigate to <code>http://localhost:8000/admin</code> to manage the data.</li>
+            <li><strong>Interact with the API:</strong> Use tools like Postman or a web browser to interact with the API endpoints.</li>
+        </ol>
+    </div>
+</body>
+</html>
