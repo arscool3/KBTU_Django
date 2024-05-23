@@ -20,6 +20,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path("logout/", logout_view, name='logout'),
     path('cart/', cart_view, name='cart'),
+    path('remove_from_cart/<int:cart_id>/', remove_from_cart, name='remove_from_cart'),
     path('orders/', orders_view, name='orders'),
     path('add_to_cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('create_order/<int:product_id>/', create_order, name='create_order'),

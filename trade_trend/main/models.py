@@ -9,6 +9,7 @@ User = get_user_model()
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='category_images', default="static\images\home-appliances.jpg")
 
     def __str__(self) -> str:
         return self.name
@@ -57,4 +58,4 @@ class Notification(models.Model):
     notification_text = models.TextField(max_length=255, default='Your product status updated!')
 
     def __str__(self) -> str:
-        return self.user
+        return str(self.id)

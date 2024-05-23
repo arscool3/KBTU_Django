@@ -104,6 +104,12 @@ def add_to_cart(request, product_id):
     return redirect('cart')
 
 @login_required
+def remove_from_cart(request, cart_id):
+    cart_item = get_object_or_404(Cart, id=cart_id, user=request.user)
+    cart_item.delete()
+    return redirect('cart')
+
+@login_required
 def create_order(request, product_id):
     product = Product.objects.get(id=product_id)
     order, created = Order.objects.get_or_create(user=request.user, status='Pending')

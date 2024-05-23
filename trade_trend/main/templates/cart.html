@@ -13,6 +13,7 @@
                 <p>Quantity: {{ item.quantity }}</p>
                 <p>Price: {{ item.product.price }} KZT</p>
                 <a href="{% url 'create_order' item.product.id %}" class="order-now">Order</a>
+                <a href="{% url 'remove_from_cart' item.product.id %}" class="remove-from-cart">Remove from Cart</a>
             </div>
         {% endfor %}
     </div>
