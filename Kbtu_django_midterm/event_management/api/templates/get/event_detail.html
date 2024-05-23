@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ event.title }}</title>
+  </head>
+  <body>
+    <h1>{{ event.title }}</h1>
+    <p>Description: {{ event.description }}</p>
+    <p>Location: {{ event.location }}</p>
+    <p>Organizer: {{ event.organizer}}</p>
+    <p>Date: {{ event.date }}</p>
+    <a href="/events/{{ event.id }}/attendees"
+      >Click to see list of attendees</a
+    >
+    <br />
+    {% if event.schedule %}
+    <a href="/events/{{ event.id }}/schedule">Click to see schedule</a>
+    {% else %}
+    <a href="/events/{{event.id}}/schedule/create">Schedule for this event is not set up yet. Please create a schedule</a>
+    {% endif %}
+    <form action="/events/{{ event.id }}/delete/" method="post">
+      {% csrf_token %}
+      <button type="submit">Delete Event</button>
+    </form>
+
+    <form action="/events/{{ event.id }}/ticket/create/" method="post">
+      {% csrf_token %}
+      <button type="submit">Sell Ticket</button>
+    </form>
+  </body>
+</html>

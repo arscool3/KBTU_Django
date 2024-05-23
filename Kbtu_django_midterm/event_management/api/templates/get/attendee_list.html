@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{event.title}}</title>
+</head>
+<body>
+    <h2>Attendee List for - {{ event.title }}</h2>
+    <ul>
+        {% for attendee in attendees %}
+            <li>{{attendee}}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

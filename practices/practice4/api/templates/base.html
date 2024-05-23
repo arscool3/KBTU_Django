@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students</title>
+</head>
+<body>
+    <h1>Stipendia Students</h1>
+    <ul>
+        {% for student in stipendia_students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+
+
+    <h1>Non-Stipendia Students</h1>
+    <ul>
+        {% for student in non_stipendia_students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>FIT Students</h1>
+    <ul>
+        {% for student in fit_students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>BS Students</h1>
+    <ul>
+        {% for student in bs_students %}
+        <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
