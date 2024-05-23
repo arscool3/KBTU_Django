@@ -1,0 +1,16 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <form action={{request.get_full_path}} method="post">
+        {% csrf_token %}
+        {{ form }}
+    <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

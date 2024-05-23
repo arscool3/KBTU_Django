@@ -1,0 +1,34 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+
+{% block title %}Home - My Website{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Journal</title>
+        <link rel="stylesheet" href="{% static 'css/journal.css' %}">
+
+    </head>
+    <body>
+
+    <div class="container">
+        <h1>Journal</h1>
+        <div>
+            <label for="discipline_name">Discipline</label>
+            <select id="discipline_name">
+                {% for discipline in disciplines %}
+                    <option value="{{ discipline }}">{{ discipline }}</option>
+                {% endfor %}
+            </select>
+            <label for="student_id">Student ID</label>
+            <input id="student_id">
+        </div>
+        <div>
+            <p>Student name surname</p>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block content %}
+
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+    </head>
+    <h2>Manage Entities</h2>
+    <ul>
+        <li class="crud" ><a href="{% url 'crud_news' %}">Create News</a></li>
+        <li class="crud" ><a href="{% url 'crud_student' %}">Create Student</a></li>
+        <li class="crud" ><a href="{% url 'crud_faculty' %}">Create Faculty</a></li>
+        <li class="crud" ><a href="{% url 'crud_schedule' %}">Create Schedule</a></li>
+        <li class="crud" ><a href="{% url 'crud_professor' %}">Create Professor</a></li>
+        <li class="crud" ><a href="{% url 'crud_discipline' %}">Create Discipline</a></li>
+        <li class="crud" ><a href="{% url 'crud_speciality' %}">Create Speciality</a></li>
+    </ul>
+
+{% endblock %}
