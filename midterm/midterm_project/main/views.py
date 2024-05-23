@@ -1,18 +1,13 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import Instructor, Member, Gym, Membership, Equipment, Workout
-from .forms import InstructorForm, MemberForm, GymForm, MembershipForm, EquipmentForm, WorkoutForm, InstructorFilterForm, GymFilterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse
-from .serializers import GymSerializer,WorkoutSerializer,InstructorSerializer, MemberSerializer,MembershipSerializer
-
-# Create your views here.
-
+from rest_framework import viewsets
+from .models import Instructor, Member, Gym, Membership, Equipment, Workout
+from .forms import InstructorForm, MemberForm, GymForm, MembershipForm, EquipmentForm, WorkoutForm, InstructorFilterForm, GymFilterForm
+from .serializers import InstructorSerializer, MemberSerializer, GymSerializer, MembershipSerializer, EquipmentSerializer, WorkoutSerializer
+from .tasks import send_welcome_email
 # Rendered views
 def index(request):
     return render(request, 'main/index.html')
@@ -86,85 +81,32 @@ def add_workout(request):
         form = WorkoutForm()
     return render(request, 'main/add_workout.html', {'form': form})
 
-# API views
-@api_view(['GET', 'POST'])
-def instructor_list(request):
-    if request.method == 'GET':
-        instructors = Instructor.objects.all()
-        serializer = InstructorSerializer(instructors, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = InstructorSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# ViewSets
+class InstructorViewSet(viewsets.ModelViewSet):
+    queryset = Instructor.objects.all()
+    serializer_class = InstructorSerializer
 
-@api_view(['GET', 'POST'])
-def member_list(request):
-    if request.method == 'GET':
-        members = Member.objects.all()
-        serializer = MemberSerializer(members, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = MemberSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MemberViewSet(viewsets.ModelViewSet):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
 
-@api_view(['GET', 'POST'])
-def gym_list(request):
-    if request.method == 'GET':
-        gyms = Gym.objects.all()
-        serializer = GymSerializer(gyms, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = GymSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class GymViewSet(viewsets.ModelViewSet):
+    queryset = Gym.objects.all()
+    serializer_class = GymSerializer
 
-@api_view(['GET', 'POST'])
-def membership_list(request):
-    if request.method == 'GET':
-        memberships = Membership.objects.all()
-        serializer = MembershipSerializer(memberships, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = MembershipSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class MembershipViewSet(viewsets.ModelViewSet):
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer
 
-@api_view(['GET', 'POST'])
-def equipment_list(request):
-    if request.method == 'GET':
-        equipment = Equipment.objects.all()
-        serializer = EquipmentSerializer(equipment, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = EquipmentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class EquipmentViewSet(viewsets.ModelViewSet):
+    queryset = Equipment.objects.all()
+    serializer_class = EquipmentSerializer
 
-@api_view(['GET', 'POST'])
-def workout_list(request):
-    if request.method == 'GET':
-        workouts = Workout.objects.all()
-        serializer = WorkoutSerializer(workouts, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = WorkoutSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class WorkoutViewSet(viewsets.ModelViewSet):
+    queryset = Workout.objects.all()
+    serializer_class = WorkoutSerializer
 
+# Filters
 def filter_instructors(request):
     if request.method == 'GET':
         form = InstructorFilterForm(request.GET)
@@ -185,7 +127,6 @@ def filter_instructors(request):
         form = InstructorFilterForm()
     return render(request, 'main/filter_instructors.html', {'form': form})
 
-
 def filter_gyms(request):
     if request.method == 'GET':
         form = GymFilterForm(request.GET)
@@ -200,56 +141,51 @@ def filter_gyms(request):
     return render(request, 'main/filter_gyms.html', {'form': form})
 
 
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
+            send_welcome_email.delay(user.email)  # Отправка welcome email
             return redirect('mainpage')
     else:
         form = UserCreationForm()
     return render(request, 'main/register.html', {'form': form})
-
 @login_required
 def custom_logout(request):
     logout(request)
     return redirect('')
 
-
+# JSON responses
 def get_members(request):
     members = Member.objects.all()
-    data = [{'member_id': member.member_id, 'name': member.name,
-             'age': member.age, 'membership_type': member.membership_type} for member in members]
+    data = [{'member_id': member.member_id, 'name': member.name, 'age': member.age, 'membership_type': member.membership_type} for member in members]
     return JsonResponse(data, safe=False)
 
 def get_gyms(request):
     gyms = Gym.objects.all()
-    data = [{'gym_id': gym.gym_id, 'gym_name': gym.gym_name,
-             'location': gym.location} for gym in gyms]
+    data = [{'gym_id': gym.gym_id, 'gym_name': gym.gym_name, 'location': gym.location} for gym in gyms]
     return JsonResponse(data, safe=False)
 
 def get_memberships(request):
     memberships = Membership.objects.all()
-    data = [{'membership_id': membership.membership_id, 'name': membership.name,
-             'price': membership.price} for membership in memberships]
+    data = [{'membership_id': membership.membership_id, 'name': membership.name, 'price': membership.price} for membership in memberships]
     return JsonResponse(data, safe=False)
 
 def get_equipment(request):
     equipment = Equipment.objects.all()
-    data = [{'equipment_id': item.equipment_id, 'name': item.name,
-             'quantity': item.quantity} for item in equipment]
+    data = [{'equipment_id': item.equipment_id, 'name': item.name, 'quantity': item.quantity} for item in equipment]
     return JsonResponse(data, safe=False)
 
 def get_workouts(request):
     workouts = Workout.objects.all()
-    data = [{'workout_id': workout.workout_id, 'name': workout.name,
-             'description': workout.description} for workout in workouts]
+    data = [{'workout_id': workout.workout_id, 'name': workout.name, 'description': workout.description} for workout in workouts]
     return JsonResponse(data, safe=False)
-
 
 def show_instructor(request, instructor_id):
     instructor = get_object_or_404(Instructor, pk=instructor_id)
@@ -268,4 +204,3 @@ def delete_instructor(request, instructor_id):
         return JsonResponse({'message': 'Instructor deleted successfully'})
     else:
         return JsonResponse({'message': 'Instructor not found'}, status=404)
-
