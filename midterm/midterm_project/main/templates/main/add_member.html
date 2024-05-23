@@ -1,0 +1,15 @@
+{%extends 'main/base.html'%}
+
+{% block title %}
+    add_member
+{% endblock %}
+
+{% block content %}
+  <h1>Add Member</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+{% endblock %}
