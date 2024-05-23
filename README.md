@@ -43,24 +43,24 @@
 
 ### Performance
 <img width="468" alt="image" src="https://github.com/Walparis/KBTU_Django/assets/123378945/e3b1e0b3-e944-4f6d-8187-8cb6f12c0e9a">
-####Response time:
+#### Response time:
 <ul>
   <li>The median response time for GET requests is 3ms, and for POST requests, it's 4ms, which are quite low and indicate good performance.</li>
   <li>The 95th percentile response time for GET requests is 8ms and for POST requests is 18ms. These times are still reasonable.</li>
   <li>The 99th percentile response time for both GET and POST requests is 61ms, indicating that 99% of requests are handled within 61ms.</li>
 </ul>
 
-####Request volume:
+#### Request volume:
 <ul>
   <li>The total number of requests is 2440, with GET requests being 1239 and POST requests being 1201. This distribution seems balanced.</li>
 </ul>
 
-####Failures:
+#### Failures:
 <ul>
   <li>There are a few failed requests (3 for GET and 4 for POST). This is a very low failure rate.</li>
 </ul>
 
-####Throughput:
+#### Throughput:
 <ul>
   <li>The current RPS (Requests Per Second) is 66.1, which is a solid throughput rate. This indicates that the system can handle a significant number of requests per second.</li>
 </ul>
