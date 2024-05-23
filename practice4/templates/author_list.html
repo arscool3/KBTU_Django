@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Authors</h1>
+<ul>
+    {% for author in authors %}
+        <li><a href="{% url 'author-detail' author.pk %}">{{ author.name }}</a></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

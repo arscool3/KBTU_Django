@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Borrowers</h1>
+<ul>
+    {% for borrower in borrowers %}
+        <li><a href="{% url 'borrower-detail' borrower.pk %}">{{ borrower.name }}</a></li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
