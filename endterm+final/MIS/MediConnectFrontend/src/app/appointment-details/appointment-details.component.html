@@ -1,0 +1,25 @@
+<h2>Appointment Details</h2>
+
+<div *ngIf="appointment">
+    <div>
+        <strong>Doctor:</strong> {{ appointment.doctor_full_name }}
+    </div>
+    <div>
+        <strong>Patient:</strong> {{ appointment.patient_full_name }}
+    </div>
+    <div>
+        <strong>Date and Time:</strong> {{ appointment.date_and_time | date: 'd MMMM h:mm a' }}
+    </div>
+    <div>
+        <strong>Google meet link:</strong> {{appointment.google_meet_link}}
+    </div>
+    <div *ngIf="isFutureAppointment(appointment)">
+        <button (click)="redirectToAppointmentEdit()">Choose New Date</button>
+        <button (click)="cancelAppointment(appointment)">Cancel Appointment</button>
+    </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>
+
+<div>
+    <button (click)="goHome()">Home</button>
+</div>

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Accommodation Search
+{% endblock %}
+
+{% block content %}
+  <h2>Accommodation Search</h2>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <h2>Select City</h2>
+    <form id="accommodationSearchForm" class="form" action="{% url 'accommodation_search' %}" method="POST">
+        {% csrf_token %}
+        <label for="destination">City:</label>
+        <select id="destination" name="destination">
+        {% for city in cities %}
+            <option value="{{ city.name }}" {% if city.name == destination %}selected{% endif %}>{{ city.name }}</option>
+        {% endfor %}
+        </select>
+        <label for="arrival_date">Arrival Date:</label>
+        <input type="date" id="arrival_date" name="arrival_date" required value="{{ arrival_date }}">
+        <label for="departure_date">Departure Date:</label>
+        <input type="date" id="departure_date" name="departure_date" required value="{{ departure_date }}">
+        <label for="visitors">Number of Visitors:</label>
+        <input type="number" id="visitors" name="visitors" min="1" value="{% if visitors %}{{ visitors }}{% else %}1{% endif %}">
+        <button type="button" onclick="checkDatesAndSubmit()">Search Accommodation</button>
+    </form>
+    <div class="home_link">
+        <a href="{% url 'home' %}">Home</a>
+      </div>
+      <img id="ad" src="https://penji.co/wp-content/uploads/2019/03/CurtisTea-Food-Ad-Designs-708x1024.jpg" alt="Advertisement">
+  <img id="ad2" src="https://penji.co/wp-content/uploads/2019/03/demorfi-Food-Ad-Designs-768x1024.jpg" alt="">
+  <ul class="list">
+    {% for accommodation in accommodations %}
+        <li id="accommodation_{{ accommodation.id }}" {% if accommodation.selected %} class="selected" {% endif %} {% if accommodation.cheapest %} class="cheapest" {% endif %} onclick="selectAccommodation({{ accommodation.id }})">
+            <p>Name: {{ accommodation.name }}</p>
+            <p>Price per night: ${{ accommodation.price_per_night }}</p>
+        </li>
+    {% endfor %}
+  </ul>
+  {% if accommodations %}
+  <button class="addToCart" onclick="continueSelection()">Add to cart</button>
+  {% endif %}
+  <form id="selectAccommodationForm" method="post" action="">
+    {% csrf_token %}
+  </form>
+
+    <script>
+        function checkDatesAndSubmit() {
+            var arrivalDate = new Date(document.getElementById('arrival_date').value);
+            var departureDate = new Date(document.getElementById('departure_date').value);
+            if (arrivalDate >= departureDate) {
+                alert("Arrival date cannot be later than departure date.");
+                return;
+            }
+            document.getElementById('accommodationSearchForm').submit();
+        }
+
+        let selectedAccommodationId = null; 
+
+        function selectAccommodation(accommodationId) {
+            const selectedAccommodation = document.querySelector('.selected');
+            if (selectedAccommodation) {
+                selectedAccommodation.classList.remove('selected');
+            }
+            const currentAccommodation = document.getElementById(`accommodation_${accommodationId}`);
+            if (currentAccommodation) {
+                currentAccommodation.classList.add('selected');
+                selectedAccommodationId = accommodationId;
+            }
+        }
+
+        function continueSelection() {
+            if (selectedAccommodationId) {
+                document.getElementById('selectAccommodationForm').action = `{% url 'add_accommodation_to_cart' 0 %}`.replace('0', selectedAccommodationId);
+                document.getElementById('selectAccommodationForm').submit();
+            } else {
+                console.error('No ticket selected.');
+            }
+        }
+    </script>
+{% endblock %}

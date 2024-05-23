@@ -1,0 +1,15 @@
+<h2>Service List</h2>
+
+<ul>
+  <li *ngFor="let service of services">
+    <div (click)="viewServiceDetails(service)">
+      <strong>Name:</strong> {{ service.name }}
+    </div>
+    <div>
+        <strong>Specialty:</strong> {{ service.specialty_name }}
+    </div>
+  </li>
+</ul>
+<div>
+  <button (click)="goHome()">Home</button>
+</div>

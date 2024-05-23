@@ -1,0 +1,49 @@
+<body>
+  <h2>My Appointments</h2>
+  <div class="tab">
+    <button class="tablinks" (click)="openTab('upcoming')" [class.active]="activeTab === 'upcoming'">Upcoming Appointments</button>
+    <button class="tablinks" (click)="openTab('past')" [class.active]="activeTab === 'past'">Past Appointments</button>
+  </div>
+  
+  <div id="upcoming" class="tabcontent" *ngIf="activeTab === 'upcoming'">
+    <div *ngIf="upcomingAppointments.length === 0">
+      <p>You have no upcoming appointments.</p>
+    </div>
+    <ul>
+      <li *ngFor="let appointment of upcomingAppointments">
+        <div (click)="viewAppointmentDetails(appointment)">
+          <strong>Doctor:</strong> {{ appointment.doctor_full_name }}
+        </div>
+        <div>
+          <strong>Patient:</strong> {{ appointment.patient_full_name }}
+        </div>
+        <div>
+          <strong>Date and Time:</strong> {{ appointment.date_and_time | date: 'd MMMM h:mm a' }}
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div id="past" class="tabcontent" *ngIf="activeTab === 'past'">
+    <div *ngIf="pastAppointments.length === 0">
+      <p>You have no past appointments.</p>
+    </div>
+    <ul>
+      <li *ngFor="let appointment of pastAppointments">
+        <div (click)="viewAppointmentDetails(appointment)">
+          <strong>Doctor:</strong> {{ appointment.doctor_full_name }}
+        </div>
+        <div>
+          <strong>Patient:</strong> {{ appointment.patient_full_name }}
+        </div>
+        <div>
+          <strong>Date and Time:</strong> {{ appointment.date_and_time | date: 'd MMMM h:mm a' }}
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <div>
+    <button (click)="goHome()">Home</button>
+  </div>
+</body>

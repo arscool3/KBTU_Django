@@ -1,0 +1,40 @@
+<!-- src/app/home/home.component.html -->
+
+<div class="container">
+  <div *ngIf="message">
+    <p>{{ message }}</p>
+  </div>
+  
+    <h2>Welcome to MediConnect!</h2>
+    <p>
+      Find the right healthcare professional, book appointments online, and explore medical services, all in one place.
+    </p>
+    <p>
+      <strong>How it works:</strong>
+    </p>
+    <ol>
+      <li>Search for a doctor or clinic.</li>
+      <li>View their profiles and services.</li>
+      <li>Book an appointment online.</li>
+      <li>Receive quality healthcare services.</li>
+    </ol>
+    <p>
+      Start your journey to better health today!
+    </p>
+  
+    <div class="buttons">
+      <button *ngIf="!isAuthenticated()" (click)="goToLoginPage()" class="btn btn-primary">Login</button>
+      <button *ngIf="!isAuthenticated()" (click)="goToRegisterPage()" class="btn btn-success">Register</button>
+      <button *ngIf="isAuthenticated()" (click)="goToProfilePage()" class="btn btn-success">My Profile</button>
+      <button *ngIf="isAuthenticated()" (click)="logout()" class="btn btn-danger">Logout</button>
+      <button *ngIf="isAuthenticated()" (click)="goToMyAppointments()" class="btn">My Appointments</button>
+    </div>
+  
+    <div class="menu">
+      <ul>
+        <li><a (click)="goToDoctors()">Doctors</a></li>
+        <li><a (click)="goToServices()">Services</a></li>
+      </ul>
+    </div>
+  </div>
+  

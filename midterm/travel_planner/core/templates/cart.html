@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Cart
+{% endblock %}
+
+{% block content %}
+  
+    <h2>Shopping Cart</h2>
+    <div class="cart-container">
+    <div class="message">
+  </div>
+    <h3>Tickets</h3>
+    <ul class="list">
+      {% for ticket in ticket_items %}
+      <li class="ticket-item">
+        <div>
+          <p>Flight Number: {{ ticket.flight_number }}</p>
+          <p>Price: ${{ ticket.price }}</p>
+          <p>Quantity: <span class="quantity" data-ticket-id="{{ ticket.id }}">{{ ticket.travelers }}</span></p>
+        </div>
+        <div class="btns">
+          <form class="delete-form" action="{% url 'delete_ticket_from_cart' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+            <button class="remove" type="submit">Remove</button>
+          </form>
+          <div class="inbtn">
+          <button class="minus-btn" data-ticket-id="{{ ticket.id }}">-</button>
+          <button class="plus-btn" data-ticket-id="{{ ticket.id }}">+</button> 
+          <p>Total Price: ${{ ticket.total_price }}</p> 
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <a style="color: rgb(92, 171, 43);" href="{% url 'ticket_search' %}">Add tickets</a>
+
+    
+    <h3>Accommodations</h3>
+    
+    <ul class="list">
+      {% for accommodation in accommodation_items %}
+      <li class="accommodation-item">
+          <div>
+            <p>Name: {{ accommodation.name }}</p>
+            <p>Price per Night: ${{ accommodation.price_per_night }}</p>
+            <p>Nights: {{ accommodation.num_nights }}</p>
+            <p>Guests: <span class="visitors" data-accommodation-id="{{ accommodation.id }}">{{ accommodation.visitors }}</span></p>
+          </div>
+          <div class="btns">
+            <form class="delete-form" action="{% url 'delete_accommodation_from_cart' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="accommodation_id" value="{{ accommodation.id }}">
+              <button class="remove" type="submit">Remove</button>
+            </form>
+            <div class="inbtn">
+              <button class="minus-btn-a" data-accommodation-id="{{ accommodation.id }}">-</button>
+              <button class="plus-btn-a" data-accommodation-id="{{ accommodation.id }}">+</button> 
+              <p>Total Price: ${{ accommodation.total_price }}</p> 
+            </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+    <a style="color: rgb(88, 163, 41);" href="{% url 'accommodation_search' %}">Add accommodations</a>
+
+    
+    {% if total_price %}
+        <h3 class="total-price">Total Price: ${{ total_price }}</h3>
+    {% else %}
+        <h3 class="total-price">Total Price: $0</h3>
+    {% endif %}
+    <div class="home_link">
+      <a href="{% url 'home' %}">Home</a>
+      {% if ticket_items or accommodation_items %}
+      <a href="{% url 'payment_page' %}" class="pay-button">Pay Now</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    const plusButtons = document.querySelectorAll('.plus-btn');
+    const minusButtons = document.querySelectorAll('.minus-btn');
+
+    plusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const ticketId = this.dataset.ticketId;
+            
+            const quantitySpan = document.querySelector(`.quantity[data-ticket-id="${ticketId}"]`);
+            const currentQuantity = parseInt(quantitySpan.innerText);
+            fetch('{% url "update_ticket_quantity" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' 
+                },
+                body: JSON.stringify({
+                    ticket_id: ticketId, 
+                    travelers: currentQuantity + 1 
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Ошибка при обновлении количества билетов');
+                }
+            })
+        });
+    });
+    minusButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const ticketId = this.dataset.ticketId;
+        
+        const quantitySpan = document.querySelector(`.quantity[data-ticket-id="${ticketId}"]`);
+        let currentQuantity = parseInt(quantitySpan.innerText);
+        
+        if (currentQuantity > 1) {
+            fetch('{% url "update_ticket_quantity" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' 
+                },
+                body: JSON.stringify({
+                    ticket_id: ticketId, 
+                    travelers: currentQuantity - 1 
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Ошибка при обновлении количества билетов');
+                }
+            })
+        } else {
+            console.log('Количество не может быть меньше 1');
+        }
+    });
+});
+
+    const plusButtons_a = document.querySelectorAll('.plus-btn-a');
+    const minusButtons_a = document.querySelectorAll('.minus-btn-a');
+
+    plusButtons_a.forEach(button => {
+        button.addEventListener('click', function() {
+            const accommodationId = this.dataset.accommodationId;
+            
+            const quantitySpan = document.querySelector(`.visitors[data-accommodation-id="${accommodationId}"]`);
+            const currentQuantity = parseInt(quantitySpan.innerText);
+            fetch('{% url "update_accommodation_quantity" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' 
+                },
+                body: JSON.stringify({
+                    accommodation_id: accommodationId, 
+                    visitors: currentQuantity + 1 
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Ошибка при обновлении количества билетов');
+                }
+            })
+        });
+    });
+    minusButtons_a.forEach(button => {
+        button.addEventListener('click', function() {
+            const accommodationId = this.dataset.accommodationId;
+            
+            const quantitySpan = document.querySelector(`.visitors[data-accommodation-id="${accommodationId}"]`);
+            const currentQuantity = parseInt(quantitySpan.innerText);
+            if (currentQuantity > 1) {
+            fetch('{% url "update_accommodation_quantity" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' 
+                },
+                body: JSON.stringify({
+                    accommodation_id: accommodationId, 
+                    visitors: currentQuantity - 1 
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Ошибка при обновлении количества билетов');
+                }
+            })
+          } else {
+            console.log('Количество не может быть меньше 1');
+        }
+        });
+    });
+
+
+  </script>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<h2>Doctor Details</h2>
+
+<div *ngIf="doctor">
+  <div>
+    <strong>First Name:</strong> {{ doctor.first_name }}
+  </div>
+  <div>
+    <strong>Last Name:</strong> {{ doctor.lastName }}
+  </div>
+  <div>
+    <strong>Specialty:</strong> {{ doctor.specialty_name }}
+  </div>
+  <div>
+    <strong>Clinic location:</strong> {{ doctor.clinic_location }}
+  </div>
+  <div>
+    <strong>License status:</strong> {{ doctor.license_status }}
+  </div>
+  <div>
+    <button (click)="scheduleAppointment(doctor.id)">Schedule Appointment</button>
+  </div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</div>
+<div>
+    <button (click)="goHome()">Home</button>
+</div>

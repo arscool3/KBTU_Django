@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Search{% endblock %}
+
+{% block content %}
+  <h2>Tour Options</h2>
+  <ul>
+    {% for tour in tours %}
+      <li>{{ tour.name }} - ${{ tour.price }}</li>
+    {% empty %}
+      <li>No tours found</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
