@@ -43,6 +43,7 @@
 
 ### Performance
 <img width="468" alt="image" src="https://github.com/Walparis/KBTU_Django/assets/123378945/e3b1e0b3-e944-4f6d-8187-8cb6f12c0e9a">
+
 #### Response time:
 <ul>
   <li>The median response time for GET requests is 3ms, and for POST requests, it's 4ms, which are quite low and indicate good performance.</li>
