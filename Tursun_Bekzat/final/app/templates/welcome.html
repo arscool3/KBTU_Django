@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Our Site{% endblock %}
+
+{% block content %}
+<div class="welcome-page">
+    <h1>Welcome to Our Q&A Site</h1>
+    <p>Explore questions, find answers, and contribute your own knowledge.</p>
+    <a href="{% url 'questions_list' %}" class="btn btn-primary">View Questions</a>
+    <p>If you want to ask/answer question you must log in</p>
+    <a href="{% url 'signin' %}" class="btn btn-primary">Login</a>
+</div>
+{% endblock %}

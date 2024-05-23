@@ -1,17 +1,24 @@
 {% extends "base.html" %}
-
 {% load custom_filters %}
 
 {% block title %}Questions{% endblock %}
 
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/questions_list.css' %}">
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/questions_list.css' %}">
     <div class="questions-list">
         <h2 class="page-title">Questions</h2>
+
+        <!-- Форма для поиска по тегам и автору -->
+        <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search by tags or author">
+            <button type="submit">Search</button>
+        </form>
+
         <ul class="questions">
             {% for question in questions %}
-                <li class="question-item">
+                <li class="question-item" data-tags="{{ question.tags.all|tag_list }}" data-author="{{ question.author.username }}">
                     <a class="question-title" href="{% url 'question_detail' question.id %}">{{ question.title }}</a>
                     <div class="question-meta">
                         <span class="question-author">by {{ question.author.username }}</span>
@@ -21,4 +28,29 @@
             {% endfor %}
         </ul>
     </div>
+
+    <!-- Скрипт для выполнения поиска -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchForm = document.getElementById('search-form');
+            const searchInput = document.getElementById('search-input');
+            const questionItems = document.querySelectorAll('.question-item');
+
+            searchForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const searchTerm = searchInput.value.toLowerCase();
+
+                // Перебираем все вопросы и скрываем те, которые не соответствуют критериям поиска
+                questionItems.forEach(function(item) {
+                    const tags = item.dataset.tags.toLowerCase();
+                    const author = item.dataset.author.toLowerCase();
+                    if (tags.includes(searchTerm) || author.includes(searchTerm)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

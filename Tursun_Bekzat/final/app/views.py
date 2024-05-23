@@ -12,25 +12,30 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .tasks import add
 
 
-def base(request):
-    return render(request, 'base.html')
+# Welcome, Page
+def welcome(request):
+    return render(request, 'welcome.html')
 
 
+# Note that's user should login
 def should_login(request):
     return render(request, 'should_login.html')
 
 
+# Home Page
 @decorators.login_required(login_url='should_login')
 def home(request):
     return render(request, 'home.html')
 
 
-@decorators.login_required(login_url='base')
+# Logout, then Welcome Page
+@decorators.login_required(login_url='welcome')
 def user_logout(request):
     logout(request)
-    return redirect('base')
+    return redirect('welcome')
 
 
+# Sign Up Page
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -46,6 +51,7 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
+# Sign In
 def signin(request):
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
@@ -75,25 +81,30 @@ class QuestionViewSet(viewsets.ModelViewSet):
     def upvote(self, request, pk=None):
         question = get_object_or_404(Question, pk=pk)
         if question.author == request.user:
-            return Response({'status': 'You cannot vote for your own question'}, status=400)
+            # return Response({'status': 'You cannot vote for your own question'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         if Vote.objects.filter(user=request.user, question=question).exists():
-            return Response({'status': 'You have already voted for this question'}, status=400)
+            # return Response({'status': 'You have already voted for this question'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         Vote.objects.create(user=request.user, question=question, is_upvote=True)
         question.upvotes += 1
         question.save()
-        return Response({'status': 'Question upvoted'})
+        return render(request, 'question_detail.html', {'question': question})
 
     @action(detail=True, methods=['post'])
     def downvote(self, request, pk=None):
         question = get_object_or_404(Question, pk=pk)
         if question.author == request.user:
-            return Response({'status': 'You cannot vote for your own question'}, status=400)
+            # return Response({'status': 'You cannot vote for your own question'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         if Vote.objects.filter(user=request.user, question=question).exists():
-            return Response({'status': 'You have already voted for this question'}, status=400)
+            # return Response({'status': 'You have already voted for this question'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         Vote.objects.create(user=request.user, question=question, is_upvote=False)
         question.downvotes += 1
         question.save()
-        return Response({'status': 'Question downvoted'})
+        # return Response({'status': 'Question downvoted'})
+        return render(request, 'question_detail.html', {'question': question})
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -104,26 +115,33 @@ class AnswerViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def upvote(self, request, pk=None):
         answer = get_object_or_404(Answer, pk=pk)
+        question = get_object_or_404(Question, pk=pk)
         if answer.author == request.user:
-            return Response({'status': 'You cannot vote for your own answer'}, status=400)
+            # return Response({'status': 'You cannot vote for your own answer'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         if Vote.objects.filter(user=request.user, answer=answer).exists():
-            return Response({'status': 'You have already voted for this answer'}, status=400)
+            # return Response({'status': 'You have already voted for this answer'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         Vote.objects.create(user=request.user, answer=answer, is_upvote=True)
         answer.upvotes += 1
         answer.save()
-        return Response({'status': 'Answer upvoted'})
+        return render(request, 'question_detail.html', {'question': question})
 
     @action(detail=True, methods=['post'])
     def downvote(self, request, pk=None):
         answer = get_object_or_404(Answer, pk=pk)
+        question = get_object_or_404(Question, pk=pk)
         if answer.author == request.user:
-            return Response({'status': 'You cannot vote for your own answer'}, status=400)
+            # return Response({'status': 'You cannot vote for your own answer'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         if Vote.objects.filter(user=request.user, answer=answer).exists():
-            return Response({'status': 'You have already voted for this answer'}, status=400)
+            # return Response({'status': 'You have already voted for this answer'}, status=400)
+            return render(request, 'question_detail.html', {'question': question})
         Vote.objects.create(user=request.user, answer=answer, is_upvote=False)
         answer.downvotes += 1
         answer.save()
-        return Response({'status': 'Answer downvoted'})
+        # return Response({'status': 'Answer downvoted'})
+        return render(request, 'question_detail.html', {'question': question})
 
 
 class VoteViewSet(viewsets.ModelViewSet):

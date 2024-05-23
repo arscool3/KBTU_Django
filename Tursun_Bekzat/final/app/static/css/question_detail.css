@@ -1,87 +1,105 @@
+/* Styles specific to question detail page */
+
 .question-detail {
-    margin: 20px;
+    display: flex; /* Flexible layout for side-by-side content (optional) */
+    flex-direction: column; /* Stack content vertically by default */
+    border: 1px solid #ddd; /* Light border for the entire section */
+    border-radius: 5px; /* Rounded corners for a softer look */
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    animation: fadeInUp 0.5s ease-in-out forwards; /* Fade in animation on page load */
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .question-title {
-    font-size: 24px;
-    color: #333;
+    font-size: 1.8rem; /* Slightly larger font for emphasis */
+    margin-bottom: 15px; /* Add some space below the title */
+    color: #333; /* Richer text color */
+    border-bottom: 1px solid #ddd; /* Light border for separation */
+    padding-bottom: 5px;
+    cursor: pointer; /* Indicate clickable title (optional) */
+}
+
+.question-title:hover {
+    border-color: #999; /* Change border color on hover (optional) */
 }
 
 .question-body {
-    margin-top: 10px;
-    font-size: 16px;
+    line-height: 1.5; /* Adjust line spacing for better readability */
+    margin-bottom: 20px; /* Add space before other content */
+    color: #666; /* Subdued text color for body */
 }
 
 .question-info {
-    margin-top: 10px;
+    display: flex; /* Align info elements horizontally */
+    align-items: center; /* Vertically align content within info block */
+    margin-bottom: 15px; /* Add space before other content */
 }
 
-.question-author {
-    font-style: italic;
+.question-info p {
+    margin-right: 15px; /* Add spacing between info elements */
+    color: #999; /* Even more subdued text color for info */
 }
 
-.question-tags {
-    font-weight: bold;
+.tags {
+    display: inline-block; /* Display tags as a single unit */
+    background-color: #eee; /* Light background for tags */
+    padding: 5px 10px; /* Add padding for readability */
+    border-radius: 5px; /* Rounded corners for a softer look */
+    color: #333; /* Richer text color for tags */
+    margin-right: 10px; /* Add spacing between tags and other info */
 }
 
-.messages {
-    margin-top: 10px;
+.alerts {
+    margin-top: 20px; /* Add space above alerts */
 }
 
 .alert {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    padding: 10px 20px; /* Add padding for readability */
+    border-radius: 5px; /* Rounded corners for a softer look */
+    margin-bottom: 10px; /* Add space between alerts */
+    background-color: #f5f5f5; /* Light background for alerts */
+    border: 1px solid #ddd; /* Light border for alerts */
+    color: #333; /* Richer text color for alerts */
 }
 
-.answers-header {
-    margin-top: 20px;
-    font-size: 20px;
+.success.alert {
+    border-color: #4CAF50; /* Green border for success alerts */
 }
 
-.answers-list {
-    list-style: none;
-    padding-left: 0;
+.warning.alert {
+    border-color: #ffc107; /* Yellow border for warning alerts */
 }
 
-.answer-item {
-    margin-top: 20px;
+.danger.alert {
+    border-color: #f44336; /* Red border for danger alerts */
 }
 
-.answer-body {
-    font-size: 16px;
+.answers {
+    margin-top: 20px; /* Add space above answers section */
 }
 
-.answer-info {
-    margin-top: 10px;
-}
-
-.answer-author {
-    font-style: italic;
-}
-
-.vote-form {
-    display: inline-block;
+.answer {
+    border-bottom: 1px solid #ddd; /* Light border for separation */
+    padding: 15px 0; /* Add padding for readability */
+    margin-bottom: 15px; /* Add space between answers */
+    background-color: #fafafa; /* Light background for each answer */
+    border-left: 5px solid #ddd; /* Left border for visual separation */
+    animation: fadeInLeft 0.5s ease-in-out forwards; /* Fade in animation for each answer */
+    transition: background-color 0.2s ease;
 }
 
 .vote-button {
-    padding: 5px 10px;
-    margin-left: 10px;
-    background-color: #337ab7;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.votes-info {
-    margin-top: 10px;
-}
-
-.upvotes, .downvotes {
-    margin-right: 10px;
-    font-weight: bold;
+    float: left; /* Float buttons to the left */
+    margin-right: 10px; /* Add spacing between buttons */
 }

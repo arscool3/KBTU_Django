@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import TagViewSet, QuestionViewSet, AnswerViewSet, VoteViewSet, CommentViewSet, question_detail, questions_list, create_question, create_answer, create_tag, signin, signup, home, user_logout, base, should_login, add_view
+from .views import TagViewSet, QuestionViewSet, AnswerViewSet, VoteViewSet, CommentViewSet, question_detail, questions_list, create_question, create_answer, create_tag, signin, signup, home, user_logout, welcome, should_login, add_view
 from rest_framework.authtoken import views
 
 
@@ -13,9 +13,8 @@ router.register(r'comments', CommentViewSet)
 
 
 urlpatterns = [
-    path('', base, name='base'),
+    path('', welcome, name='welcome'),
     path('home/', home, name='home'),
-    path('login/', signin, name='login'),
     path('signup/', signup, name='signup'),
     path('signin/', signin, name='signin'),
     path('logout/', user_logout, name='logout'),
