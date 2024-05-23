@@ -1,0 +1,28 @@
+<div  class="center" [formGroup]="signinForm">
+  <h1>Логин</h1>
+  <form>
+    <div class="inputbox">
+      <input
+        type="text"
+        class="form-control"
+        formControlName="username"
+        required
+      />
+      <span>Имя пользователя</span>
+    </div>
+    <div class="inputbox2">
+      <input
+        type="password"
+        class="form-control"
+        formControlName="password"
+        required
+      />
+      <span>Пароль</span>
+    </div>
+    <div class="inputbox">
+      <button (click)="loginUser()" class="button">Войти</button>
+      <p class="p">или</p>
+      <button (click)="signUP()" class="button">Регистрация</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,92 @@
+.main {
+  width: 1300px;
+  margin-top: 100px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: row;
+  padding: 50px;
+  column-gap: 100px;
+
+  &_left {
+    margin-left: 100px;
+    width: 500px;
+    margin-right: auto;
+
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+
+    &_title {
+      font-family: "Book Antiqua";
+      font-size: 36px;
+    }
+
+    &_logo {
+      width: 60%;
+      margin-left: 20px;
+    }
+
+    &_txt {
+      margin-top: 0;
+      font-size: 24px;
+      font-family: "Book Antiqua";
+      margin-left: 10px;
+      opacity: 0.8;
+
+      &:hover {
+        font-size: 25px;
+        color: #363030;
+        cursor: pointer;
+        opacity: 1.5;
+      }
+    }
+  }
+
+  &_right {
+    padding: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    width: 500px;
+
+    &_title {
+      font-family: "Book Antiqua";
+      font-size: 36px;
+    }
+    &_txt {
+      margin-top: 0;
+      font-size: 24px;
+      font-family: "Book Antiqua";
+      margin-left: 10px;
+      opacity: 0.8;
+
+    }
+    &_input{
+      margin-left: 10px;
+      width: 80%;
+      height: 50px;
+      border: 0;
+      border-bottom: 2px solid gray;
+      outline: 0;
+      font-size: 1.3rem;
+      color: black;
+      padding: 7px 0;
+      background: transparent;
+      transition: border-color 0.2s;
+
+      &::placeholder {
+        color: black;
+        opacity: 0.7;
+      }
+
+      &:placeholder-shown ~ .form__label {
+        font-size: 1.3rem;
+        cursor: text;
+        top: 20px;
+      }
+    }
+  }
+
+}

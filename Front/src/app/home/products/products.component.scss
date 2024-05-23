@@ -1,0 +1,45 @@
+.main {
+  width: 1400px;
+  margin-left: 25px;
+  margin-top: 50px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+
+  &_title {
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 40px;
+    font-family: "Book Antiqua";
+  }
+
+  &_box {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    margin-left: auto;
+    width: 1300px;
+    padding: 10px;
+    row-gap: 10px;
+    &_item{
+      width: 1250px;
+      margin-right: auto;
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      &_title{
+        padding: 10px;
+        font-family: Bahnschrift;
+        font-size: 24px;
+        margin-left: auto;
+        margin-right: auto;
+        &:hover{
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+
+    }
+
+  }
+}
