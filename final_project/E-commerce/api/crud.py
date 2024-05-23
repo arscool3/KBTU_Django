@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from fastapi import status, HTTPException
 
+from tasks import send_order_confirmation
+
 def create(db: Session, model_class, model: dict):
     attribute_name = f"{model_class.__name__.lower()}_id"
 
@@ -13,6 +15,9 @@ def create(db: Session, model_class, model: dict):
 
     model_instance = model_class(**model.__dict__) 
     setattr(model_instance, attribute_name, next_id)
+
+    if model_class.__name__ == 'Order':
+        send_order_confirmation.send(model_instance.user_id, model_instance.order_id)
 
     db.add(model_instance)
     db.commit()
