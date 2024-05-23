@@ -1,0 +1,55 @@
+2024-05-22 18:33:18,600 - INFO - select pg_catalog.version()
+2024-05-22 18:33:18,600 - INFO - [raw sql] ()
+2024-05-22 18:33:21,059 - INFO - select current_schema()
+2024-05-22 18:33:21,062 - INFO - [raw sql] ()
+2024-05-22 18:33:23,235 - INFO - show standard_conforming_strings
+2024-05-22 18:33:23,236 - INFO - [raw sql] ()
+2024-05-22 18:33:24,811 - INFO - BEGIN (implicit)
+2024-05-22 18:33:24,834 - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password 
+FROM users 
+WHERE users.id = $1::INTEGER
+2024-05-22 18:33:24,834 - INFO - [generated in 0.00036s] (2,)
+2024-05-22 18:33:25,969 - DEBUG - Enqueueing message 'f43e37ec-8af4-43d1-be97-e46ad15462a2' on queue 'default'.
+2024-05-22 18:33:25,975 - INFO - ROLLBACK
+2024-05-22 18:36:47,800 - DEBUG - Calling on_field_start with no data
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_name with data[0:8]
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_data with data[9:28]
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_end with no data
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_start with no data
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_name with data[29:37]
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_data with data[38:44]
+2024-05-22 18:36:47,801 - DEBUG - Calling on_field_end with no data
+2024-05-22 18:36:47,801 - DEBUG - Calling on_end with no data
+2024-05-22 18:36:54,562 - INFO - select pg_catalog.version()
+2024-05-22 18:36:54,562 - INFO - [raw sql] ()
+2024-05-22 18:36:56,368 - INFO - select current_schema()
+2024-05-22 18:36:56,369 - INFO - [raw sql] ()
+2024-05-22 18:36:59,781 - INFO - show standard_conforming_strings
+2024-05-22 18:36:59,782 - INFO - [raw sql] ()
+2024-05-22 18:37:01,627 - INFO - BEGIN (implicit)
+2024-05-22 18:37:01,648 - INFO - SELECT users.id, users.username, users.email, users.hashed_password 
+FROM users 
+WHERE users.email = $1::VARCHAR
+2024-05-22 18:37:01,649 - INFO - [generated in 0.00037s] ('walparis1@mail.ru',)
+2024-05-22 18:37:02,857 - INFO - COMMIT
+2024-05-22 18:37:03,488 - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/Users/madishka/KBTU_Django/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2024-05-22 18:37:03,491 - DEBUG - detected 'bcrypt' backend, version '<unknown>'
+2024-05-22 18:37:03,491 - DEBUG - 'bcrypt' backend lacks $2$ support, enabling workaround
+2024-05-22 18:37:29,231 - INFO - BEGIN (implicit)
+2024-05-22 18:37:29,233 - INFO - SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.hashed_password AS users_hashed_password 
+FROM users 
+WHERE users.id = $1::INTEGER
+2024-05-22 18:37:29,233 - INFO - [generated in 0.00018s] (2,)
+2024-05-22 18:37:30,128 - DEBUG - Enqueueing message '6bf8a0a2-bf15-48d8-ad7f-c5572325e2bf' on queue 'default'.
+2024-05-22 18:37:30,138 - INFO - ROLLBACK
+2024-05-22 18:37:55,116 - INFO - BEGIN (implicit)
+2024-05-22 18:37:55,121 - INFO - SELECT videos.id AS videos_id, videos.title AS videos_title, videos.description AS videos_description, videos.url AS videos_url, videos.user_id AS videos_user_id 
+FROM videos 
+WHERE videos.id = $1::INTEGER
+2024-05-22 18:37:55,121 - INFO - [generated in 0.00082s] (1,)
+2024-05-22 18:37:56,319 - INFO - ROLLBACK
