@@ -1,1 +1,0 @@
-final project for KBTU_Django_2024 course
