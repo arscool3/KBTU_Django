@@ -113,3 +113,44 @@ class SubscribeAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+class VideoListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(channel=self.request.user.channel)
+
+
+class VideoDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+
+class PlaylistListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class PlaylistDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class LiveStreamAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        if not request.user.has_perm('youtube.start_live_stream'):
+            return Response({"message": "You don't have permission to start a live stream."}, status=403)
+        stream_title = request.data.get('title')
+        if not stream_title:
+            return Response({"message": "Stream title is required."}, status=400)
+        return Response({"message": f"Live stream '{stream_title}' started successfully."}, status=200)

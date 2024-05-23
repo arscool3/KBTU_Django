@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView, UserProfileRetrieveUpdateAPIView, SeeChannelAPIView, AddCommentAPIView, SubscribeAPIView
+from .views import (
+    RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView,
+    UserProfileRetrieveUpdateAPIView, SeeChannelAPIView, AddCommentAPIView,
+    SubscribeAPIView, VideoListCreateAPIView, VideoDetailAPIView,
+    PlaylistListCreateAPIView, PlaylistDetailAPIView, LiveStreamAPIView
+)
 
 urlpatterns = [
     path('register/', RegistrationAPIView.as_view(), name='register'),
@@ -9,4 +14,9 @@ urlpatterns = [
     path('channel/<int:channel_id>/', SeeChannelAPIView.as_view(), name='seeChannel'),
     path('video/<int:video_id>/comment/', AddCommentAPIView.as_view(), name='addComment'),
     path('channel/<int:channel_id>/subscribe/', SubscribeAPIView.as_view(), name='subscribe'),
+    path('videos/', VideoListCreateAPIView.as_view(), name='video-list-create'),
+    path('videos/<int:pk>/', VideoDetailAPIView.as_view(), name='video-detail'),
+    path('playlists/', PlaylistListCreateAPIView.as_view(), name='playlist-list-create'),
+    path('playlists/<int:pk>/', PlaylistDetailAPIView.as_view(), name='playlist-detail'),
+    path('live/', LiveStreamAPIView.as_view(), name='live-stream'),
 ]
