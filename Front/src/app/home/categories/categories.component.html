@@ -1,0 +1,17 @@
+<div class="main">
+  <p class="main_title">Категории мебели</p>
+  <div class="main_box">
+    <div class="main_box_left">
+      <div (click)="goToCategory(i)" *ngFor="let category of categories ;let i=index" class="main_box_left_names">
+        {{category.name}}
+      </div>
+    </div>
+    <div class="main_box_right">
+      <div *ngFor="let category of categories; let i = index" class="main_box_right_box"
+           [ngStyle]="{'background-image': 'URL('+category.photo+')'}">
+        <button (click)="goToCategory(i)" class="main_box_right_box_btn">Открыть</button>
+      </div>
+
+    </div>
+  </div>
+</div>

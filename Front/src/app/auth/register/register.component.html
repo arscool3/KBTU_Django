@@ -1,0 +1,35 @@
+<div class="center" [formGroup]="signupForm">
+  <h1>Регистрация</h1>
+  <form>
+    <div class="inputbox">
+      <input
+        type="username"
+        class="form-control"
+        formControlName="username"
+        required
+      />
+      <span>Имя пользователя</span>
+    </div>
+    <div class="inputbox2">
+      <input
+        type="email"
+        class="form-control"
+        formControlName="email"
+        required
+      />
+      <span>Почта</span>
+    </div>
+    <div class="inputbox2">
+      <input
+        type="password"
+        class="form-control"
+        formControlName="password"
+        required
+      />
+      <span>Пароль</span>
+    </div>
+    <div class="inputbox">
+      <button (click)="registerUser()" class="button">Зарегистрироваться</button>
+    </div>
+  </form>
+</div>

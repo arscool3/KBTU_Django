@@ -1,0 +1,9 @@
+<div class="main">
+  <p class="main_title">{{curCategory.name}}</p>
+  <div class="main_box">
+    <div class="main_box_item" *ngFor="let product of products;">
+      <p (click)="goToProduct(product.id)" class="main_box_item_title"> {{product.name}}</p>
+      <img class="main_box_item_img" src="{{product.photo}}">
+    </div>
+  </div>
+</div>

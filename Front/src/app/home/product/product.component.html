@@ -1,0 +1,13 @@
+<div class="main">
+  <img class="main_img" src="{{curProduct.photo}}">
+  <div class="main_right">
+    <p class="main_right_title">{{curProduct.name}}</p>
+    <p class="main_right_smalldesc">{{curProduct.small_descr}}</p>
+    <p class="main_right_price">{{curProduct.price}}  ₸</p>
+    <p class="main_right_desc">
+      {{curProduct.description}}
+    </p>
+    <button (click)="addCorzina(curProduct)" class="btn btn-white btn-animate">В корзину</button>
+    <p class="main_right_buy">Купить в 1 клик</p>
+  </div>
+</div>

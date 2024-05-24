@@ -1,0 +1,21 @@
+<div class="header">
+  <div class="header_logo" (click)="goToHome()">
+    <img class="header_logo_img" src="https://cdn-icons-png.flaticon.com/512/2590/2590525.png" alt="aaa">
+    Mebel
+  </div>
+  <div class="header_nav">
+    <p (click)="goToHome()" class="header_nav_txt">Главная</p>
+    <p (click)="goToProducts()" class="header_nav_txt">Мебели</p>
+    <p (click)="goToCategories()" class="header_nav_txt">Категории</p>
+    <p (click)="goToAboutPage()" id="header_nav_id" class="header_nav_txt">О нас</p>
+    <p (click)="goToContactPage()" class="header_nav_txt">Контакты</p>
+  </div>
+  <div class="header_icons">
+    <img (click)="goToCorzina()" src="assets/icons/IconShop.png" alt="">
+    <img *ngIf="check==false" (click)="login()" src="assets/icons/IconAuth.png" alt="">
+    <img *ngIf="check" (click)="logout()"
+         src="assets/icons/IconLeave.png"
+         alt="">
+  </div>
+
+</div>

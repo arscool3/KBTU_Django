@@ -1,0 +1,167 @@
+$button-bg: #0e0d0e;
+$button-text-color: #fff;
+$baby-blue: #f8faff;
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  border: 1px solid black;
+  margin-top: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 10px;
+  background-color: #726767;
+  opacity: 0.95;
+
+  &_box {
+    display: flex;
+    flex-direction: row;
+    column-gap: 50px;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 98%;
+
+    &_right {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin-left: auto;
+      margin-right: auto;
+      width: 850px;
+      padding: 0;
+
+      &_box {
+        width: 350px;
+        height: 320px;
+        display: flex;
+        flex-direction: column;
+        opacity: 0.8;
+        margin: 10px;
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center center;
+
+        &_btn {
+          width: 200px;
+          height: 40px;
+          text-shadow: 0 0 1px #FFFFFF;
+          margin-right: auto;
+          margin-left: auto;
+          margin-top: 280px;
+          padding: 10px;
+          color: white;
+          background: #695f5f;
+          font-family: 'Open Sans';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 18px;
+          border-radius: 6px;
+          border: none;
+          transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+          box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
+
+          &:focus {
+            outline: 0;
+          }
+
+          &:before, &:after {
+            position: absolute;
+            content: '';
+            display: block;
+            width: 140%;
+            height: 100%;
+            left: -20%;
+            z-index: -1000;
+            transition: all ease-in-out 0.5s;
+            background-repeat: no-repeat;
+          }
+
+          &:before {
+            display: none;
+            top: -75%;
+            background-image: radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, transparent 20%, $button-bg 20%, transparent 30%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, transparent 10%, $button-bg 15%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%);
+            background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+          }
+          &:hover{
+            cursor: pointer;
+          }
+
+          &:after {
+            display: none;
+            bottom: -75%;
+            background-image: radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, transparent 10%, $button-bg 15%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%),
+            radial-gradient(circle, $button-bg 20%, transparent 20%);
+            background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+
+          }
+
+          &:active {
+            transform: scale(0.9);
+            background-color: darken($button-bg, 5%);
+            box-shadow: 0 2px 25px rgba(255, 0, 126, 0.2);
+          }
+
+
+        }
+      }
+    }
+
+    &_left {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      margin-top: 10px;
+      color: white;
+      padding: 80px 10px 30px 10px;
+      width: 349px;
+      border: 1px solid black;
+      border-radius: 100px;
+      row-gap: 50px;
+
+      &_names {
+        column-gap: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 28px;
+        font-family: "Book Antiqua";
+        line-height: 30px;
+
+        &:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
+
+      }
+
+    }
+  }
+
+  &_title {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    color: white;
+    opacity: 0.8;
+    line-height: 85px;
+  }
+}
+

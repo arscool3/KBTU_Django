@@ -1,0 +1,135 @@
+.main {
+  width: 1425px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+  margin-left: 10px;
+  margin-top: 50px;
+  padding: 20px;
+
+  &_img {
+    width: 1000px;
+    background-size: cover;
+    background-position: center center;
+  }
+
+  &_right {
+    display: flex;
+    width: 430px;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    &_title {
+      margin-top: 0;
+      margin-right: auto;
+      font-family: Bahnschrift;
+      font-size: 38px;
+    }
+
+    &_smalldesc {
+      margin-right: auto;
+      margin-left: 5px;
+      font-family: Bahnschrift;
+      font-size: 16px;
+      margin-top: 0;
+    }
+
+    &_price {
+      margin-right: auto;
+      font-family: Bahnschrift;
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    &_desc {
+      font-size: 19px;
+      font-family: "Book Antiqua";
+    }
+
+
+    &_buy {
+      margin-left: auto;
+      margin-right: auto;
+      font-family: "Book Antiqua";
+      font-size: 20px;
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.btn {
+  border-radius: 10px;
+  padding: 20px;
+  font-family: Bahnschrift;
+  font-size: 20px;
+}
+
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 15px 40px;
+  display: inline-block;
+  border-radius: 100px;
+  transition: all .2s;
+  position: absolute;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+  background-color: #fff;
+  color: black;
+}
+
+.btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: all .4s;
+}
+
+.btn-white::after {
+  background-color: #fff;
+}
+
+.btn:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+
+.btn-animated {
+  animation: moveInBottom 5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

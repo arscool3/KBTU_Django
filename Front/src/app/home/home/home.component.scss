@@ -1,0 +1,66 @@
+.home {
+  background-image: url("https://images.wallpaperscraft.ru/image/single/mebel_divan_belyj_83779_1920x1080.jpg");
+  height: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.block {
+  margin-left: 200px;
+  margin-top: 300px;
+  border-radius: 100px;
+  width: 600px;
+  background-color: #726767;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.9;
+  padding: 30px;
+
+  &_txt1 {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 85px;
+    padding: 30px;
+    color: #FFFFFF;
+    hyphens: auto;
+    margin: 0;
+  }
+
+  &_txt2 {
+    font-size: 15px;
+    margin: 0;
+    padding-left: 40px;
+    padding-bottom: 30px;
+    font-weight: 700;
+    font-family: 'Open Sans';
+    font-style: normal;
+    color: #FFFFFF;
+    hyphens: auto;
+  }
+
+  &_btn {
+    width: 300px;
+    margin-left: 30px;
+    color: #FFFFFF;
+    appearance: none;
+    outline: 0;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    letter-spacing: 3px;
+    line-height: 80px;
+    height: 80px;
+    padding: 0 30px;
+    font-size: 32px;
+    font-weight: 600;
+    background: #363030;
+    border-radius: 5px;
+    transition: all 0.3s ease-in;
+
+  }
+}
