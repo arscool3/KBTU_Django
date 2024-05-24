@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+
+  db:
+    container_name: postgresql_db
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+  src:
+    container_name: src
+    build: .
+    command: bash -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/src
+    ports:
+      - 8000:8000
+    restart: always
+    depends_on:
+      - db
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+
+  celery_worker:
+    container_name: celery_worker
+    build: .
+    command: celery -A tasks.tasks.celery worker --loglevel=INFO
+    volumes:
+      - .:/src
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+    depends_on:
+      - src
+      - db
+      - redis
+  flower:
+    container_name: flower
+    build: .
+    command: celery -A tasks.tasks.celery flower --port=5555
+    ports:
+      - 5556:5555
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+    depends_on:
+      - src
+      - redis
