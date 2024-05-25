@@ -60,7 +60,7 @@ To stop and remove the containers, networks, and volumes defined in the `docker-
 docker-compose down
 ```
 
-## MIn requirements
+# MIn requirements
 1) 6 models
 2) 4 Relationships
 3) Authorization
