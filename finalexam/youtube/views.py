@@ -47,6 +47,7 @@ class UserProfileRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserProfileSerializer
 
+    # One-to-One Relationship
     def get_object(self):
         return self.request.user.userprofile
 
@@ -84,7 +85,7 @@ class AddCommentAPIView(generics.CreateAPIView):
         video = Video.objects.filter(id=video_id).first()
         if not video:
             return Response({'error': 'Video not found'}, status=404)
-
+        # One-to-Many Relationship
         comment_data = {
             'video': video.id,
             'author': request.user.id,
@@ -104,7 +105,8 @@ class SubscribeAPIView(generics.CreateAPIView):
         channel = Channel.objects.filter(id=channel_id).first()
         if not channel:
             return Response({'error': 'Channel not found'}, status=404)
-
+        
+        # Many-to-Many Relationship
         subscription_data = {
             'user': request.user.id,
             'channel': channel.id
@@ -119,6 +121,7 @@ class VideoListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = VideoSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    # One-to-Many Relationship
     def perform_create(self, serializer):
         serializer.save(channel=self.request.user.channel)
 
@@ -134,7 +137,8 @@ class PlaylistListCreateAPIView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    
+    # One-to-Many Relationship
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
