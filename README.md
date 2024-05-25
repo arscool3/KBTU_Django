@@ -68,7 +68,7 @@ docker-compose down
 5) Postgres DB
 6) 3 DI (2 func, 1 class)
 
-#1&2 Database Report: Models and Relationships
+### 1&2 Database Report: Models and Relationships
 
 This report outlines the structure of the database, detailing the models and their relationships within the application. The database is structured around several core entities: `User`, `Activity`, `Post`, `Follow`, `Hashtag`, and additional join tables for handling many-to-many relationships.
 
@@ -161,18 +161,18 @@ This report outlines the structure of the database, detailing the models and the
 - **Post to Hashtag:** Many-to-Many (Posts can contain multiple hashtags, and each hashtag can be associated with multiple posts.)
 - **Post to Activity:** Many-to-One (Activities can reference posts, but each post can be involved in multiple activities.)
 
-### 3 Authorization implemented with OAuth2 with Password (and hashing), Bearer with JWT tokens (check auth module)
-### 4 Background Tasks with Celery, Redis and Flower
+### 3. Authorization implemented with OAuth2 with Password (and hashing), Bearer with JWT tokens (check auth module)
+### 4. Background Tasks with Celery, Redis and Flower
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/079c69e7-310c-4a37-bbe6-2659294f9588)
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/dac31e45-ac13-41c5-be9e-652071054b30)
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/149bfcd5-d68a-43e0-b4d0-88a7a68b78ad)
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/c4d59b68-b2f9-4fc0-99ea-92f60d058b33)
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/1d9cf5cc-b474-4c3a-8f3c-9111b55d97d0)
 
-### 5 Postgres DB
+### 5. Postgres DB
 - ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/8aa2f7b6-8489-47db-9623-31f6649a5645)
 
-### 6 DI usage
+### 6. DI usage
 - 1. func ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/8eda6282-3d44-4359-ab5e-a70c45e68cd1)
 - 2. func ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/b324ebfa-7280-42dc-9cc4-a73e423e1f28)
 - 3. class ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/7b1698d0-d9da-4cb2-b565-c59d504dbb89)
