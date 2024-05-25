@@ -1,14 +1,61 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Novel, Chapter, UserProfile, Review, Bookmark
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, request, HttpResponseRedirect
 from .forms import NovelUploadForm, ChapterForm, ReviewForm
-from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from .forms import UserLoginForm
 from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import NovelUploadForm
+from .models import UserProfile, Novel, Chapter, Review, Bookmark
+from .serializers import UserProfileSerializer, NovelSerializer, ChapterSerializer, ReviewSerializer, BookmarkSerializer
+from .tasks import send_new_novel_notification
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+
+class NovelViewSet(viewsets.ModelViewSet):
+    queryset = Novel.objects.all()
+    serializer_class = NovelSerializer
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def mark_as_favorite(self, request, pk=None):
+        novel = self.get_object()
+        user_profile = request.user.profile
+        user_profile.favorites.add(novel)  # Ensure this is correct based on your UserProfile model
+        user_profile.save()
+        return Response({'status': 'novel marked as favorite'})
+
+    @action(detail=False, methods=['get'])
+    def top_rated(self, request):
+        top_rated_novels = Novel.objects.order_by('-rating')[:10]  # Ensure `rating` is a field in your Novel model
+        serializer = self.get_serializer(top_rated_novels, many=True)
+        return Response(serializer.data)
+
+
+class ChapterViewSet(viewsets.ModelViewSet):
+    queryset = Chapter.objects.all()
+    serializer_class = ChapterSerializer
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer
+
+
 
 
 def user_logout(request):
@@ -40,7 +87,7 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            return redirect('user_profile')
+            return redirect('login')
     else:
         user_form = UserRegistrationForm()
         profile_form = UserProfileForm()
@@ -108,6 +155,7 @@ def bookmark_chapter(request, novel_id, chapter_id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
+@login_required
 def upload_novel(request):
     if request.method == 'POST':
         form = NovelUploadForm(request.POST, request.FILES)
@@ -122,6 +170,8 @@ def upload_novel(request):
         if form.is_valid():
             novel = form.save(commit=False)
             novel.save()
+            # Trigger the Celery task
+            send_new_novel_notification.delay(novel.id)
             messages.success(request, 'Novel uploaded successfully!')
             return redirect('home')
         else:
