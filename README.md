@@ -1,4 +1,4 @@
-# Project Title: Social Media App with FastAPI
+# FINAL PROJECT: Social Media App with FastAPI
 
 ## Introduction
 
