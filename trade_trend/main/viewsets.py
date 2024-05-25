@@ -43,10 +43,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
 
 
-class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-        
     
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -84,5 +80,10 @@ class CartViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
 class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification
+    queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = Notification.objects.filter(user=request.user)
+        serializer = NotificationSerializer(queryset, many=True)
+        return Response(serializer.data)

@@ -11,6 +11,7 @@ from django.shortcuts import HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, decorators, logout, forms
 from .tasks import notify_user_of_order
 from .forms import ReviewForm
+from .serializers import NotificationSerializer
 
 
 def get_index(request):
@@ -31,7 +32,6 @@ def product_list(request):
     return render(request, 'products.html', {'products': products, 'categories': categories})
 
 
-# Create your views here.
 
 def basic_form(request, given_form):
     if request.method == 'POST':
@@ -118,3 +118,10 @@ def create_order(request, product_id):
         cart_item.quantity = 1
         cart_item.save()
     return redirect('orders')
+
+@login_required
+def notification_list(request):
+    queryset = Notification.objects.filter(user=request.user)
+    serializer = NotificationSerializer(queryset, many=True)
+    notifications = serializer.data
+    return render(request, "notifications.html", {"notifications": notifications})

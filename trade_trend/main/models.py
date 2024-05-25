@@ -1,8 +1,7 @@
 from django.db import models
-
-from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
@@ -41,7 +40,7 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=(('Pending', 'Pending'), ('Completed', 'Completed'), ('Canceled', 'Canceled')), default='Pending')
 
     def __str__(self) -> str:
-        return self.user
+        return str(self.id)
     
 class Review(models.Model):
     user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
