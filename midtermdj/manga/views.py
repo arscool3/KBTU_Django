@@ -1,12 +1,76 @@
 from django.contrib.auth import logout
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Manga, Chapter, Page, UserProfile
-from django.contrib.auth.models import User
-from .forms import UserProfileForm, MangaForm, ChapterForm, PageForm, ReviewForm
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from .forms import UserProfileForm, MangaForm, ChapterForm, ReviewForm
 from .forms import UserRegisterForm
 from django.contrib import messages
+from rest_framework import viewsets
+from .models import Genre, Manga, Chapter, Page, Review, UserProfile
+from .serializers import GenreSerializer, MangaSerializer, ChapterSerializer, PageSerializer, ReviewSerializer, \
+    UserProfileSerializer, UserSerializer
+from django.contrib.auth.models import User
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+
+
+class MangaViewSet(viewsets.ModelViewSet):
+    queryset = Manga.objects.all()
+    serializer_class = MangaSerializer
+
+    @action(detail=True, methods=['post'])
+    def rate(self, request, pk=None):
+        manga = self.get_object()
+        rating = request.data.get('rating')
+
+        if not rating:
+            return Response({'detail': 'Rating is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            rating = int(rating)
+            if rating < 1 or rating > 5:
+                raise ValueError()
+        except ValueError:
+            return Response({'detail': 'Rating must be an integer between 1 and 5.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        Review.objects.create(user=request.user, manga=manga, rating=rating)
+        return Response({'status': 'rating set'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def top_rated(self, request):
+        top_mangas = Manga.objects.annotate(avg_rating=models.Avg('reviews__rating')).order_by('-avg_rating')[:10]
+        serializer = self.get_serializer(top_mangas, many=True)
+        return Response(serializer.data)
+
+
+class ChapterViewSet(viewsets.ModelViewSet):
+    queryset = Chapter.objects.all()
+    serializer_class = ChapterSerializer
+
+
+class PageViewSet(viewsets.ModelViewSet):
+    queryset = Page.objects.all()
+    serializer_class = PageSerializer
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 def register(request):

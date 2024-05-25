@@ -14,6 +14,7 @@ class Genre(models.Model):
         return self.name
 
 
+# manga/models.py
 class Manga(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
@@ -21,6 +22,11 @@ class Manga(models.Model):
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     published_date = models.DateField()
     cover_image = models.ImageField(upload_to='manga_covers/', default='manga_covers/Black_Bright.jpg')
+    average_rating = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.title
+
 
 
     def __str__(self):
