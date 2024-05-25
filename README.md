@@ -60,7 +60,7 @@ To stop and remove the containers, networks, and volumes defined in the `docker-
 docker-compose down
 ```
 
-### MIn requirements
+## MIn requirements
 1) 6 models
 2) 4 Relationships
 3) Authorization
@@ -74,7 +74,7 @@ This report outlines the structure of the database, detailing the models and the
 
 ## Models Overview
 
-### 1. User Model
+#### 1. User Model
 
 - **Table Name:** users
 - **Columns:**
@@ -98,7 +98,7 @@ This report outlines the structure of the database, detailing the models and the
   - Following (Many-to-Many)
   - Post Hashtags (Many-to-Many)
 
-## 2. Activity Model
+#### 2. Activity Model
 
 - **Table Name:** activities
 - **Columns:**
@@ -112,7 +112,7 @@ This report outlines the structure of the database, detailing the models and the
   - followed_user_pic (String)
 - **Relationships:** None specified in the provided schema.
 
-### 3. Post Model
+#### 3. Post Model
 
 - **Table Name:** posts
 - **Columns:**
@@ -127,7 +127,7 @@ This report outlines the structure of the database, detailing the models and the
   - Hashtags (Many-to-Many)
   - Liked By Users (Many-to-Many)
 
-### 4. Follow Model
+#### 4. Follow Model
 
 - **Table Name:** follows
 - **Columns:**
@@ -137,7 +137,7 @@ This report outlines the structure of the database, detailing the models and the
   - Follower (Back Populates Followers in User)
   - Following (Back Populates Following in User)
 
-### 5. Hashtag Model
+#### 5. Hashtag Model
 
 - **Table Name:** hashtags
 - **Columns:**
@@ -146,14 +146,14 @@ This report outlines the structure of the database, detailing the models and the
 - **Relationships:**
   - Posts (Many-to-Many)
 
-### 6. Models for join tables
+#### 6. Models for join tables
 
 - **post_hashtags:** A join table used to implement the Many-to-Many relationship between `Post` and `Hashtag`.
 - **post_likes:** A join table used to implement the Many-to-Many relationship between `User` and `Post` for liking posts.
 - **Relationships:**
   Both represent Many-to-Many relationships.
 
-## Relationships Summary
+### Relationships Summary
 
 - **User to Post:** One-to-Many (A user can create multiple posts, but each post belongs to one user.)
 - **User to Activity:** Many-to-One (Multiple users can perform activities, but each activity is associated with one user.)
