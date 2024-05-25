@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список видео</title>
+</head>
+<body>
+    <h1>Список видео</h1>
+    <ul>
+        {% for video in videos %}
+            <li>
+                <a href="{% url 'video_detail' video.id %}">{{ video.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
