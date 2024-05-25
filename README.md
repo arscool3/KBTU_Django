@@ -17,9 +17,9 @@ Welcome to the documentation for Final Project within KBTU DJANGO 2024 Spring. T
 
 ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/0ab4c05e-62ed-4494-baf7-c5f368457a6e)
 
-check others on http://0.0.0.0:8000/docs
 ![image](https://github.com/yantay0/KBTU_Django/assets/93054482/5169f854-5fc8-4410-bbed-b45d1b69245f)
 
+check others on http://0.0.0.0:8000/docs
 
 ## Getting Started
 
@@ -59,6 +59,108 @@ To stop and remove the containers, networks, and volumes defined in the `docker-
 ```
 docker-compose down
 ```
+
+### MIn requirements
+1) 6 models
+2) 4 Relationships
+3) Authorization
+4) Background Tasks (Dramatiq / Celery)
+5) Postgres DB
+6) 3 DI (2 func, 1 class)
+
+# Database Report: Models and Relationships
+
+This report outlines the structure of the database, detailing the models and their relationships within the application. The database is structured around several core entities: `User`, `Activity`, `Post`, `Follow`, `Hashtag`, and additional join tables for handling many-to-many relationships.
+
+## Models Overview
+
+### 1. User Model
+
+- **Table Name:** users
+- **Columns:**
+  - id (Integer, Primary Key)
+  - email (String, Unique)
+  - username (String, Unique)
+  - name (String)
+  - hashed_password (String, Not Null)
+  - created_dt (DateTime, Default Current UTC Timestamp)
+  - dob (Date)
+  - gender (Enum)
+  - profile_pic (String)
+  - bio (String)
+  - location (String)
+  - followers_count (Integer, Default 0)
+  - following_count (Integer, Default 0)
+- **Relationships:**
+  - Posts (One-to-Many)
+  - Liked Posts (Many-to-Many)
+  - Followers (Many-to-Many)
+  - Following (Many-to-Many)
+  - Post Hashtags (Many-to-Many)
+
+## 2. Activity Model
+
+- **Table Name:** activities
+- **Columns:**
+  - id (Integer, Primary Key)
+  - username (String, Not Null)
+  - timestamp (DateTime, Not Null, Default Current UTC Timestamp)
+  - liked_post_id (Integer)
+  - username_like (String)
+  - liked_post_image (String)
+  - followed_username (String)
+  - followed_user_pic (String)
+- **Relationships:** None specified in the provided schema.
+
+### 3. Post Model
+
+- **Table Name:** posts
+- **Columns:**
+  - id (Integer, Primary Key)
+  - content (String)
+  - image (String)
+  - location (String)
+  - created_dt (DateTime, Default Current UTC Timestamp)
+  - likes_count (Integer, Default 0)
+- **Relationships:**
+  - Author (Foreign Key to User)
+  - Hashtags (Many-to-Many)
+  - Liked By Users (Many-to-Many)
+
+### 4. Follow Model
+
+- **Table Name:** follows
+- **Columns:**
+  - follower_id (Integer, Foreign Key to User, Primary Key)
+  - following_id (Integer, Foreign Key to User, Primary Key)
+- **Relationships:**
+  - Follower (Back Populates Followers in User)
+  - Following (Back Populates Following in User)
+
+### 5. Hashtag Model
+
+- **Table Name:** hashtags
+- **Columns:**
+  - id (Integer, Primary Key)
+  - name (String, Index)
+- **Relationships:**
+  - Posts (Many-to-Many)
+
+### 6. Models for join tables
+
+- **post_hashtags:** A join table used to implement the Many-to-Many relationship between `Post` and `Hashtag`.
+- **post_likes:** A join table used to implement the Many-to-Many relationship between `User` and `Post` for liking posts.
+- **Relationships:**
+  Both represent Many-to-Many relationships.
+
+## Relationships Summary
+
+- **User to Post:** One-to-Many (A user can create multiple posts, but each post belongs to one user.)
+- **User to Activity:** Many-to-One (Multiple users can perform activities, but each activity is associated with one user.)
+- **User to Follow:** Many-to-Many (Users can follow and be followed by other users.)
+- **Post to Hashtag:** Many-to-Many (Posts can contain multiple hashtags, and each hashtag can be associated with multiple posts.)
+- **Post to Activity:** Many-to-One (Activities can reference posts, but each post can be involved in multiple activities.)
+
 
 ## Contributing
 
