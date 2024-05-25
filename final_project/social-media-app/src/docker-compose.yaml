@@ -21,13 +21,19 @@ services:
     ports:
       - 8000:8000
     restart: always
+
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
     depends_on:
       - db
 
   redis:
     container_name: redis
     image: redis:6.2-alpine
-
   celery_worker:
     container_name: celery_worker
     build: .
@@ -60,3 +66,4 @@ services:
     depends_on:
       - src
       - redis
+      - celery_worker

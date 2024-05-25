@@ -16,6 +16,8 @@ psycopg2 = "*"
 redis = "*"
 celery = "*"
 flower = "*"
+install = "*"
+requests = "*"
 
 [dev-packages]
 
