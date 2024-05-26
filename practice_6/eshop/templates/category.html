@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}All Categories - E-Shop{% endblock %}
+
+{% block content %}
+    <h2>All Categories</h2>
+
+    {% if categories %}
+        <ul>
+            {% for category in categories %}
+                <li>
+                    <h3>{{ category.name }}</h3>
+
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No categories available.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
