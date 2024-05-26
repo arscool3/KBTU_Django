@@ -1,0 +1,32 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    color: red;
+    padding: 10px;
+    text-align: center;
+    border: 10px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+td.empty-cell {
+    background-color: #e0e0e0;
+}
+
+td.discipline-cell {
+    background-color: #c5e1a5;
+}

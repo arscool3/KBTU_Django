@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <div class="home-container">
+        <h2 class="welcome-title">Welcome to the Home Page</h2>
+        {% if user.is_authenticated %}
+            <div class="user-info">
+                <p>Hello, <strong>{{ user.username }}</strong>!</p>
+                <p>Your email: <strong>{{ user.email }}</strong></p>
+                <form action="{% url 'logout' %}?next={% url 'home' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Logout</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="guest-info">
+                <p>Welcome, Guest!</p>
+                <a href="{% url 'base' %}" class="btn btn-primary">Login</a>
+                <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

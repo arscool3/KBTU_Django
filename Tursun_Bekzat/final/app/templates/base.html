@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Simple StackOverflow Clone - A Community of Coders
+        {% endblock %}
+    </title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>{% block header %}Simple StackOverflow Clone{% endblock %}</h1>
+            <nav class="auth-links">
+                <a href="{% url 'home' %}" class="btn btn-primary">Home</a>
+                <a href="{% url 'questions_list' %}" class="btn btn-primary">Questions</a>
+                <a href="{% url 'create_question' %}" class="btn btn-primary">Ask Question</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}?next={{ request.path }}" class="btn btn-primary">Logout</a>
+                {% else %}
+                    <a href="{% url 'signin' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary">Sign Up</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</body>
+</html>

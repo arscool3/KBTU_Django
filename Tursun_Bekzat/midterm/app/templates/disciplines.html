@@ -1,0 +1,29 @@
+{% extends 'basic.html' %}
+{% load static %}
+
+{% block title %}Disciplines - My Website{% endblock %}
+
+{% block content %}
+    <head>
+        <meta charset="UTF-8">
+        <title>Disciplines - My Website</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/disciplines.css' %}">
+    </head>
+
+    <div class="disciplines-container">
+        <h2>Disciplines</h2>
+        {% if disciplines %}
+            <ul class="disciplines-list">
+                {% for discipline in disciplines %}
+                    <li>
+                        <h3>{{ discipline.name }}</h3>
+                        <p><strong>Credits:</strong> {{ discipline.credits }}</p>
+                        <p><strong>Faculty:</strong> {{ discipline.faculty }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No disciplines available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

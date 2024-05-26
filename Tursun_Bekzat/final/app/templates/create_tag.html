@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Create Tag{% endblock %}
+
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <div class="form-container">
+        <h2>Create a new tag</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}

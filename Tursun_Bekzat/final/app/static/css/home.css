@@ -1,0 +1,48 @@
+.home-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.welcome-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.user-info, .guest-info {
+    margin-top: 20px;
+}
+
+.user-info p, .guest-info p {
+    font-size: 16px;
+    color: #555;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #337ab7;
+}
+
+.btn-primary:hover {
+    background-color: #286090;
+}
+
+.btn-secondary {
+    background-color: #5bc0de;
+}
+
+.btn-secondary:hover {
+    background-color: #31b0d5;
+}
