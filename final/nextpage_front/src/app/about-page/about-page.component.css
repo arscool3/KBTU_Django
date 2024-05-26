@@ -1,0 +1,119 @@
+* {
+        font:   Prompt; 
+        display: block;
+        box-sizing: border-box;
+        font-family: sans-serif;
+        
+}
+
+ul {
+        list-style-type: none;
+}
+.navbar{
+        width:221.92px;
+        margin-left: 100px;
+        margin-bottom: 120px;
+}
+
+.logoquot, .signup, .signin, a, .infotop
+{
+        font-weight: 700;
+        font-size: 25px;
+        line-height: 38px;
+        text-decoration: none;
+}
+.infotop{
+        font-size: 40px;
+        line-height: 60px;
+        text-align: center;
+        
+}
+
+.logonobook{
+        width:390.91px;
+}
+
+button{
+        width: 214px;
+        height: 71px;
+        background-color: black;
+        color:white;
+}
+.signup a{
+        color: white;
+}
+.signup {
+        border: 0;
+        border-radius: 6px;
+}
+.signin{
+        color:#868686;
+        font-weight: 1000;
+        text-decoration: underline;
+        text-decoration-thickness: 1.05px;
+        margin-left: 20px;
+}
+.info img, .info p{
+        margin: 0 auto;
+
+}
+.bottom{
+        background-color: #EFEFEF;
+        padding-top: 15px;
+}
+.info{
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+        justify-content: center;
+}
+.boxx{
+        width: 483px;
+        height: 366px;
+        background-color: white;
+        margin: 25px 15px;
+        /* text-align: center; */
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+        align-items: center;
+        justify-content: center;
+}
+
+.boxx p{
+        width: 282px;
+        margin-top: 15px;
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 30px;
+        /* text-align: center; */
+        font-family: sans-serif;
+        
+}
+.boxx img, .icon{
+        width: 50px;
+        height: 60px;
+        margin:0 auto;
+        margin-top: 47px;
+}
+
+.logo{
+        width: 50%;
+}
+.stack{
+        width: 500px;
+}
+.topinfo{
+        display: flex;
+        flex-wrap: nowrap;
+        margin-left: 100px;
+}
+.butts{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+
+}
+.topinfo{
+        margin-top: 100px;
+}

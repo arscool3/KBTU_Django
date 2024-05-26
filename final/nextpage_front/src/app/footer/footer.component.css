@@ -1,0 +1,17 @@
+#foot{
+    position: relative;
+    margin-top: 2cm;
+    width: 101%;
+    margin-left: -7px;
+}
+#line{
+    height: 0.08px;
+    /* font-weight: bolder; */
+    background-color: black;
+}
+#bot{
+    font-family: 'Prompt';
+    font-size: 15px;
+    /* font-weight: bold; */
+    margin-left: 9.79%;
+}

@@ -1,0 +1,9 @@
+<div class="main">
+        <h2>My Lists</h2>
+
+        <div>
+                <div *ngFor="let list of userList" class="card" >
+                        <app-user-list [list]="list" *ngIf="list.books.length!=0"></app-user-list>
+                </div>
+        </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="profile-holder">
+        <div class="profile-people-holder">
+          <div class="profile-name">
+            <h3>Manage account</h3>
+            <p>Update your profile password and username</p>
+          </div>
+        </div>
+        <div class="profile-settings-holder">
+
+          <form class="form-horizontal profile-update">
+
+            <h4>Change username and email</h4>
+            <input class="text" type="text" name="Username" placeholder="Username" required="" [(ngModel)]="user.username">
+            <input class="text email" type="email" name="email" placeholder="Email" required="" [(ngModel)]="user.email">
+
+            <div class="form-group clearfix">
+              <div class="col-sm-12 control-label">
+<!--                <h4>Change password</h4>-->
+              </div>
+<!--              <input class="text" type="password" name="password" placeholder="Old Password" required="">-->
+<!--              <input class="text w3lpass" type="password" name="password" placeholder="New Password" required="" [(ngModel)]="user.password">-->
+            </div>
+          </form>
+
+
+          <input type="submit" value="Save changes">
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

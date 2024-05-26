@@ -1,0 +1,52 @@
+img#mainImg{
+    margin-top: 34px;
+    width: 263px;
+    height: 386px;
+    position: relative;
+}
+p#name{
+    font-family: 'Prompt-Bold';
+    font-weight: 700;
+    font-size: 30px;
+}
+p#author{
+    margin-top: -28px;
+    font-family: 'Prompt';
+    font-weight: 700;
+    font-size: 30px;
+}
+p#des{
+    margin-top: -10px;
+    font-family: 'Prompt-Medium';
+    /* font-weight: 700; */
+    font-size: 25px;
+}
+div#right{
+    margin-left: 331px;
+    margin-top: -420px;
+    position: relative;
+}
+#descr{
+    width: 679px;
+    height: auto;
+    min-height: 180px;
+    border-radius: 8px;
+}
+#lab{
+    font-family: 'Prompt';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 158.2%;
+}
+#show{
+    font-style: italic;
+}
+#show:hover{
+    text-decoration: underline;
+}
+#noDes{
+    font-size: 35px;
+    font-family: 'Prompt';
+    line-height: 90px;
+}

@@ -1,0 +1,31 @@
+
+<div id="pro">
+    <fieldset id="about">
+        <p id="user">{{user.username}}</p>
+        <p id="name">{{user.first_name}} {{user.last_name}}</p>
+        <div><img src="/assets/images/star.png" id="star"> <p id="fr">My friends</p></div>
+        <div *ngIf="myProfile==false"><img src="/assets/images/mail.png" id="mail"> <p id="ma">{{user.email}}</p></div>
+        <div *ngIf="myProfile==true"><img src="/assets/images/add.png" id="add"> <p id="ad">Add to friends</div>
+        <div><img src="/assets/images/shelf.png" id="shelf" *ngIf="id==0"> <a id="sh" routerLink="/mybooks" *ngIf="id==0">my Books</a></div>
+    </fieldset>
+    <fieldset id="stats">
+        <p id="stat">Stats</p>
+        <p id="cur">Currently reading: {{cur}} books</p>
+        <p id="alr">Already read books: {{alr}} books</p>
+        <p id="wil">Willing to read books: {{wil}} books</p>
+    </fieldset>
+    <fieldset id="find">
+        <p id="fin">Find user</p>
+        <div id="poisk">
+            <p id="username">username:</p>
+            <input type="text" [(ngModel)]="findUser" id="search" placeholder="Search all users.." (input)="search()">
+            <div>
+                <ul id="inBlock" *ngIf="findUser!=''">
+                  <li *ngFor="let user of users">
+                    <a routerLink="/profile/{{user.id}}" id="finding" (click)="getUserInfo(user.id)">{{user.username}}</a>
+                  </li>
+                </ul>
+              </div>
+        </div>
+    </fieldset>
+</div>

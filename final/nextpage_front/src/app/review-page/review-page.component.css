@@ -1,0 +1,17 @@
+body {
+  background: white;
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: 'Prompt';
+}
+.review-top {
+  font-family:Khula;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 15px;
+  text-transform: capitalize;
+}
+.full-review {
+  margin-left: 4cm;
+}

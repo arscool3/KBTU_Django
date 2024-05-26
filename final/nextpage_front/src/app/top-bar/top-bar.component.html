@@ -1,0 +1,32 @@
+
+<div class="topbar"*ngIf="logged">
+    <a routerLink="/home"><img src="assets/images/logo_web-removebg-preview1.png" id="image"></a>
+    <div id="top"> 
+      <a routerLink="/home" class="top">HOME</a> 
+      <a routerLink="/catalogs" class="top">CATALOG</a> 
+      <a routerLink="/mybooks" class="top">MY BOOKS</a> 
+
+    </div>
+    <div class="block">
+      <input type="text" [(ngModel)]="findBook" placeholder="Search all books.." id="search" (input)="search()">
+      <div>
+        <ul id="inBlock" *ngIf="findBook!=''">
+          <li *ngFor="let book of books">
+            <a routerLink="book/{{book.id}}" id="find">{{book.title}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="log">
+      <input type="image" src="assets/images/login1.png" id="login" (click)="showBar()">
+
+      <div *ngIf="check==true" class="loginProfile">
+        <button routerLink="/profile" class="loginProfile1">Profile</button>
+        <button routerLink="/manage-account" class="loginProfile2">Manage account</button>
+        <button class="loginProfile3" *ngIf="logged" (click)="logOut()">Sign out</button>
+      </div>
+    </div>
+</div>
+
+
+

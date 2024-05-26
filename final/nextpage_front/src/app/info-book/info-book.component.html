@@ -1,0 +1,13 @@
+<div *ngIf="book!=undefined">
+    <a routerLink="/book/{{book.id}}"><img src="{{book.img}}" id="mainImg" *ngIf="book.img!=undefined"></a>
+    <div id="right" *ngIf="book.title!=undefined">
+        <p id="name">{{book.title}}</p>
+        <p id="author">{{book.author}}</p>
+        <p id="des">DESCRIPTION</p>
+        <fieldset id="descr">
+
+            <label id="lab">{{book.description}} <a *ngIf="appear==true"><a *ngIf="check==true" id="show" (click)="changeDes()"> Show more</a><a *ngIf="check==false" (click)="changeDes()" id="show"> Hide text</a></a> </label>
+
+        </fieldset>
+    </div>
+</div>

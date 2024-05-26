@@ -1,0 +1,53 @@
+
+<div style="margin-left: 120px;">
+    <app-info-book></app-info-book>
+    <div id="ReviewBlock">
+        <p id="Reviews">Reviews</p>
+
+        <div *ngIf="add==true">
+            <form action="#" method="post">
+                <div class="Posting">
+                    <div class="rating"> 
+                        <div class="rating_item" data-item-value="5" (click)="changeRate(5)">★</div>
+                        <div class="rating_item" data-item-value="4" (click)="changeRate(4)">★</div>
+                        <div class="rating_item" data-item-value="3" (click)="changeRate(3)">★</div>
+                        <div class="rating_item" data-item-value="2" (click)="changeRate(2)">★</div>
+                        <div class="rating_item" data-item-value="1" (click)="changeRate(1)">★</div>
+                    </div>
+                    <textarea id="reviewPost" name="review" [(ngModel)]="review"></textarea>
+                    <input type="submit" value="post" id="post" (click)="onSubmit()">
+                </div>
+            </form>
+        </div>
+        <app-review [reviews]="reviews"></app-review>
+        <!-- <div *ngFor=""></div> -->
+        <!-- <div *ngFor="review of reviews"></div> -->
+    </div>
+    <div id="glav">
+    <div id="main">
+        <div> 
+            <label id="rating_item_part">★</label> <label id="rate">Rating: {{rating}}%</label>
+
+        </div>
+        <div>
+            <select id="select" (change)="saveOption()">
+                <option value="AddBook" id="option">{{option}}</option>
+                <option value="Reading" id="option">Reading</option>
+                <option value="Read" id="option">Read</option>
+                <option value="Favorites" id="option">Favorites</option>
+                <option value="Planned" id="option">Planned</option>
+                <option value="Abandoned" id="option">Abandoned</option>
+                <option value="Delete" id="option">Delete</option>
+            </select>
+        </div>
+        <div>
+
+            <label class="rating_item_ex">★</label><a id="rev" (click)="add=true">add review <img src="/assets/images/edit.png" id="edit"></a>
+
+            <!-- <img src="/assets/images/edit.png" id="edit"> -->
+        </div>
+    </div> 
+    </div>
+</div>
+<!-- <div>Rating</div> -->
+<!-- ☆ -->

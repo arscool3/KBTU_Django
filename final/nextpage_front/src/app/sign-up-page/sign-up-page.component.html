@@ -1,0 +1,18 @@
+<div class="main-w3layouts wrapper">
+  <img src="/assets/logo-clean.png" alt="image" class="center">
+  <div class="main-agileinfo">
+    <div class="agileits-top">
+      <form action="#" method="post">
+        <input class="text" type="text" name="Username" placeholder="Username"  [(ngModel)]="username" required="">
+        <input class="text email" type="email" name="email" placeholder="Email" [(ngModel)]="email" required="">
+        <input class="text" type="password" name="password" placeholder="Password" [(ngModel)]="password" required="">
+        <input class="text w3lpass" type="text" name="password" placeholder="Firstname" [(ngModel)]="firstName" required="">
+        <input class="text w3lpass" type="text" name="password" placeholder="Lastname" [(ngModel)]="lastName" required="">
+
+        <input type="submit" value="Sign up" (click)="register()">
+      </form>
+<!--      <p>Don't have an Account? <a href="#"> Login Now!</a></p>-->
+    </div>
+  </div>
+  <!-- //copyright -->
+</div>
