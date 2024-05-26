@@ -1,0 +1,36 @@
+### Create Book
+POST http://localhost:8000/create
+Content-Type: application/json
+
+{
+  "parameter": {
+    "id": 1,
+    "title": "Example Title",
+    "description": "Example Description"
+  }
+}
+
+### Get Books
+GET http://localhost:8000/?skip=0&limit=100
+
+### Update Book
+PATCH http://localhost:8000/update
+Content-Type: application/json
+
+{
+  "parameter": {
+    "id": 1,
+    "title": "Updated Title",
+    "description": "Updated Description"
+  }
+}
+
+### Delete Book
+DELETE http://localhost:8000/delete
+Content-Type: application/json
+
+{
+  "parameter": {
+    "id": 1
+  }
+}

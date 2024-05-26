@@ -1,0 +1,56 @@
+# Test your FastAPI endpoints
+
+# Get the root endpoint
+GET http://127.0.0.1:8000/
+Accept: application/json
+###
+
+# Get all users
+GET http://127.0.0.1:8000/users/
+Accept: application/json
+###
+
+# Create a new user
+POST http://127.0.0.1:8000/users/
+Content-Type: application/json
+
+{
+  "id": 1,
+  "username": "john_doe",
+  "email": "john@example.com"
+}
+###
+
+# Get all items
+GET http://127.0.0.1:8000/items/
+Accept: application/json
+###
+
+# Create a new item
+POST http://127.0.0.1:8000/items/
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Item 1",
+  "description": "Description of Item 1",
+  "price": 10.99
+}
+###
+
+# Get all orders
+GET http://127.0.0.1:8000/orders/
+Accept: application/json
+###
+
+# Create a new order
+POST http://127.0.0.1:8000/orders/
+Content-Type: application/json
+
+{
+  "id": 1,
+  "user_id": 1,
+  "item_id": 1,
+  "quantity": 2
+}
+###
