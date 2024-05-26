@@ -1,0 +1,124 @@
+/* #stars{
+    font-size: 35px;
+    flex-direction: row-reverse;
+    /* background-color: yellow; */
+    /* color: white; */
+/* } */
+/* #first{ */
+    /* display: inline-block;
+    background: ★;
+} */
+#main{
+    position:absolute;
+    top: 539px;
+}
+.rating{
+    display: inline-flex;
+    flex-direction: row-reverse;
+
+}
+.rating_item{
+    color: grey;
+    font-size:40px;
+    cursor: pointer;
+    transition:.2s;
+}
+.rating_item_ex{
+    color: yellow;
+    font-size:40px;
+}
+.rating_item:hover,
+.rating_item:hover ~ .rating_item{
+    color: orange;
+}
+
+.rating[data-total-value='1'] .rating_item:nth-child(n + 5),
+.rating[data-total-value='2'] .rating_item:nth-child(n + 4),
+.rating[data-total-value='3'] .rating_item:nth-child(n + 3),
+.rating[data-total-value='4'] .rating_item:nth-child(n + 2),
+.rating[data-total-value='5'] .rating_item:nth-child(n + 1){
+
+    color:yellow; 
+}
+#rating_item_part{
+    font-size:40px;
+    background: linear-gradient(to right, yellow 10%, transparent 10%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#rate{
+    font-family: 'Prompt';
+    margin-top: 16px;
+    margin-left: 5px;
+    font-size: 20px;
+    position: absolute;
+
+}
+
+#select{
+    margin-top: 10px;
+    border-radius: 8px;
+    /* border: 1px solid #000000; */
+    width: 263px;
+    height: 42px;
+    font-family: 'Prompt';
+    font-size: 20px;
+    padding-left: 5.32%;
+}
+#option{
+    border-radius: 8px;
+    margin-top: 10px;
+    position: absolute;
+}
+#rev{
+    cursor: pointer;
+    font-family: 'Prompt';
+    font-size: 20px;
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 16px;
+}
+#rev:hover{
+    text-decoration:underline;
+}
+#edit{
+    width: 19px;
+    height: 19px;
+    /* margin-left: 123px; */
+    margin-bottom: -3px;
+}
+#ReviewBlock{
+    margin-left: 8.85cm;
+
+}
+#Reviews{
+    font-family: 'Prompt';
+    font-size: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+}
+#reviewPost{
+    width: 698px;
+    height: 100px;
+    vertical-align: top;
+    font-family: 'Prompt';
+    font-size: 20px;
+}
+#post{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border-width: 0.1px;
+    width: 150px;
+    height: 30px;
+    background-color: white;
+    font-family: 'Prompt';
+}
+#post:hover{
+    background-color: rgb(203, 203, 203);
+}
+.Posting > #post,#reviewPost{
+    display: block;
+
+}

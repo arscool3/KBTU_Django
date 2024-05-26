@@ -1,0 +1,166 @@
+#image{
+  height: 50px;
+  position: relative;
+  width: 180px;
+  /* display: flex; */
+  /* margin-top: 0.4cm; */
+}
+.topbar{
+  margin-top: 20px;
+  margin-left: 4cm;
+  position: relative;
+  height: 2.65cm;
+  width: 35cm;
+  /* background-color: black; */
+}
+#top{
+  position: relative;
+  margin-top:-36px;
+  margin-left: 6cm;
+  display: flex;
+  /* justify-content: center; */
+  /* width: 20cm; */
+  /* background-color: #000000; */
+}
+.top{
+  color: black;
+  margin-left: 80px;
+  font-size: 18px;
+  text-decoration: none;
+  position: relative;
+  font-weight: lighter;
+  display: inline-block;
+  /* align-items: center; */
+}
+/* Вот здесь для подчеркивания снизу */
+.top::after{ 
+  content:'';
+  background-color: #000000;
+  position: absolute;
+  width: 40%;
+  left:0;
+  height: 0.7px;
+  bottom: 0px;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+  
+}
+.top:hover::after{
+  transform: scaleX(1);
+        transform-origin: bottom left;
+}
+.top:hover{
+  text-decoration-line: underline;
+  text-underline-offset: 4.2px;
+  text-decoration-thickness: 1px;
+}
+.underline::before{
+  width: 30%;
+}
+#search{
+  position: relative;
+  margin-left: 2.3cm;
+  width: 7cm;
+  height: 0.8cm;
+  margin-top: -19px;
+  border-style: solid;
+  border-radius: 8px;
+  border-width: 1.6px;
+  /* border-radius: px; */
+  /* border */
+}
+#login{
+  position: relative;
+  /* margin-left: 31cm; */
+  height: 1cm;
+  margin-left: 1cm;
+  /* margin-top:-cm; */
+  margin-top: -4.4cm;
+  /* display: flex; */
+}
+/* #login:hover{
+} */
+input[type="text"]{
+  padding-left: 19px;
+  padding-top: 4px;
+}
+#log{
+  margin-left: 3cm;
+  height: 1.3cm;
+}
+#loginProfile{
+  z-index: 2;
+  position: absolute;
+}
+.loginProfile1,.loginProfile2,.loginProfile3{
+  z-index: 2;
+  position: fixed;
+  margin-left: -2.2cm;
+  background-color: rgb(249, 249, 249);
+  width: 166px;
+  height: 47px;
+  border-color: white;
+  border-radius: 0.1px;
+  border-width: 0.01px;
+  border-style: none;
+  
+}
+.loginProfile2{
+  margin-top: 47px;
+}
+
+div#log{
+  margin-left: 31cm;
+  height: 1.3cm;
+  margin-top: -10px;
+  position: absolute;
+}
+#loginProfile{
+  z-index: 2;
+  position: absolute;
+}
+.loginProfile1,.loginProfile2,.loginProfile3{
+  position: fixed;
+  margin-left: -2.2cm;
+  background-color: rgb(249, 249, 249);
+  width: 166px;
+  height: 47px;
+  border-color: white;
+  border-radius: 0.1px;
+  border-width: 0.01px;
+  border-style: none;
+}
+.loginProfile2{
+  margin-top: 47px;
+}
+
+.loginProfile3{
+  margin-top: 94px;
+}
+.loginProfile1:hover,.loginProfile2:hover,.loginProfile3:hover{
+  background-color: #bdbdbd;
+}
+.block{
+  /* height: 200px; задаем фиксированную высоту */
+    border: #000000;
+    border-radius: 12px;
+    display: block;
+    margin-left: 700px;
+    margin-top: -25px;
+    z-index: 2;
+    position: absolute;
+}
+#inBlock{
+  overflow-y: scroll;
+  margin-left: 2.3cm;
+  height: 100px;
+  width: 250px;
+  border: #000000;
+  border-radius: 12px;
+  z-index: 2;
+  background-color: rgb(232, 232, 232);
+  list-style-type:none;
+}
+#find{
+  text-decoration: none;
+}

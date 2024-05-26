@@ -1,0 +1,12 @@
+
+<div *ngIf="!auth.IsLoggedIn">
+  <router-outlet></router-outlet>
+</div>
+<div *ngIf="auth.IsLoggedIn">
+  <app-top-bar></app-top-bar>
+
+  <router-outlet></router-outlet>
+
+  <app-footer></app-footer>
+</div>
+

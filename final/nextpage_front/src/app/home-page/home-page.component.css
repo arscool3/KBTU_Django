@@ -1,0 +1,119 @@
+div#fullHome{
+    margin-left: 120px;
+}
+p#cur{
+    font-family: 'Prompt';
+    font-size: 25px;
+    font-weight: lighter;
+    /* line-height: 38px; */
+    position: relative;
+}
+img#mainImg{
+    margin-top: 34px;
+    width: 263px;
+    height: 386px;
+    position: relative;
+}
+p#name{
+    font-family: 'Prompt-Bold';
+    font-weight: 700;
+    font-size: 30px;
+}
+p#author{
+    margin-top: -28px;
+    font-family: 'Prompt';
+    font-weight: 700;
+    font-size: 30px;
+}
+p#des{
+    margin-top: -10px;
+    font-family: 'Prompt-Medium';
+    /* font-weight: 700; */
+    font-size: 25px;
+}
+div#right{
+    margin-left: 331px;
+    margin-top: -420px;
+    position: relative;
+}
+#descr{
+    width: 679px;
+    height: 193px;
+    border-radius: 8px;
+}
+#lab{
+    font-family: 'Prompt';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 158.2%;
+}
+div#rec{
+    margin-top: 50px;
+}
+div#recBooks{
+    margin-top: 80px;
+    /* width: ; */
+    margin-left: -13px;
+}
+#book{
+    width: 195px;
+    height: 296px;
+    margin-left: 13px;
+}
+p#reco{
+    font-family: 'Prompt';
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 38px;
+}
+div#pop{
+    margin-left: 760px;
+    margin-top: -446px;
+}
+#popu{
+    margin-bottom: 82px;
+    font-family: 'Prompt';
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 38px;
+}
+#popBlock{
+    /* margin-top: 80px; */
+    width: 427px;
+    height: auto;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    display: block;
+}
+#po{
+    margin-top: -10px;
+    width: 391px;
+    line-height: 2px;
+}
+#Bname,#Bauthor{
+    display: block;
+    font-family: 'Prompt-bold';
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 38px;
+    margin-left: 10px;
+    margin-top: 10px;
+    /* margin-top: -1px; */
+    text-decoration: none;
+    color: black;
+}
+#Bauthor{
+    font-family: 'Prompt';
+    font-size: 20px;
+    margin-top: -30px;
+}
+#link{
+    text-decoration: none;
+    color: black;
+}
+#link:hover{
+    text-decoration: underline;
+}

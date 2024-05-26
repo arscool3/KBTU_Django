@@ -1,0 +1,7 @@
+<p  class="c_name">{{list.name}}</p>
+
+<div class="main">
+        <a *ngFor="let book of books" class="card" routerLink="/book/{{book.id}}/"> 
+                <img src="{{book.img}}" alt="{{book.title}}" class="bookimg">
+        </a>
+</div>

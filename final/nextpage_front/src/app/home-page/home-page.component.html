@@ -1,0 +1,28 @@
+
+<div id="fullHome">
+    <p id="cur" *ngIf="book!=undefined">Currently reading</p>
+    <app-info-book></app-info-book>
+    <div id="rec">
+        <p id="reco">Recommendations</p>
+        <div id="recBooks">
+            <a routerLink="/book/{{recommendations[0].id}}"><img src="{{recommendations[0].img}}" id="book"></a>
+            <a routerLink="/book/{{recommendations[1].id}}"><img src="{{recommendations[1].img}}" id="book"></a>
+            <a routerLink="/book/{{recommendations[2].id}}"><img src="{{recommendations[2].img}}" id="book"></a>
+        </div>
+    </div>
+    <div id="pop">
+        <p id="popu">Popular this week</p>
+        <div>
+            <fieldset id="popBlock">
+                <p id="Bname"><a routerLink="/book/{{popular[0].id}}" id="link">{{popular[0].title}}</a></p>
+                <p id="Bauthor"><a routerLink="/book/{{popular[0].id}}" id="link">{{popular[0].author}}</a></p>
+                <hr id="po">
+                <p id="Bname"><a routerLink="/book/{{popular[1].id}}" id="link">{{popular[1].title}}</a></p>
+                <p id="Bauthor"><a routerLink="/book/{{popular[1].id}}" id="link">{{popular[1].author}}</a></p>
+                <hr id="po">
+                <p id="Bname"><a routerLink="/book/{{popular[2].id}}" id="link">{{popular[2].title}}</a></p>
+                <p id="Bauthor"><a routerLink="/book/{{popular[2].id}}" id="link">{{popular[2].author}}</a></p>
+            </fieldset>
+        </div>
+    </div>
+</div>

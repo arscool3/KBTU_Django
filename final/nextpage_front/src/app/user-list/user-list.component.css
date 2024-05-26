@@ -1,0 +1,47 @@
+.bookimg{
+        width: 195px;
+        height: 296px;
+        margin-left: 10px;
+        -webkit-box-shadow: 0px 0px 10px -1px rgba(0,0,0,0.43);
+        -moz-box-shadow: 0px 0px 10px -1px rgba(0,0,0,0.43);
+        box-shadow: 0px 0px 10px -1px rgba(0,0,0,0.43);
+        border-radius: 4px;
+        transition: transform 0.3s ease-in-out;
+}
+.c_name{
+        margin-left: 10px;
+}
+
+.main{
+        display: flex;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding-top: 10px;
+}
+.row{
+        display: inline-block;
+        align-items: center;
+        
+}
+
+* { 
+        font-size:25px;
+        font-weight: 300;
+        line-height: 158%;;
+        src: url('src/assets/Prompt-Light.ttf');
+        font:   Prompt; 
+        display: block;
+        box-sizing: border-box;
+        font-family: sans-serif;
+}
+a{
+        text-decoration: none;
+        color: black;
+        
+}
+.bookimg:hover{
+        /* color: ; */
+        opacity: 0.90;
+        transform: scale(1.04);
+}

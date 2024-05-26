@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Prompt';
+    src: url('src/assets/Prompt-Light.ttf');
+}
+@font-face {
+    font-family: 'Prompt-Black';
+    src: url('src/assets/Prompt-Black.ttf');
+}
+@font-face {
+    font-family: 'Prompt-bold';
+    src: url('src/assets/Prompt-SemiBold.ttf');
+}
+@font-face {
+    font-family: 'Prompt-medium';
+    src: url('src/assets/Prompt-Medium.ttf');
+}
+@font-face {
+    font-family: 'Khula';
+    src: url('src/assets/Khula-Regular.ttf');
+}

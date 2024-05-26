@@ -1,0 +1,161 @@
+/* DO NOT USE THIS */
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+html,
+body {
+  font-family: "Open Sans", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* END OF DO NOT USE THIS */
+
+input[type="text"], input[type="email"], input[type="password"] {
+  font-size: 0.9em;
+  color: #000000;
+  font-weight: 100;
+  width: 94.5%;
+  display: block;
+  border: none;
+  padding: 0.8em;
+  border: solid 1px rgba(0, 0, 0);
+  border-radius: 8px;
+  -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #000000 4%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #000000 4%);
+  background-position: -800px 0;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  color: #000000;
+  font-family: 'Roboto', sans-serif;
+}
+
+input.email, input.text.w3lpass {
+  margin: 2em 0;
+}
+
+.text:focus, .text:valid {
+  box-shadow: none;
+  outline: none;
+  background-position: 0 0;
+}
+
+.text:focus::-webkit-input-placeholder, .text:valid::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: .9em;
+  -webkit-transform: translateY(-30px);
+  -moz-transform: translateY(-30px);
+  -o-transform: translateY(-30px);
+  -ms-transform: translateY(-30px);
+  transform: translateY(-30px);
+  visibility: visible !important;
+}
+
+::-webkit-input-placeholder {
+  color: #000000;
+  font-weight: 100;
+}
+
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #fff;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #fff;
+}
+
+:-ms-input-placeholder {
+  color: #fff;
+}
+
+input[type="submit"] {
+  font-size: 1.0em;
+  font-weight: bold;
+  color: #fff;
+  background: #000000;
+  outline: none;
+  border: 2px solid #000000;
+  cursor: pointer;
+  padding: 0.9em;
+  border-radius: 8px;
+  -webkit-appearance: none;
+  width: 15%;
+  margin: 1em 28em;
+  /* letter-spacing: 4px; */
+}
+
+input[type="submit"]:hover {
+  color: black;
+  background: #ffffff;
+}
+
+
+
+/** PROFILE **/
+
+
+.profile-people-holder {
+  padding: 1.5em 0;
+  border-bottom: 3px solid #000000;
+  margin-bottom: 1.5em;
+}
+
+@media screen and (min-width: 640px) {
+  .container-fluid {
+    padding: 0 12.5%;
+  }
+  .btn-primary {
+    clear: none;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+  }
+  .btn-secondary {
+    clear: none;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+  }
+  .btn-danger {
+    clear: none;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+  }
+  .modal-content {
+    top: 15px;
+    bottom: 30%;
+    left: 25%;
+    right: 25%;
+  }
+}
+
+.form-control::-webkit-input-placeholder {
+  opacity: 0.85;
+}
+
+.form-control:-moz-placeholder {
+  opacity: 0.85;
+}
+
+.form-control::-moz-placeholder {
+  opacity: 0.85;
+}
+
+.form-control:-ms-input-placeholder {
+  opacity: 0.85;
+}
+
+.form-control::-ms-input-placeholder {
+  opacity: 0.85;
+}
+
+.form-control:placeholder-shown {
+  opacity: 0.85;
+}
+
