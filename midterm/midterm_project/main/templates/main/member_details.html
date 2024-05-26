@@ -1,0 +1,107 @@
+<!-- templates/main/member_details.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">Member Details</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Member Information</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>ID:</strong> {{ member.member_id }}</p>
+                <p><strong>Name:</strong> {{ member.name }}</p>
+                <p><strong>Age:</strong> {{ member.age }}</p>
+                <p><strong>Membership Type:</strong> {{ member.membership_type }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Instructor Information</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>ID:</strong> {{ member.instructor.instructor_id }}</p>
+                <p><strong>Name:</strong> {{ member.instructor.instructor_name }}</p>
+                <p><strong>Specialization:</strong> {{ member.instructor.specialization }}</p>
+                <p><strong>Gender:</strong> {{ member.instructor.gender }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Gym Information</h2>
+            </div>
+            <div class="card-body">
+                {% if gym %}
+                    <p><strong>ID:</strong> {{ gym.gym_id }}</p>
+                    <p><strong>Name:</strong> {{ gym.gym_name }}</p>
+                    <p><strong>Location:</strong> {{ gym.location }}</p>
+                {% else %}
+                    <p>No gym information available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Memberships</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for membership in memberships %}
+                        <li class="list-group-item">
+                            <strong>ID:</strong> {{ membership.membership_id }},
+                            <strong>Name:</strong> {{ membership.name }},
+                            <strong>Price:</strong> {{ membership.price }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Equipment</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for item in equipment %}
+                        <li class="list-group-item">
+                            <strong>ID:</strong> {{ item.equipment_id }},
+                            <strong>Name:</strong> {{ item.name }},
+                            <strong>Quantity:</strong> {{ item.quantity }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Workouts</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for workout in workouts %}
+                        <li class="list-group-item">
+                            <strong>ID:</strong> {{ workout.workout_id }},
+                            <strong>Name:</strong> {{ workout.name }},
+                            <strong>Description:</strong> {{ workout.description }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <a href="/" class="btn btn-primary">Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,9 +1,32 @@
-{%extends 'main/base.html'%}
+<!-- templates/main/index.html -->
+{% extends 'main/base.html' %}
 
 {% block title %}
-    main page
+    Main Page
 {% endblock %}
 
 {% block content %}
-    <h1>Main page</h1>
+    <h1>Welcome to the Gym Management System</h1>
+    <p>Here you can manage instructors, members, gyms, memberships, equipment, and workouts.</p>
+
+    <!-- Add button for member details -->
+    <h2>View Member Details</h2>
+    <form action="" method="get" id="memberDetailsForm" class="form-inline">
+        <div class="form-group mb-2">
+            <label for="member_id" class="sr-only">Enter Member ID:</label>
+            <input type="number" id="member_id" name="member_id" class="form-control" min="1" required>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">View Details</button>
+    </form>
+
+    <!-- Add JavaScript to update the form action dynamically -->
+    <script>
+        document.getElementById('memberDetailsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var memberId = document.getElementById('member_id').value;
+            var formAction = '{% url "member_details" 0 %}'.replace('0', memberId);
+            this.action = formAction;
+            this.submit();
+        });
+    </script>
 {% endblock %}

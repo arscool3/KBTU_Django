@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     InstructorViewSet, MemberViewSet, GymViewSet, MembershipViewSet, EquipmentViewSet, WorkoutViewSet,
     index, about, add_instructor, add_member, add_gym, add_membership, add_equipment, add_workout,
-    filter_instructors, filter_gyms, register, custom_logout, get_members, get_gyms, get_memberships, get_equipment, get_workouts, show_instructor, delete_instructor
+    filter_instructors, filter_gyms, register, custom_logout, get_members, get_gyms, get_memberships, get_equipment, get_workouts, show_instructor, delete_instructor,
+    member_details  # Добавьте здесь
 )
 from django.contrib.auth import views as auth_views
 
@@ -31,7 +32,11 @@ urlpatterns = [
     path('accounts/logout/', custom_logout, name='logout'),
     path('instructors/<int:pk>/', show_instructor, name='show_instructor'),
     path('instructors/<int:pk>/delete/', delete_instructor, name='delete_instructor'),
+    path('members/<int:member_id>/details/', member_details, name='member_details'),  # Добавьте этот маршрут
     path('', include(router.urls)),  # Include the DRF router URLs
 ]
+
+urlpatterns += router.urls
+
 
 urlpatterns += router.urls

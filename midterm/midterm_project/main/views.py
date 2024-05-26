@@ -204,3 +204,23 @@ def delete_instructor(request, instructor_id):
         return JsonResponse({'message': 'Instructor deleted successfully'})
     else:
         return JsonResponse({'message': 'Instructor not found'}, status=404)
+
+
+def member_details(request, member_id):
+    member = get_object_or_404(Member, pk=member_id)
+    instructor = member.instructor
+    gym = Gym.objects.filter(instructor=instructor).first()
+    memberships = member.memberships.all()
+    equipment = Equipment.objects.filter(gym=gym)
+    workouts = Workout.objects.filter(gym=gym)
+
+    context = {
+        'member': member,
+        'instructor': instructor,
+        'gym': gym,
+        'memberships': memberships,
+        'equipment': equipment,
+        'workouts': workouts,
+    }
+
+    return render(request, 'main/member_details.html', context)
