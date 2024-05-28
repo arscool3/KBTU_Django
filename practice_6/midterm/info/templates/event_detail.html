@@ -1,0 +1,14 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Detail</title>
+</head>
+<body>
+    <h1>Event Detail</h1>
+    <p><strong>Name:</strong> {{ event.name|to_upper }}</p>
+    <p><strong>About:</strong> {{ event.about|reverse_string }}</p> 
+</body>
+</html>

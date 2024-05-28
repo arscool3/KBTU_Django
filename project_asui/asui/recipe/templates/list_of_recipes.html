@@ -1,0 +1,34 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Recipes</title> 
+</head> 
+<body> 
+    <h1>Recipes</h1> 
+    <form method="get"> 
+        <label for="prep_time">Prep Time (minutes):</label> 
+        <input type="number" id="prep_time" name="prep_time" value="{{ request.GET.prep_time }}"> 
+         
+        <label for="difficulty">Difficulty:</label> 
+        <select id="difficulty" name="difficulty"> 
+            <option value="">All</option> 
+            <option value="easy" {% if request.GET.difficulty == 'easy' %}selected{% endif %}>Easy</option> 
+            <option value="medium" {% if request.GET.difficulty == 'medium' %}selected{% endif %}>Medium</option> 
+            <option value="hard" {% if request.GET.difficulty == 'hard' %}selected{% endif %}>Hard</option> 
+        </select> 
+ 
+        <button type="submit">Filter</button> 
+    </form> 
+    <ul> 
+        {% for recipe in recipes %} 
+            <li> 
+                <h2>{{ recipe.title }}</h2> 
+                <p>Author: {{ recipe.author }}</p> 
+                <p>Difficulty: {{ recipe.difficulty }}</p> 
+                <p>Prep Time: {{ recipe.prep_time }} minutes</p> 
+                <p>Cook Time: {{ recipe.cook_time }} minutes</p> 
+            </li> 
+        {% endfor %} 
+    </ul> 
+</body> 
+</html>
