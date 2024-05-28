@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goods List</title>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="mb-4">Goods Available in Shop</h1>
+        <ul class="list-group mb-4">
+            {% for goods in goods_available_in_shop %}
+                <li class="list-group-item">{{ goods.name }} - {{ goods.description | truncatewords:10 }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h1 class="mb-4">Ordered Goods by Price</h1>
+        <ul class="list-group">
+            {% for goods in ordered_goods %}
+                <li class="list-group-item">{{ goods.name }} - ${{ goods.price }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="mt-5">Update Goods Price</h2>
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-6">
+                <label for="goods_id" class="form-label">Goods ID:</label>
+                <input type="text" id="goods_id" name="goods_id" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label for="new_price" class="form-label">New Price:</label>
+                <input type="text" id="new_price" name="new_price" class="form-control">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Update Price</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

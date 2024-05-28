@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Producer List</title>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="mb-4">Producers with Goods in Section</h1>
+        <ul class="list-group mb-4">
+            {% for producer in producers_with_goods_in_section %}
+                <li class="list-group-item">{{ producer.name }} - {{ producer.country }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h1 class="mb-4">Ordered Producers by Country</h1>
+        <ul class="list-group">
+            {% for producer in ordered_producers %}
+                <li class="list-group-item">{{ producer.name }} - {{ producer.country }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="mt-5">Delete Producer</h2>
+        <form method="post" class="row g-3">
+            {% csrf_token %}
+            <div class="col-md-6">
+                <label for="producer_id" class="form-label">Producer ID:</label>
+                <input type="text" id="producer_id" name="producer_id" class="form-control">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-danger">Delete Producer</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
