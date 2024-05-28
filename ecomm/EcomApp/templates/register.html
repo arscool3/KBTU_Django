@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Register User</title>
+    <style>
+        body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			background: #fff !important;
+            align-items: center;
+		}
+		.user_card {
+			width: 350px;
+			margin-top: auto;
+			margin-bottom: auto;
+			background: #74cfbf;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 10px;
+			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+			border-radius: 5px;
+
+		}
+
+		.form_container {
+			margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+		}
+
+		#form-title{
+			color: #000000;
+		}
+        .user_card {
+    width: auto;
+    margin: auto; /* This centers the card horizontally */
+    margin-top: 20vh; /* Adjust this value to vertically position the card */
+    background: #fff;}
+    </style>
+</head>
+<body>
+    <div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<h3 id="form-title">REGISTER ACCOUNT</h3>
+                    {% if messages %}
+                      {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                              {{ messages }}
+                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      {% endfor %}
+                    {% endif %} 
+				</div>
+				<div class="d-flex justify-content-center form_container">
+                <form method="POST" action="">
+                    {%csrf_token%}
+                    {% for field in form%}
+                    {{field.label}}
+                    {{field}} 
+                    
+                    {%if field.name == "password1" or field.name == "password2"%}
+                    <span id="check" class="bi bi-eye-slash" onclick='fun(this)'></span>
+                    {% endif %}
+                    <br><br>
+
+                    {% endfor %}
+
+
+                    <input type="checkbox" name="check" id="check" required>I agree to the terms and conditions<br><br>
+                   <!--  {{form.as_p}} -->
+                    <input type="submit" value="Create User" style="align-content:center">
+                    Already User?&nbsp;&nbsp;&nbsp; <a href="{% url 'login' %}" style="text-decoration: none;">Login</a>
+                </form>
+                </div>
+            </div> 
+            
+        </div> 
+        <script>
+            function fun(btn){
+                btn.classList.toggle("bi-eye-slash")
+                btn.classList.toggle("bi-eye")
+                var pswd = document.getElementById("id_password1");
+                var y = document.getElementById("id_password2")  
+                if (pswd.type == "password")
+                {
+                    pswd.type = "text"
+                }
+                else{
+                    pswd.type = "password"
+                }
+                if (y.type == "password")
+                {
+                    y.type = "text"
+                }
+                else{
+                    y.type = "password"
+                }
+                }                  
+                
+               /*  passwordFieldIds.forEach(function(id){
+                    var pswd = document.getElementById(id);
+                    
+                    if (pswd.type === "password")
+                {
+                    pswd.type = "text"
+                }
+                else{
+                    pswd.type = "password"
+                }
+                }                    
+                )};  */
+            
+        </script>
+     
+        
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        </script> 
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <title>Ekart|Registers</title>
+</head>
+<body>
+    <br>
+    <br> <br>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-4 mt-5 mx-auto shadow p-3">
+                <h2 class="mb-5 text-center">User Registration</h2>
+                <form method="post" action="">
+                    <div class="mb-3">
+                        <label for="Input1" class="form-label"><b>Username:</b></label>
+                        <input type="email" class="form-control" name="uname" id="Input1" placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Input2" class="form-label"><b>Password:</b></label>
+                        <input type="password" class="form-control" name="upass"  id="Input2" placeholder="Enter password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Input3" class="form-label"><b>Confirm Password:</b></label>
+                        <input type="password" class="form-control" name="ucpass"  id="Input3" placeholder="Confirm password">
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-outline-danger" value="Register">
+                        Already User?&nbsp;&nbsp;&nbsp; <a href="login.html" style="text-decoration: none;">Login</a>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html> -->

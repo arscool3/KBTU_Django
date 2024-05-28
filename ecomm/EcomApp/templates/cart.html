@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+{%block title%} Ekart|Cart {%endblock%}
+{% block body %}
+<!--Cart Start-->
+<div class="row m-2">
+    <div class="col-md-9">
+        <h4 class="bg-danger text-white p-2">Customer Details</h4>
+        <p><b>Name:</b> &nbsp; {{user.username}}</p>
+        <p><b>Mobile:</b> &nbsp; 0264654235</p>
+        <p><b>Email:</b> &nbsp; {{user.email}}</p>
+
+        <h4 class="bg-danger text-white p-2">Cart Details</h4>
+        {% for x in products %}
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{x.product.image.url}}" style="height: 250px; width:300px;" alt="product">
+            </div>
+            <div class="col-md-6">
+                    <p><b>Product Name: </b> {{x.product.prod_name}}</p>
+                    <p><b>Product Category: </b> {{x.product.category}}</p>
+                    <p><b>Product Price: </b> {{x.product.price}} </p>
+                    <p><b>Product Description: </b> {{x.product.desc}}</p>
+                    <p><b>Quantity: </b>
+                    
+                    <a href="/updateqty/0/{{x.product.product_id}}"><button class="btn btn-warning"> - </button></a>
+                    <input type="number" readonly="readonly" value="{{x.quantity}}">
+                    <a href="/updateqty/1/{{x.product.product_id}}"><button class="btn btn-warning"> + </button></a>
+                   </p>
+                    <a href="{% url 'removeCart' x.product.product_id %}" class="btn btn-danger">Remove</a>
+                    <a href="{%url 'index'%}" class="btn btn-danger">Shop More</a>
+            </div>
+        </div>
+        {%empty%}
+        <h3>Your Cart is empty. Continue Shopping!!</h3>
+        {%endfor%}
+    </div>
+    <div class="col-md-3">
+        <h4 class="bg-danger text-white p-2">Total Amount Section </h4>
+        <p><b>Total items: </b>{{items}}</p>
+        <p><b>Total price: </b>{{total}}</p>
+        <a href="{% url 'placeOrder' %}"><button class="btn btn-danger">Place Order</button></a>
+    </div>
+</div>
+
+{%endblock%}

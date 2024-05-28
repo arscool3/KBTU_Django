@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Payment{% endblock %}
+{% block body %}
+<div class="col-md-8 p-2 m-2">
+    <h3>Order Confirmation</h3>
+    <button id="confirm-button" class="btn btn-success">Confirm Order</button>
+</div>
+<script>
+document.getElementById('confirm-button').onclick = function(e){
+    e.preventDefault();
+    window.location.href = "/";
+}
+</script>
+{% endblock %}

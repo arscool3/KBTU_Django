@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+{% block title %}
+Address
+{% endblock %}
+{% block body%}
+<div class="container" border="1">
+    <div class="row">
+        <form method="post">
+            {%csrf_token%}
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea name="address" id="address" cols="30" rows="04" placeholder="1234 Bakers Street Mumbai" 
+                required>{% if update_address%} {{update_address.address}} {%endif%}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="zip" class="form-label">Zipcode</label>
+                <input type="
+                " name="zip" class="form-control" id="zip" minlength="6" maxlength="6" size="6" {% if update_address%} value="{{update_address.zipcode}}"{%endif%}required>
+            </div>
+            <div class="mb-3 ">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone" minlength="10" maxlength="10" size="6" {% if update_address%} value="{{update_address.phone}}" {%endif%} required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Address</button>
+        </form>
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ messages }}
+       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{% endfor %}
+{% endif %} 
+{%endblock%}
