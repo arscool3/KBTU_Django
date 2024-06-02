@@ -16,14 +16,14 @@
         <h1>
             Welcome
         </h1>
-        <span><a href="/auth/signin">Log in</a> <a href="/auth/signup">Sign up</a> <a href="/auth/signup-mfr">Sign up</a></span>
+        <span><a href="/auth/signin">Log in</a> <a href="/auth/signup">Sign up</a></span>
         {% endif %}
         <div>
             <h2>Our products:</h2>
             {% for c in cats %}
                 <div>
                     <h3>{{c.name|capfirst}}</h3>
-                    {% for p in c %}
+                    <!--{% for p in c %}
                         <div>
                             <h6>{{p.name|capfirst}}</h6>
                             <p>{{p.manufacturer|capfirst}}</p>
@@ -31,7 +31,7 @@
                             <p><b>Cost:</b> {{p.cost}}$</p>
                             <p><b>Available:</b> {{p.count}}</p>
                         </div>
-                    {% endfor %}
+                    {% endfor %}-->
                 </div>
             {% endfor %}
         </div>

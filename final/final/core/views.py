@@ -1,88 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from final.settings import LOGIN_REDIRECT_URL, LOGIN_URL
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout, get_user_model
 
-from .serializers import CustomerSerializer,ManufacturerSerializer,CategorySerializer,ProductSerializer,HistoryItemSerializer,CommentSerializer
+from core.models import *
+from core.forms import *
 
-
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all().order_by('-username')
-    serializer_class = CustomerSerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-class ManufacturerViewSet(viewsets.ModelViewSet):
-    queryset = Manufacturer.objects.all().order_by('-username')
-    serializer_class = ManufacturerSerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = []
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().order_by('-name')
-    serializer_class = CategorySerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = []
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-    @action(detail=True, methods=['get'])
-    def get_products_by_cat(self, request, pk=None):
-        cat = self.get_object()
-        prods = Product.objects.filter(category=cat.id)
-        serializer = self.get_serializer(prods, many=True)
-        return Response(serializer.data)
-
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all().order_by('-name')
-    serializer_class = ProductSerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = []
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-    
-class HistoryItemViewSet(viewsets.ModelViewSet):
-    queryset = HistoryItem.objects.all().order_by('-date')
-    serializer_class = HistoryItemSerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-    @action(detail=True, methods=['get'])
-    def get_history_by_user(self, request, pk=None):
-        user = self.get_object().user
-        hist = HistoryItem.objects.filter(user=user)
-        serializer = self.get_serializer(hist, many=True)
-        return Response(serializer.data)
-
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all().order_by('-text')
-    serializer_class = CommentSerializer
-    #permission_classes = [permissions.IsAuthenticated]
-    def get_permissions(self):
-        if self.action == 'list':
-            permission_classes = []
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+@login_required(login_url=LOGIN_URL)
+def profile(request):
+    his = [val for val in HistoryItem.objects.all() if val in request.user.history.all()]
+    return render(request, "profile.html", {'user':request.user,'hist':his})
 
 def signin(request):
     if request.method == "POST":
@@ -134,19 +66,60 @@ def signup_mfr(request):
         password = request.POST['password']
         email = request.POST['email']
         newuser = User.objects.create_user(
-            first_name=first_name, 
-            last_name=last_name,
             username=username,
             password=password,
             email=email
         )
         try:
             newuser.save()
-            newcust = Customer(user=newuser, balance=0.0)
-            newcust.save()
+            newmfr = Manufacturer(user=newuser, descr = descr)
+            newmfr.save()
             return redirect('/')
         except:
             return HttpResponse("Something went wrong.")
     else:
-        form = CustomerForm()
-        return render(request, 'form.html', {'form':form,'entity':'Sign up'})
+        form = ManufacturerForm()
+        return render(request, 'form.html', {'form':form,'entity':'Sign up as a Manufacturer'})
+
+def index(request):
+    cats = Category.objects.all()
+    return render(request, "index.html", {'user':request.user.username,'cats':cats})
+
+def category(request):
+    cat = Category.objects.get(id=id)
+    products = Product.objects.filter(category=cat)
+    return render(request, "category.html", {'cat':cat,'products':products})
+
+def product(request):
+    prod = Product.objects.get(id=id)
+    return render(request, "product.html", {'prod':prod})
+
+def new_product(request):
+    if request.method=="POST":
+        mfr = request.POST['username']
+        cat = request.POST['descr']
+        cost = request.POST['cost']
+        count = request.POST['count']
+        image = request.POST['image']
+        try:
+            newprod = Product(manufacturer=mfr, category=cat, cost=cost, count=count, image=image)
+            newprod.save()
+            return redirect('/')
+        except:
+            return HttpResponse("Something went wrong.")
+    else:
+        form = ProductForm()
+        return render(request, 'form.html', {'form':form,'entity':'Create a new product'})
+
+def buy_product(request):
+    product = Product.objects.get(id=request.POST['product'])
+    zahl = request.POST['zahl']
+    user = request.user
+    if zahl > product.count:
+        return HttpResponse("Invalid amount")
+    try:
+        newhi = HistoryItem(user=user, product=product, count=zahl)
+        newhi.save()
+        return redirect('/')
+    except:
+        return HttpResponse("Something went wrong.")

@@ -1,5 +1,5 @@
 from django import forms
-from .models import *
+from core.models import *
 
 class LoginForm(forms.ModelForm):
     class Meta:
@@ -11,41 +11,33 @@ class LoginForm(forms.ModelForm):
 
 class CategoryForm(forms.ModelForm):
     class Meta:
-    	model = Category
+        model = Category
         fields = "__all__"
 
 class ProductForm(forms.ModelForm):
     class Meta:
-    	model = Product
+        model = Product
         fields = "__all__"
 
 class HistoryItemForm(forms.ModelForm):
     class Meta:
-    	model = HistoryItem
+        model = HistoryItem
         fields = "__all__"
 
 class CommentForm(forms.ModelForm):
     class Meta:
-    	model = Comment
+        model = Comment
         fields = "__all__"
 
-class CustomerForm(forms.ModelForm):
-    class Meta:
-    	model = Customer
-        fields = [
-            'username', 
-            'password', 
-            'email', 
-            'first_name', 
-            'last_name'
-    	]
+class CustomerForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=50)
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    password = forms.CharField(max_length=50)
 
-class ManufacturerForm(forms.ModelForm):
-    class Meta:
-    	model = Manufacturer
-        fields = [
-            'username', 
-            'password', 
-            'email', 
-            'descr'
-    	]
+class ManufacturerForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=50)
+    descr = forms.CharField(max_length=50)
+    password = forms.CharField(max_length=50)

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{prod}}
+        </title>
+    </head>
+    <body>
+        <img src="{{p.image}}">
+        <h1>{{prod}}</h1>
+        <p>Manufacturer: {{p.manufacturer}}$</p>
+        <p>Category: {{p.category}}$</p>
+        <p>Cost: {{p.cost}}$</p>
+        <p>In stock: {{p.count}}</p>
+        <p>Description: {{p.descr}}</p>
+        <form action="/items/buy/{{p.id}}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="product" value={{p.id}}>
+            <input type="number" name="zahl">
+        <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{cat}}
+        </title>
+    </head>
+    <body>
+        <h1>{{cat}}</h1>
+        {% for p in products %}<a href="/items/{{p.id}}">
+            <h3>{{p.name}}</h3>
+            <p>Cost: {{p.cost}}$</p>
+            <p>In stock: {{p.count}}</p>
+        </a>{% endfor %}
+    </body>
+</html>

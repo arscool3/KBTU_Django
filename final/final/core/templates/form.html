@@ -6,11 +6,23 @@
         </title>
     </head>
     <body>
+        <span><a href="/">Back to the main page</a></span>
         <h1>{{entity}}</h1>
         <form action={{request.get_full_path}} method="post">
             {% csrf_token %}
             {{form}}
         <input type="submit" value="Submit">
         </form>
+        {% if entity == "Log in" %}
+        <span>Don't have an account? <a href="/auth/signup">Sign up</a></span>
+        {% endif %}
+        {% if entity == "Sign up" %}
+        <span>Already have an account? <a href="/auth/signin">Log in</a></span>
+        <span>For official corporate representatives <a href="/auth/signup_mfr">Sign up as a Manufacturer</a></span>
+        {% endif %}
+        {% if entity == "Sign up as a Manufacturer" %}
+        <span>Already have an account? <a href="/auth/signin">Log in</a></span>
+        <span>For customers <a href="/auth/signup">Sign up as a Customer</a></span>
+        {% endif %}
     </body>
 </html>
