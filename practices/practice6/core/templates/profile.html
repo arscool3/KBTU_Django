@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{user}}</title>
+    </head>
+    <body>
+        <h1>{{user}}</h1>
+        <p><b>Organization: </b>{{user.org}}</p>
+        <p><b>Email: </b>{{user.email}}</p>
+        <p><b>First name: </b>{{user.first_name|title}}</p>
+        <p><b>Last name: </b>{{user.last_name|title}}</p>
+        <span><a href="/">Back to the main page</a> <br> <a href="/auth/signout">Log out</a></span>
+        <div>
+        <h2>Certificates:</h2>
+        {% for c in certs %}
+            <div>
+                <h3>{{c.title}}</h3>
+                <p>{{c.descr}}</p>
+            </div>
+        {%endfor%}
+        </div>
+    </body>
+</html>

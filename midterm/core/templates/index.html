@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Hello
+        </title>
+    </head>
+    <body>
+        {% if user %}
+        <h1>
+            Welcome back, {{user}}
+        </h1>
+        <span><a href="/profile">Profile</a> <br> <a href="/courses">Start learning</a></span>
+        {% endif %}
+        {% if not user %}
+        <h1>
+            Welcome
+        </h1>
+        <span><a href="/auth/signin">Log in</a> or <a href="/auth/signup">Sign up</a> to start learning</span>
+        {% endif %}
+    </body>
+</html>

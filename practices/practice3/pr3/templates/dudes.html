@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Dudes:</h1>
+        {% for dude in dudes %}
+        <p><b>Name: </b>{{dude.fname}} {{dude.lname}}</p>
+        <p><b>Age: </b>{{dude.age}}</p>
+        <br>
+        {% endfor %}
+    </body>
+</html>

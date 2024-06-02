@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Benvenuti
+        </title>
+    </head>
+    <body>
+        {% if user %}
+        <h1>
+            Welcome back, {{user}}
+        </h1>
+        <span><a href="/profile">Profile</a></span>
+        {% endif %}
+        {% if not user %}
+        <h1>
+            Welcome
+        </h1>
+        <span><a href="/auth/signin">Log in</a> <a href="/auth/signup">Sign up</a></span>
+        {% endif %}
+        <div>
+            <h2>Our products:</h2>
+            {% for c in cats %}
+                <div>
+                    <h3>{{c.name|capfirst}}</h3>
+                    <!--{% for p in c %}
+                        <div>
+                            <h6>{{p.name|capfirst}}</h6>
+                            <p>{{p.manufacturer|capfirst}}</p>
+                            <p>{{p.descr|truncatewords:"100"}}</p>
+                            <p><b>Cost:</b> {{p.cost}}$</p>
+                            <p><b>Available:</b> {{p.count}}</p>
+                        </div>
+                    {% endfor %}-->
+                </div>
+            {% endfor %}
+        </div>
+    </body>
+</html>

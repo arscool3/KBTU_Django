@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{organization}}
+        </title>
+    </head>
+    <body>
+        <h1>{{organization}}</h1>
+        <p>{{organization.descr}}</p>
+        <h3>Users:</h3>
+        <ul>
+            {% for u in users %}
+            <li>{{u}}</li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {{citizen.fname}} {{citizen.lname}}
+        </title>
+    </head>
+    <body>
+        <h1>{{citizen.fname}} {{citizen.lname}}</h1>
+        <p><b>Age:</b> {{citizen.age}}</p>
+        <p><b>Residence:</b> <a href='/views/city/{{citizen.city.name}}'>{{citizen.city}}</a></p>
+    </body>
+</html>

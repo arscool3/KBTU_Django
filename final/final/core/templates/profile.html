@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{user}}</title>
+    </head>
+    <body>
+        <h1>{{user}}</h1>
+        <p><b>Email: </b>{{user.email}}</p>
+        <p><b>First name: </b>{{user.first_name|title}}</p>
+        <p><b>Last name: </b>{{user.last_name|title}}</p>
+        <span><a href="/">Back to the main page</a> <br> <a href="/auth/signout">Log out</a></span>
+        <div>
+        <h2>History:</h2>
+        {% for h in hist %}
+            <div>
+                <p>{{h.product}}</p>
+                <p>{{h.count}}</p>
+                <p>{{h.date}}</p>
+            </div>
+        {%endfor%}
+        </div>
+    </body>
+</html>
